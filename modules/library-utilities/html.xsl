@@ -17,8 +17,8 @@
     xmlns:portal="http://www.enonic.com/cms/xslt/portal"
     xmlns:util="http://www.enonic.com/cms/xslt/utilities">
     
-    <xsl:import href="/libraries/utilities/fw-variables.xsl"/>
-    <xsl:import href="/libraries/utilities/image.xsl"/>
+    <xsl:import href="/modules/library-utilities/fw-variables.xsl"/>
+    <xsl:import href="/modules/library-utilities/image.xsl"/>
 
     <xsl:variable name="filter-delimiter" select="';'"/>
 
@@ -122,7 +122,7 @@
         <xsl:attribute name="{name()}">
             <xsl:choose>
                 <xsl:when test="$url-type = 'image'">
-                    <xsl:call-template name="util:image.generate-url">
+                    <xsl:call-template name="util:image.create-url">
                         <xsl:with-param name="image" select="$source-image"/>
                         <xsl:with-param name="size" select="$url-size"/>
                         <xsl:with-param name="background" select="$url-background"/>

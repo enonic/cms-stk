@@ -1,0 +1,6 @@
+@import url('all-devices.css');
+
+#container {
+    width: 300px;
+    padding: 20px 9px;
+}

@@ -16,11 +16,11 @@
    xmlns:portal="http://www.enonic.com/cms/xslt/portal"
    xmlns:util="http://www.enonic.com/cms/xslt/utilities">
    
-   <xsl:import href="/libraries/utilities/fw-variables.xsl"/>
+   <xsl:import href="/modules/library-utilities/fw-variables.xsl"/>
         
    <!-- Accessibility links -->
    <!-- Renders hotkeys to access different anchors as defined in the config.xml -->
-   <xsl:template name="util:accessibility.links">
+   <xsl:template name="util:accessibility.create-bypass-links">
       <xsl:if test="exists($fw:theme-config/accessibility/access-key)">
          <nav id="accessibility-links">
             <ul>

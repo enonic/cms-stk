@@ -15,15 +15,15 @@
     xmlns:fw="http://www.enonic.com/cms/xslt/framework"
     xmlns:util="http://www.enonic.com/cms/xslt/utilities">
     
-    <xsl:import href="/libraries/utilities/fw-variables.xsl"/>
-    <xsl:import href="/libraries/utilities/system.xsl"/>
+    <xsl:import href="/modules/library-utilities/fw-variables.xsl"/>
+    <xsl:import href="/modules/library-utilities/system.xsl"/>
     
     <xsl:template name="util:google.analytics">
-        <xsl:variable name="google-analytics-tracker" select="util:system.get-config-param('google-analytics-tracker', $fw:path)" as="xs:string?"/>
-        <xsl:if test="$google-analytics-tracker != ''">
+        <xsl:variable name="google-analytics-web-property-id" select="util:system.get-config-param('google-analytics-web-property-id', $fw:path)" as="xs:string?"/>
+        <xsl:if test="normalize-space($google-analytics-web-property-id)">
             <script type="text/javascript">
                 var _gaq = _gaq || [];
-                _gaq.push(['_setAccount', '<xsl:value-of select="$google-analytics-tracker"/>']);
+                _gaq.push(['_setAccount', '<xsl:value-of select="$google-analytics-web-property-id"/>']);
                 _gaq.push(['_trackPageview']);
 
                 (function() {

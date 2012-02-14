@@ -17,10 +17,10 @@
     xmlns:portal="http://www.enonic.com/cms/xslt/portal"
     xmlns:util="http://www.enonic.com/cms/xslt/utilities">
     
-    <xsl:import href="/libraries/utilities/fw-variables.xsl"/>
+    <xsl:import href="/modules/library-utilities/fw-variables.xsl"/>
 
     <!-- Generates image element -->
-    <xsl:template name="util:image.display">
+    <xsl:template name="util:image.create">
         <xsl:param name="image" as="element()"/><!-- Image content node -->
         <xsl:param name="size" as="xs:string?"/>
         <xsl:param name="background" as="xs:string?"/>
@@ -39,7 +39,7 @@
         
         <img alt="{$alt}">
             <xsl:attribute name="src">
-                <xsl:call-template name="util:image.generate-url">
+                <xsl:call-template name="util:image.create-url">
                     <xsl:with-param name="image" select="$image"/>
                     <xsl:with-param name="size" select="$size"/>
                     <xsl:with-param name="background" select="$background"/>
@@ -84,7 +84,7 @@
     </xsl:template>
     
     <!-- Generates image url -->
-    <xsl:template name="util:image.generate-url">
+    <xsl:template name="util:image.create-url">
         <xsl:param name="image" as="element()"/><!-- Image content node -->
         <xsl:param name="size" as="xs:string?"/>
         <xsl:param name="background" as="xs:string?"/>
@@ -94,11 +94,11 @@
         <xsl:param name="filter" as="xs:string?" select="$fw:config-filter"/><!-- Custom image filters -->
         <xsl:param name="imagesize" as="element()*" select="$fw:config-imagesize"/><!-- Rel image size config -->
         
-        <xsl:value-of select="portal:createImageUrl(util:image.get-attachment-key($image/@key, $region-width, $imagesize, $size, (), $filter, $image), util:image.generate-filter($region-width, $imagesize, $size, (), $filter), $background, $format, $quality)"/>
+        <xsl:value-of select="portal:createImageUrl(util:image.get-attachment-key($image/@key, $region-width, $imagesize, $size, (), $filter, $image), util:image.create-filter($region-width, $imagesize, $size, (), $filter), $background, $format, $quality)"/>
     </xsl:template>
 
     <!-- Returns final image filter as xs:string? -->
-    <xsl:function name="util:image.generate-filter" as="xs:string?">
+    <xsl:function name="util:image.create-filter" as="xs:string?">
         <xsl:param name="region-width" as="xs:integer"/>
         <xsl:param name="imagesize" as="element()*"/>
         <xsl:param name="size" as="xs:string?"/>

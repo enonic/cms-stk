@@ -13,9 +13,10 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fw="http://www.enonic.com/cms/xslt/framework"
-    xmlns:portal="http://www.enonic.com/cms/xslt/portal">
+    xmlns:portal="http://www.enonic.com/cms/xslt/portal"    
+    xmlns:util="http://www.enonic.com/cms/xslt/utilities">
 
-    <xsl:import href="/libraries/utilities/fw-variables.xsl"/>
+    <xsl:import href="/modules/library-utilities/fw-variables.xsl"/>
 
     <xsl:variable name="fw:region.active-regions" as="element()*">
         <xsl:copy-of select="/result/context/page/regions/region[count(windows/window) gt 0]"/>
@@ -23,16 +24,52 @@
 
     <!-- Regions template -->
     <!-- Renders region(s), either specified by region-name or all available regions -->
-    <xsl:template name="fw:region.render">
+    <xsl:template name="util:region.render">
         <xsl:param name="region-name" as="xs:string?"/>
         <xsl:param name="layout" as="xs:string" select="'default'"/>
         <xsl:param name="content-prepend" as="document-node()*"/>
         <xsl:param name="content-append" as="document-node()*"/>
-
+        
         <xsl:for-each select="$fw:theme-device-class/layout[@name = $layout]//region[if ($region-name) then @name = $region-name else *]">
             <!-- Creates region if it contains portlets or this is system region and error page-->
             <xsl:if
                 test="count($fw:rendered-page/regions/region[name = concat($fw:theme-region-prefix, current()/@name)]/windows/window) gt 0 or (current()/system = 'true' and $fw:error-page/@key = portal:getPageKey())">
+                
+                <xsl:variable name="active-siblings" as="element()*" select="../region[index-of($fw:region.active-regions/name, concat($fw:theme-region-prefix, @name)) castable as xs:integer]"/>
+                
+                <xsl:variable name="width" as="xs:integer">
+                    <xsl:choose>
+                        <xsl:when test="scalable = 'true'">
+                            
+                            <xsl:variable name="width-of-siblings" as="xs:integer">
+                                <xsl:choose>
+                                    <xsl:when test="$fw:theme-config/layout-type = 'grid'">
+                                        <!--<xsl:value-of select="sum($active-siblings/width) + sum($active-siblings/margin/node()[name() = 'left' or name() = 'right']) + sum($active-siblings/padding/node()[name() = 'left' or name() = 'right'])"/>
+                                                --><xsl:value-of select="sum($active-siblings[not(scalable = 'true')]/columns) * $fw:theme-config/column/@width"/>    
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="sum($active-siblings[not(scalable = 'true')]/width) + sum($active-siblings[not(scalable = 'true')]/margin/node()[name() = 'left' or name() = 'right']) + sum($active-siblings[not(scalable = 'true')]/padding/node()[name() = 'left' or name() = 'right'])"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>  
+                            </xsl:variable>
+                            <xsl:variable name="padding-width" as="xs:integer">
+                                <xsl:value-of select="if (padding/node()) then sum(padding/node()[name() = 'left' or name() = 'right']) else 0"/>
+                            </xsl:variable>
+                            <xsl:value-of select="xs:integer(../@width) - $width-of-siblings - $padding-width"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:choose>
+                                <xsl:when test="$fw:theme-config/layout-type = 'grid'">
+                                    <!--<xsl:value-of select="width"/>-->
+                                    <xsl:value-of select="if (columns castable as xs:integer) then columns * $fw:theme-config/column/@width else 0"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="width"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
                 
                 <xsl:element name="{if (current()/@element) then current()/@element else 'div'}">
                     <xsl:attribute name="id" select="concat($fw:theme-region-prefix, current()/@name)"/>
@@ -41,39 +78,23 @@
                         <xsl:if test="normalize-space(current()/@class)">
                             <xsl:value-of select="concat(' ', current()/@class)"/>
                         </xsl:if>
-                    </xsl:attribute><!--
-                    <div id="{concat($fw:theme-region-prefix, current()/@name)}" class="region">-->
+                        <xsl:if test="$fw:theme-config/layout-type = 'grid'">
+                            <xsl:value-of select="concat(' ', 'span-', if (scalable = 'true') then (../@columns - sum($active-siblings[not(scalable = 'true')]/columns)) else columns)"/>
+                        </xsl:if>
+                    </xsl:attribute>
                     
                     <xsl:if test="$content-prepend/node()">
                         <xsl:copy-of select="$content-prepend"/>
                     </xsl:if>
                     
-                        <xsl:variable name="width">
-                            <xsl:choose>
-                                <xsl:when test="scalable = 'true'">
-                                    <xsl:variable name="active-siblings" as="element()*"
-                                        select="../region[not(scalable = 'true')][index-of($fw:region.active-regions/name, concat($fw:theme-region-prefix, @name)) castable as xs:integer]"/>
-                                    <xsl:variable name="width-of-siblings" as="xs:integer">
-                                        <xsl:value-of select="sum($active-siblings/width) + sum($active-siblings/margin/*) + sum($active-siblings/padding/*)"/>
-                                    </xsl:variable>
-                                    <xsl:variable name="padding-width" as="xs:integer">
-                                        <xsl:value-of select="if (padding/node()) then sum(padding/node()[name() = 'left' or name() = 'right']) else 0"/>
-                                    </xsl:variable>
-                                    <xsl:value-of select="xs:integer(../@width) - $width-of-siblings - $padding-width"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="width"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:variable>
+                        
                         <!-- Create portlet placeholder for region -->
                         <xsl:for-each select="$fw:rendered-page/regions/region[name = concat($fw:theme-region-prefix, current()/@name)]/windows/window">
                             <xsl:variable name="parameters" as="xs:anyAtomicType*">
-                                <xsl:sequence select="'_config-region-width', xs:integer($width)"/>
+                                <xsl:sequence select="'_config-region-width', $width"/>
                             </xsl:variable>
                             <xsl:value-of select="portal:createWindowPlaceholder(@key, $parameters)"/>
                         </xsl:for-each>
-                    <!--</div>-->
                     
                     <xsl:if test="$content-append/node()">
                         <xsl:copy-of select="$content-append"/>
@@ -84,11 +105,27 @@
         </xsl:for-each>
     </xsl:template>
 
-    <xsl:template name="fw:region.css">
+    <xsl:template name="util:region.create-css">
         <xsl:param name="layout" as="xs:string" select="'default'"/>
         <style type="text/css">
             <xsl:apply-templates select="$fw:theme-device-class/layout[@name = $layout]//region[index-of($fw:region.active-regions/name, concat($fw:theme-region-prefix, @name)) castable as xs:integer]" mode="css"/>
-      </style>
+      
+        
+            <xsl:if test="$fw:theme-config/layout-type = 'grid'">
+                <xsl:variable name="max-columns" as="xs:integer" select="xs:integer(max($fw:theme-device-class/layout[@name = $layout]//columns))"/>
+                <xsl:for-each select="1 to $max-columns">
+                    <xsl:value-of select="concat('.span-', current(), '{')"/>
+                        <xsl:value-of select="concat('width: ', $fw:theme-config/column/@width * current(), 'px;')"/>
+        <xsl:text>}</xsl:text>
+                </xsl:for-each>
+            </xsl:if>
+        
+        
+        </style>
+        
+        
+        
+        
     </xsl:template>
 
     <!-- region size css (width, margin, padding) for active regions -->
@@ -103,7 +140,16 @@
                     <xsl:variable name="active-siblings-padding-width" select="sum($active-siblings[padding/left]/padding/left) + sum($active-siblings[padding/right]/padding/right)"/>
                     
                     <xsl:variable name="width-of-siblings" as="xs:integer"> 
-                        <xsl:value-of select="sum($active-siblings/width) + $active-siblings-margin-width + $active-siblings-padding-width"/>
+                        <xsl:choose>
+                            <xsl:when test="$fw:theme-config/layout-type = 'grid'">
+                                <!--<xsl:value-of select="sum($active-siblings/width) + $active-siblings-margin-width + $active-siblings-padding-width"/>
+                                --><xsl:value-of select="(sum($active-siblings/columns) * $fw:theme-config/column/@width) + $active-siblings-margin-width + $active-siblings-padding-width"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="sum($active-siblings/width) + $active-siblings-margin-width + $active-siblings-padding-width"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                       
                     </xsl:variable>
                     <xsl:variable name="padding-width" as="xs:integer">                        
                         <xsl:value-of select="sum(padding/left) + sum(padding/right)"/>
@@ -114,7 +160,15 @@
                     <xsl:value-of select="xs:integer(../@width) - $width-of-siblings - $padding-width - $margin-width"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="width"/>
+                    <xsl:choose>
+                        <xsl:when test="$fw:theme-config/layout-type = 'grid'">
+                            
+                            <xsl:value-of select="if (columns castable as xs:integer) then columns * $fw:theme-config/column/@width else 0"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="width"/>
+                        </xsl:otherwise>
+                </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>

@@ -23,7 +23,7 @@
     </xsl:function>
     
     <!-- Displays icon image -->
-    <xsl:template name="util:file.icon-image">
+    <xsl:template name="util:file.create-icon-image">
         <xsl:param name="file-name" as="xs:string"/>
         <xsl:param name="icon-folder-path" as="xs:string"/>
         <xsl:param name="icon-image-prefix" as="xs:string" select="'icon-'"/>
@@ -72,7 +72,7 @@
             <xsl:if test="not(starts-with($icon-image-file-extension, '.'))">.</xsl:if>
             <xsl:value-of select="$icon-image-file-extension"/>
         </xsl:variable>
-        <img src="{portal:createResourceUrl($image-url)}" alt="{concat(util:file.type($file-name), ' ', portal:localize('util.file.icon'))}">
+        <img src="{portal:createResourceUrl($image-url)}" alt="{concat(util:file.get-type($file-name), ' ', portal:localize('util.file.icon'))}">
             <xsl:if test="$icon-class != ''">
                 <xsl:attribute name="class">
                     <xsl:value-of select="$icon-class"/>
@@ -82,7 +82,7 @@
     </xsl:template>
     
     <!-- Displays file type -->
-    <xsl:function name="util:file.type" as="xs:string">
+    <xsl:function name="util:file.get-type" as="xs:string">
         <xsl:param name="file-name" as="xs:string"/>
         <xsl:variable name="file-extension" select="lower-case(tokenize($file-name, '\.')[last()])"/>
         <xsl:choose>

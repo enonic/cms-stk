@@ -31,12 +31,6 @@
         </xsl:choose>
     </xsl:function>
     
-    <!-- Displays menu item name -->
-    <xsl:function name="util:menuitem-name" as="xs:string">
-        <xsl:param name="menuitem" as="item()?"/>
-        <xsl:value-of select="if ($menuitem/display-name != '') then $menuitem/display-name else if ($menuitem/alternative-name != '') then $menuitem/alternative-name else $menuitem/name"/>
-    </xsl:function>
-    
     <xsl:function name="util:system.check-config" as="element()?">
         <xsl:variable name="check-config-result">
             <xsl:if test="not($fw:config)">
@@ -66,6 +60,13 @@
         </xsl:if>
         
         
+    </xsl:function>
+    
+    
+    <!-- Displays menu item name -->
+    <xsl:function name="util:menuitem-name" as="xs:string">
+        <xsl:param name="menuitem" as="item()?"/>
+        <xsl:value-of select="if ($menuitem/display-name != '') then $menuitem/display-name else if ($menuitem/alternative-name != '') then $menuitem/alternative-name else $menuitem/name"/>
     </xsl:function>
 
 </xsl:stylesheet>

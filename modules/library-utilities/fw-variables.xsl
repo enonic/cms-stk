@@ -5,7 +5,7 @@
     xmlns:fw="http://www.enonic.com/cms/xslt/framework"
     xmlns:util="http://www.enonic.com/cms/xslt/utilities">
 
-    <xsl:import href="/libraries/utilities/system.xsl"/>
+    <xsl:import href="/modules/library-utilities/system.xsl"/>
     
     <!-- ########## Context variables ########## -->
 
@@ -30,7 +30,7 @@
     <xsl:variable name="fw:config-parameter" as="element()*" select="$fw:config/parameters/parameter"/>
     <xsl:variable name="fw:config-theme" as="xs:string?" select="$fw:config/theme"/>
     
-    <xsl:variable name="fw:theme-location" as="xs:string" select="concat('/themes/', $fw:config-theme)" />
+    <xsl:variable name="fw:theme-location" as="xs:string" select="concat('/modules/', $fw:config-theme)" />
     <xsl:variable name="fw:theme-config" as="element()?" select="if (doc-available(concat($fw:theme-location, '/theme.xml'))) then document(concat($fw:theme-location, '/theme.xml'))/theme else null"/>
     <xsl:variable name="fw:theme-device-class" as="element()?" select="if ($fw:theme-config/device-classes/device-class[tokenize(@name, ',')[. = $fw:device-class]]) then $fw:theme-config/device-classes/device-class[tokenize(@name, ',')[. = $fw:device-class]] else $fw:theme-config/device-classes/device-class[1]"/>
     <xsl:variable name="fw:theme-region-prefix" as="xs:string?" select="$fw:theme-config/region-prefix"/>

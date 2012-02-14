@@ -1,23 +1,27 @@
 <theme>
+    <layout-type>normal</layout-type>
+    <column width="50" gutter="10"/>
     <region-prefix/>
-    <accessibility>
+    <!--<accessibility>
         <access-key key="m" text="util.accessibility.main-menu" anchor="menu-main" />
         <access-key key="s" text="util.accessibility.sub-menu" anchor="menu-sub" />
         <access-key key="c" text="util.accessibility.center" anchor="center" />
-    </accessibility>
+    </accessibility>-->
     <device-classes>
         <device-class name="pc,unknown">
             <layout name="default">
-                <area width="950">
+                <area width="800" columns="20">
                     <region name="north">
-                        <width>950</width>
+                        <columns>20</columns>
+                        <width>800</width>
                         <margin>
                             <bottom>10</bottom>
                         </margin>
                     </region>
                 </area>
-                <area width="950">
+                <area width="800" columns="20">
                     <region name="west">
+                        <columns>20</columns>
                         <width>180</width>
                         <margin>
                             <right>10</right>
@@ -25,63 +29,26 @@
                     </region>
                     <region name="center" element="section" class="">
                         <padding>
-                            <right>30</right>
-                            <left>30</left>
-                            <top>30</top>
-                            <bottom>30</bottom>
+                            <right>0</right>
+                            <left>0</left>
+                            <top>20</top>
+                            <bottom>20</bottom>
                         </padding>
                         <scalable>true</scalable>
                         <system>true</system>
                     </region>
                     <region name="east">
+                        <columns>5</columns>
                         <width>180</width>
                         <margin>
                             <left>10</left>
                         </margin>
                     </region>
                 </area>
-                <area width="950">
+                <area width="950" columns="20">
                     <region name="south">
+                        <columns>5</columns>
                         <width>950</width>
-                    </region>
-                </area>
-            </layout>
-            <layout name="another-layout">
-                <area width="958">
-                    <region name="north">
-                        <width>958</width>
-                        <margin>
-                            <bottom>10</bottom>
-                        </margin>
-                    </region>
-                </area>
-                <area width="958">
-                    <region name="west">
-                        <width>182</width>
-                        <margin>
-                            <right>15</right>
-                        </margin>
-                    </region>
-                    <region name="center">
-                        <padding>
-                            <right>0</right>
-                            <left>0</left>
-                            <top>0</top>
-                            <bottom>30</bottom>
-                        </padding>
-                        <scalable>true</scalable>
-                        <system>true</system>
-                    </region>
-                    <region name="east">
-                        <width>182</width>
-                        <margin>
-                            <left>15</left>
-                        </margin>
-                    </region>
-                </area>
-                <area width="958">
-                    <region name="south">
-                        <width>958</width>
                     </region>
                 </area>
             </layout>
@@ -120,22 +87,10 @@
                 </sizes>
             </image>
             <styles>
-                <style>/_public/themes/travel/ui-custom-theme/jquery-ui-1.7.2.custom.css</style>
-                <style>/_public/themes/travel/all.css</style>
-                <style>/_public/themes/travel/all-beach.css</style>
-                <style>/_public/themes/travel/pc.css</style>
-                <style>/_public/themes/travel/pc-beach.css</style>
-                <style condition="lt IE 8">/_public/sites/advanced/ie.css</style>
-                <style>/_public/themes/travel/beach.css</style>
+                <style>/_public/theme-basic/css/pc.css</style>
             </styles>
             <scripts>
-                <script>/_public/libraries/jquery/scripts/jquery-1.4.2.min.js</script>
-                <script>/_public/libraries/jquery/scripts/jquery.validate.min.js</script>
-                <script>/_public/libraries/jquery/scripts/jquery-ui-1.7.2.custom.min.js</script>
-                <script>/_public/libraries/jquery/scripts/jquery.tooltip.min.js</script>
-                <script>/_public/libraries/jquery/scripts/jquery.cookie.js</script>
-                <script>/_public/themes/travel/scripts/common-all.js</script>
-                <script>/_public/themes/travel/scripts/common-pc.js</script>
+                <script>/_public/theme-basic/javascript/common.js</script>
             </scripts>
         </device-class>
         <device-class name="mobile">
@@ -145,8 +100,8 @@
                         <region name="north">
                             <width>296</width>
                             <padding>
-                                <left>12</left>
-                                <right>12</right>
+                                <left>0</left>
+                                <right>0</right>
                                 <top>12</top>
                                 <bottom>12</bottom>
                             </padding>
@@ -154,17 +109,17 @@
                         <region name="center">
                             <width>296</width>
                             <padding>
-                                <left>12</left>
-                                <right>12</right>
-                                <top>12</top>
-                                <bottom>12</bottom>
+                                <left>0</left>
+                                <right>0</right>
+                                <top>20</top>
+                                <bottom>20</bottom>
                             </padding>
                         </region>
                         <region name="south">
                             <width>296</width>
                             <padding>
-                                <left>12</left>
-                                <right>12</right>
+                                <left>0</left>
+                                <right>0</right>
                                 <top>12</top>
                                 <bottom>12</bottom>
                             </padding>
@@ -207,20 +162,10 @@
                 </sizes>
             </image>
             <styles>
-                <style>/_public/themes/travel/all.css</style>
-                <style>/_public/themes/travel/all-beach.css</style>
-                <style>/_public/themes/travel/mobile.css</style>
-                <style>/_public/themes/travel/ui-custom-theme/jquery-ui-1.7.2.custom.css</style>
-                <style>/_public/themes/travel/mobile/beach.css</style>
-                <style>/_public/themes/travel/mobile/default/style.css</style>
+                <style>/_public/theme-basic/css/mobile.css</style>
             </styles>
             <scripts>
-                <script>/_public/libraries/jquery/scripts/jquery-1.4.2.min.js</script>
-                <script>/_public/libraries/jquery/scripts/jquery.enonic.tree.js</script>
-                <script>/_public/libraries/jquery/scripts/jquery.cookie.js</script>                
-                <script>/_public/libraries/jquery/scripts/jquery-ui-1.7.2.custom.min.js</script>
-                <script>/_public/libraries/jquery/scripts/jquery.validate.min.js</script>
-                <script>/_public/themes/travel/scripts/common-all.js</script>                
+                <script>/_public/theme-basic/javascript/common.js</script>
             </scripts>
         </device-class>
     </device-classes>
