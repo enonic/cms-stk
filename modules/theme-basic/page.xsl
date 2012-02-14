@@ -90,7 +90,7 @@
                     </a>
                     
                     
-                    <xsl:call-template name="util:error.handle"/>
+                    <xsl:call-template name="util:error.create-message"/>
                     
                 </div>
                 <xsl:call-template name="util:google.analytics"/>
