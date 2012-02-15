@@ -9,7 +9,6 @@
     <xsl:import href="/modules/library-utilities/fw-variables.xsl"/>
     <xsl:import href="/modules/library-utilities/region.xsl"/>
     <xsl:import href="/modules/library-utilities/head.xsl"/>
-    <xsl:import href="/modules/library-utilities/error.xsl"/> 
     <xsl:import href="/modules/library-utilities/accessibility.xsl"/>
     <xsl:import href="/modules/library-utilities/google.xsl"/>    
     <xsl:import href="/modules/library-utilities/system.xsl"/>
@@ -88,9 +87,6 @@
                     <a href="{portal:createServicesUrl('portal','forceDeviceClass', ('deviceclass', 'mobile', 'lifetime', 'session'))}" class="change-device-class" rel="nofollow">
                         <xsl:value-of select="portal:localize('theme-basic.change-to-mobile-version')"/>
                     </a>
-                    
-                    
-                    <xsl:call-template name="util:error.create-message"/>
                     
                 </div>
                 <xsl:call-template name="util:google.analytics"/>

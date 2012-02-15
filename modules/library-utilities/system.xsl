@@ -22,7 +22,7 @@
             <xsl:when test="$fw:config-parameter[@name = $name and @path = $path]">
                 <xsl:sequence select="$fw:config-parameter[@name = $name and @path = $path][1]"/>
             </xsl:when>
-            <xsl:when test="$path != ''">
+            <xsl:when test="normalize-space($path)">
                 <xsl:copy-of select="util:system.get-config-param($name, substring-before($path, concat('/', tokenize($path, '/')[last()])))"/>
             </xsl:when>
             <xsl:when test="$fw:config-parameter[@name = $name and @path = '/']">

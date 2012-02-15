@@ -19,7 +19,7 @@
    <xsl:import href="/modules/library-utilities/fw-variables.xsl"/>
         
    <!-- Accessibility links -->
-   <!-- Renders hotkeys to access different anchors as defined in the config.xml -->
+   <!-- Renders hotkeys to access different anchors as defined in the theme.xml -->
    <xsl:template name="util:accessibility.create-bypass-links">
       <xsl:if test="exists($fw:theme-config/accessibility/access-key)">
          <nav id="accessibility-links">

@@ -40,8 +40,6 @@
     <xsl:variable name="fw:front-page" as="element()?" select="util:system.get-config-param('front-page', $fw:path)"/>
     <xsl:variable name="fw:error-page" as="element()?" select="/result/context/site/error-page/resource"/>
     <xsl:variable name="fw:login-page" as="element()?" select="/result/context/site/login-page/resource"/>
-    <xsl:variable name="fw:sitemap-page" as="element()?" select="util:system.get-config-param('sitemap', $fw:path)"/>
-    <xsl:variable name="fw:search-result-page" as="element()?" select="util:system.get-config-param('search-result', $fw:path)"/>
     
    <xsl:variable name="fw:config-filter">
         <xsl:value-of select="string-join($fw:theme-device-class/image/filters/filter, ';')"/>

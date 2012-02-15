@@ -18,7 +18,7 @@
 	
 	<xsl:import href="/modules/library-utilities/fw-variables.xsl"/>
 	
-	<xsl:template name="util:pagination.header">
+	<xsl:template name="util:pagination.create-header">
 		<xsl:param name="contents" as="element()"/>
 		<xsl:param name="index" as="xs:integer?" select="xs:integer($contents/@index)"/>
 		<xsl:param name="content-count" as="xs:integer?" select="xs:integer($contents/@resultcount)"/>
@@ -37,7 +37,7 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template name="util:pagination.menu">
+	<xsl:template name="util:pagination.create-menu">
 		<xsl:param name="contents" as="element()"/>
 		<xsl:param name="index" as="xs:integer?" select="xs:integer($contents/@index)"/>
 		<xsl:param name="content-count" as="xs:integer?" select="xs:integer($contents/@resultcount)"/>
@@ -52,7 +52,7 @@
 					<!-- First page -->
 					<xsl:if test="$index gt 0">
 						<li class="end first button">
-							<a href="{util:pagination.construct-url(0, $parameters, $index-parameter-name)}" title="{portal:localize('util.pagination.first-page')}">
+							<a href="{util:pagination.create-url(0, $parameters, $index-parameter-name)}" title="{portal:localize('util.pagination.first-page')}">
 								<xsl:value-of select="portal:localize('util.pagination.first-page')"/>
 							</a>
 						</li>
@@ -60,7 +60,7 @@
 					<!-- Previous page -->
 					<xsl:if test="($index - $contents-per-page) ge 0">
 						<li class="previous button">
-							<a href="{util:pagination.construct-url($index - $contents-per-page, $parameters, $index-parameter-name)}" title="{portal:localize('util.pagination.previous-page')}">
+							<a href="{util:pagination.create-url($index - $contents-per-page, $parameters, $index-parameter-name)}" title="{portal:localize('util.pagination.previous-page')}">
 								<xsl:value-of select="portal:localize('util.pagination.previous-page')"/>
 							</a>
 						</li>
@@ -69,7 +69,7 @@
 					<xsl:variable name="tmp" select="floor(($total-count - ($index + 1)) div $contents-per-page) - floor(($pages-in-pagination - 1) div 2)"/>
 					<xsl:variable name="tmp2" select="if ($tmp gt 0) then 0 else $tmp"/>
 					<xsl:variable name="tmp3" select="$index - (floor($pages-in-pagination div 2) * $contents-per-page) + ($tmp2 * $contents-per-page)"/>
-					<xsl:call-template name="util:pagination.menu-middle">
+					<xsl:call-template name="util:pagination.create-menu-middle">
 						<xsl:with-param name="start" tunnel="yes" select="if ($tmp3 lt 0) then 0 else $tmp3"/>
 						<xsl:with-param name="max-count" tunnel="yes" select="$pages-in-pagination"/>
 						<xsl:with-param name="parameters" tunnel="yes" select="$parameters"/>
@@ -81,7 +81,7 @@
 					<!-- Next page -->
 					<xsl:if test="$index + $contents-per-page lt $total-count">
 						<li class="next button">
-							<a href="{util:pagination.construct-url($index + $contents-per-page, $parameters, $index-parameter-name)}" title="{portal:localize('util.pagination.next-page')}">
+							<a href="{util:pagination.create-url($index + $contents-per-page, $parameters, $index-parameter-name)}" title="{portal:localize('util.pagination.next-page')}">
 								<xsl:value-of select="portal:localize('util.pagination.next-page')"/>
 							</a>
 						</li>
@@ -89,7 +89,7 @@
 					<!-- Last page -->
 					<xsl:if test="$index + $contents-per-page lt $total-count">
 						<li class="end last button">
-							<a href="{util:pagination.construct-url(xs:integer(ceiling(($total-count div $contents-per-page) - 1) * $contents-per-page), $parameters, $index-parameter-name)}" title="{portal:localize('util.pagination.last-page')}">
+							<a href="{util:pagination.create-url(xs:integer(ceiling(($total-count div $contents-per-page) - 1) * $contents-per-page), $parameters, $index-parameter-name)}" title="{portal:localize('util.pagination.last-page')}">
 								<xsl:value-of select="portal:localize('util.pagination.last-page')"/>
 							</a>
 						</li>
@@ -99,7 +99,7 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template name="util:pagination.menu-middle">
+	<xsl:template name="util:pagination.create-menu-middle">
 		<xsl:param name="parameters" tunnel="yes" as="element()*"/>
 		<xsl:param name="index" tunnel="yes" as="xs:integer"/>
 		<xsl:param name="total-count" tunnel="yes" as="xs:integer"/>
@@ -126,19 +126,19 @@
 						</span>
 					</xsl:when>
 					<xsl:otherwise>
-						<a href="{util:pagination.construct-url(xs:integer($start + (($counter - 1) * $contents-per-page)), $parameters, $index-parameter-name)}">
+						<a href="{util:pagination.create-url(xs:integer($start + (($counter - 1) * $contents-per-page)), $parameters, $index-parameter-name)}">
 							<xsl:value-of select="($start div $contents-per-page) + $counter"/>
 						</a>
 					</xsl:otherwise>
 				</xsl:choose>
 			</li>
-			<xsl:call-template name="util:pagination.menu-middle">
+			<xsl:call-template name="util:pagination.create-menu-middle">
 				<xsl:with-param name="counter" select="$counter + 1"/>
 			</xsl:call-template>
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:function name="util:pagination.construct-url" as="xs:string">
+	<xsl:function name="util:pagination.create-url" as="xs:string">
 		<xsl:param name="index" as="xs:integer"/>
 		<xsl:param name="parameters" as="element()*"/>
 		<xsl:param name="index-parameter-name" as="xs:string"/>
