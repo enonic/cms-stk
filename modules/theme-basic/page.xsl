@@ -50,13 +50,13 @@
                 <xsl:call-template name="mobile"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="pc"/>
+                <xsl:call-template name="desktop"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
     
-    <!-- PC template -->
-    <xsl:template name="pc">
+    <!-- Desktop template -->
+    <xsl:template name="desktop">
         <html>
             <head>
                 <title>
@@ -76,7 +76,7 @@
                     <!-- Create content bypass links if defined in config -->
                     <xsl:call-template name="util:accessibility.create-bypass-links"/>
                                         
-                    <span class="current-device-class">PC version</span>
+                    <span class="current-device-class">Desktop version</span>
                     <h1>My first headline</h1>
                     
                     <!-- Renders all regions defined in config -->
@@ -126,8 +126,8 @@
                         <xsl:with-param name="layout" select="$layout" as="xs:string"/>
                     </xsl:call-template>
                     
-                    <a href="{portal:createServicesUrl('portal','forceDeviceClass', ('deviceclass', 'pc', 'lifetime', 'session'))}" class="change-device-class" rel="nofollow">
-                        <xsl:value-of select="portal:localize('theme-basic.change-to-pc-version')"/>
+                    <a href="{portal:createServicesUrl('portal','forceDeviceClass', ('deviceclass', 'desktop', 'lifetime', 'session'))}" class="change-device-class" rel="nofollow">
+                        <xsl:value-of select="portal:localize('theme-basic.change-to-desktop-version')"/>
                     </a>
                     
                 </div>

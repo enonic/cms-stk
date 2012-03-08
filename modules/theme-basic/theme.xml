@@ -8,7 +8,7 @@
         <access-key key="c" text="util.accessibility.center" anchor="center" />
     </accessibility>-->
     <device-classes>
-        <device-class name="pc,unknown">
+        <device-class name="desktop,unknown">
             <layout name="default">
                 <area width="800" columns="20">
                     <region name="north">
@@ -87,7 +87,7 @@
                 </sizes>
             </image>
             <styles>
-                <style>/_public/theme-basic/css/pc.css</style>
+                <style>/_public/theme-basic/css/desktop.css</style>
             </styles>
             <scripts>
                 <script>/_public/theme-basic/javascript/common.js</script>

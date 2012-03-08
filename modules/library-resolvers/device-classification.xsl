@@ -8,7 +8,7 @@
         <xsl:text>mobile</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:text>pc</xsl:text>
+        <xsl:text>desktop</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
