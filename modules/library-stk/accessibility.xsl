@@ -12,19 +12,18 @@
 <xsl:stylesheet exclude-result-prefixes="#all" version="2.0" xmlns="http://www.w3.org/1999/xhtml"
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-   xmlns:fw="http://www.enonic.com/cms/xslt/framework"
    xmlns:portal="http://www.enonic.com/cms/xslt/portal"
-   xmlns:util="http://www.enonic.com/cms/xslt/utilities">
+   xmlns:stk="http://www.enonic.com/cms/xslt/stk">
    
-   <xsl:import href="/modules/library-utilities/fw-variables.xsl"/>
+   <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
         
    <!-- Accessibility links -->
    <!-- Renders hotkeys to access different anchors as defined in the theme.xml -->
-   <xsl:template name="util:accessibility.create-bypass-links">
-      <xsl:if test="exists($fw:theme-config/accessibility/access-key)">
+   <xsl:template name="stk:accessibility.create-bypass-links">
+      <xsl:if test="exists($stk:theme-config/accessibility/access-key)">
          <nav id="accessibility-links">
             <ul>
-               <xsl:for-each select="$fw:theme-config/accessibility/access-key">
+               <xsl:for-each select="$stk:theme-config/accessibility/access-key">
                   <li>
                      <a href="#{@anchor}" accesskey="{@key}">
                         <xsl:value-of select="portal:localize(@text)"/>

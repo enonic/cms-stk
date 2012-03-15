@@ -12,14 +12,13 @@
 <xsl:stylesheet exclude-result-prefixes="#all" version="2.0" xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:fw="http://www.enonic.com/cms/xslt/framework"
-    xmlns:util="http://www.enonic.com/cms/xslt/utilities">
+    xmlns:stk="http://www.enonic.com/cms/xslt/stk">
     
-    <xsl:import href="/modules/library-utilities/fw-variables.xsl"/>
-    <xsl:import href="/modules/library-utilities/system.xsl"/>
+    <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
+    <xsl:import href="/modules/library-stk/system.xsl"/>
     
-    <xsl:template name="util:google.analytics">
-        <xsl:variable name="google-analytics-web-property-id" select="util:system.get-config-param('google-analytics-web-property-id', $fw:path)" as="xs:string?"/>
+    <xsl:template name="stk:google.analytics">
+        <xsl:variable name="google-analytics-web-property-id" select="stk:system.get-config-param('google-analytics-web-property-id', $stk:path)" as="xs:string?"/>
         <xsl:if test="normalize-space($google-analytics-web-property-id)">
             <script type="text/javascript">
                 var _gaq = _gaq || [];

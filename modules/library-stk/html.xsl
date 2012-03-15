@@ -13,18 +13,17 @@
     xmlns="http://www.w3.org/1999/xhtml" version="2.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:fw="http://www.enonic.com/cms/xslt/framework"
     xmlns:portal="http://www.enonic.com/cms/xslt/portal"
-    xmlns:util="http://www.enonic.com/cms/xslt/utilities">
+    xmlns:stk="http://www.enonic.com/cms/xslt/stk">
     
-    <xsl:import href="/modules/library-utilities/fw-variables.xsl"/>
-    <xsl:import href="/modules/library-utilities/image.xsl"/>
+    <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
+    <xsl:import href="/modules/library-stk/image.xsl"/>
 
     <xsl:variable name="filter-delimiter" select="';'"/>
 
-    <xsl:template name="util:html.process">
-        <xsl:param name="filter" as="xs:string?" select="$fw:config-filter"/>
-        <xsl:param name="imagesize" as="element()*" select="$fw:config-imagesize"/>
+    <xsl:template name="stk:html.process">
+        <xsl:param name="filter" as="xs:string?" select="$stk:config-filter"/>
+        <xsl:param name="imagesize" as="element()*" select="$stk:config-imagesize"/>
         <xsl:param name="document" as="element()"/>
         <xsl:param name="image" as="element()*"/>
         <xsl:apply-templates select="$document/*|$document/text()" mode="html.process">
@@ -122,7 +121,7 @@
         <xsl:attribute name="{name()}">
             <xsl:choose>
                 <xsl:when test="$url-type = 'image'">
-                    <xsl:call-template name="util:image.create-url">
+                    <xsl:call-template name="stk:image.create-url">
                         <xsl:with-param name="image" select="$source-image"/>
                         <xsl:with-param name="size" select="$url-size"/>
                         <xsl:with-param name="background" select="$url-background"/>
@@ -147,8 +146,8 @@
             </xsl:choose>
         </xsl:attribute>
         <xsl:if test="$url-type = 'image' and $source-image">
-            <xsl:variable name="image-width" select="util:image.get-size($fw:region-width, $imagesize, $url-size, $url-filter, $filter, $source-image, 'width')"/>
-            <xsl:variable name="image-height" select="util:image.get-size($fw:region-width, $imagesize, $url-size, $url-filter, $filter, $source-image, 'height')"/>
+            <xsl:variable name="image-width" select="stk:image.get-size($stk:region-width, $imagesize, $url-size, $url-filter, $filter, $source-image, 'width')"/>
+            <xsl:variable name="image-height" select="stk:image.get-size($stk:region-width, $imagesize, $url-size, $url-filter, $filter, $source-image, 'height')"/>
             <xsl:if test="$image-width and $image-height">
                 <xsl:attribute name="width">
                     <xsl:value-of select="$image-width"/>

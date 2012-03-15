@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet exclude-result-prefixes="#all" version="2.0" xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:fw="http://www.enonic.com/cms/xslt/framework"
-    xmlns:util="http://www.enonic.com/cms/xslt/utilities"
-    xmlns:portal="http://www.enonic.com/cms/xslt/portal">
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"    
+    xmlns:portal="http://www.enonic.com/cms/xslt/portal"
+    xmlns:stk="http://www.enonic.com/cms/xslt/stk">
     
-    <xsl:import href="/modules/library-utilities/fw-variables.xsl"/>
-    <xsl:import href="/modules/library-utilities/region.xsl"/>
-    <xsl:import href="/modules/library-utilities/head.xsl"/>
-    <xsl:import href="/modules/library-utilities/accessibility.xsl"/>
-    <xsl:import href="/modules/library-utilities/google.xsl"/>    
-    <xsl:import href="/modules/library-utilities/system.xsl"/>
+    <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
+    <xsl:import href="/modules/library-stk/region.xsl"/>
+    <xsl:import href="/modules/library-stk/head.xsl"/>
+    <xsl:import href="/modules/library-stk/accessibility.xsl"/>
+    <xsl:import href="/modules/library-stk/google.xsl"/>    
+    <xsl:import href="/modules/library-stk/system.xsl"/>
 
     
     <!-- HTML 5 doctype -->
@@ -41,12 +40,12 @@
     <!-- Select template based on current device -->
     <xsl:template match="/">
         <!-- Run config check to make sure everything is OK -->
-        <xsl:variable name="config-status" select="util:system.check-config()"/>
+        <xsl:variable name="config-status" select="stk:system.check-config()"/>
         <xsl:choose>
             <xsl:when test="$config-status/node()">
                 <xsl:copy-of select="$config-status"/>
             </xsl:when>
-            <xsl:when test="$fw:device-class = 'mobile'">
+            <xsl:when test="$stk:device-class = 'mobile'">
                 <xsl:call-template name="mobile"/>
             </xsl:when>
             <xsl:otherwise>
@@ -60,27 +59,27 @@
         <html>
             <head>
                 <title>
-                    <xsl:value-of select="util:menuitem-name($fw:current-resource)"/>
-                    <xsl:value-of select="concat(' - ', $fw:site-name)"/>
+                    <xsl:value-of select="stk:menuitem-name($stk:current-resource)"/>
+                    <xsl:value-of select="concat(' - ', $stk:site-name)"/>
                 </title>
-                <xsl:call-template name="util:head.create-metadata"/>
-                <xsl:call-template name="util:head.create-javascript"/>
-                <xsl:call-template name="util:head.create-css"/>
+                <xsl:call-template name="stk:head.create-metadata"/>
+                <xsl:call-template name="stk:head.create-javascript"/>
+                <xsl:call-template name="stk:head.create-css"/>
                 
-                <xsl:call-template name="util:region.create-css">
+                <xsl:call-template name="stk:region.create-css">
                     <xsl:with-param name="layout" select="$layout"/>
                 </xsl:call-template>
             </head>
             <body>
                 <div id="container">
                     <!-- Create content bypass links if defined in config -->
-                    <xsl:call-template name="util:accessibility.create-bypass-links"/>
+                    <xsl:call-template name="stk:accessibility.create-bypass-links"/>
                                         
                     <span class="current-device-class">Desktop version</span>
                     <h1>My first headline</h1>
                     
                     <!-- Renders all regions defined in config -->
-                    <xsl:call-template name="util:region.render">
+                    <xsl:call-template name="stk:region.render">
                         <xsl:with-param name="layout" select="$layout" as="xs:string"/>
                     </xsl:call-template>
                     
@@ -89,7 +88,7 @@
                     </a>
                     
                 </div>
-                <xsl:call-template name="util:google.analytics"/>
+                <xsl:call-template name="stk:google.analytics"/>
             </body>
         </html>
     </xsl:template>
@@ -100,29 +99,29 @@
         <html>
             <head>                
                 <title>
-                    <xsl:value-of select="util:menuitem-name($fw:current-resource)"/>
+                    <xsl:value-of select="stk:menuitem-name($stk:current-resource)"/>
                 </title>
-                <xsl:call-template name="util:head.create-metadata"/>                
+                <xsl:call-template name="stk:head.create-metadata"/>                
                 <meta content="minimum-scale=1.0, width=device-width, user-scalable=yes" name="viewport" />
                 <meta name="apple-mobile-web-app-capable" content="yes" />
                 
-                <xsl:call-template name="util:head.create-javascript"/>
-                <xsl:call-template name="util:head.create-css"/>
+                <xsl:call-template name="stk:head.create-javascript"/>
+                <xsl:call-template name="stk:head.create-css"/>
                 
-                <xsl:call-template name="util:region.create-css">
+                <xsl:call-template name="stk:region.create-css">
                     <xsl:with-param name="layout" select="$layout"/>
                 </xsl:call-template>
             </head>
             <body>
                 <div id="container">
                     <!-- Create content bypass links if defined in config -->
-                    <xsl:call-template name="util:accessibility.create-bypass-links"/>
+                    <xsl:call-template name="stk:accessibility.create-bypass-links"/>
                                         
                     <span class="current-device-class">Mobile version</span>
                     <h1>My first headline</h1>
                     
                     <!-- Renders all regions defined in config -->
-                    <xsl:call-template name="util:region.render">
+                    <xsl:call-template name="stk:region.render">
                         <xsl:with-param name="layout" select="$layout" as="xs:string"/>
                     </xsl:call-template>
                     
@@ -131,7 +130,7 @@
                     </a>
                     
                 </div>
-                <xsl:call-template name="util:google.analytics"/>
+                <xsl:call-template name="stk:google.analytics"/>
             </body>
         </html>
     </xsl:template>

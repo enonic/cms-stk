@@ -3,9 +3,8 @@
     xmlns="http://www.w3.org/1999/xhtml" version="2.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:fw="http://www.enonic.com/cms/xslt/framework"
     xmlns:portal="http://www.enonic.com/cms/xslt/portal"
-    xmlns:util="http://www.enonic.com/cms/xslt/utilities">
+    xmlns:stk="http://www.enonic.com/cms/xslt/stk">
     
     <xsl:template match="/">
         <h2>My first module</h2>

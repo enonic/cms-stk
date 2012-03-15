@@ -3,9 +3,9 @@
     <column width="50" gutter="10"/>
     <region-prefix/>
     <!--<accessibility>
-        <access-key key="m" text="util.accessibility.main-menu" anchor="menu-main" />
-        <access-key key="s" text="util.accessibility.sub-menu" anchor="menu-sub" />
-        <access-key key="c" text="util.accessibility.center" anchor="center" />
+        <access-key key="m" text="stk.accessibility.main-menu" anchor="menu-main" />
+        <access-key key="s" text="stk.accessibility.sub-menu" anchor="menu-sub" />
+        <access-key key="c" text="stk.accessibility.center" anchor="center" />
     </accessibility>-->
     <device-classes>
         <device-class name="desktop,unknown">

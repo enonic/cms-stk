@@ -12,18 +12,17 @@
 <xsl:stylesheet exclude-result-prefixes="#all" version="2.0" xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:fw="http://www.enonic.com/cms/xslt/framework"
     xmlns:portal="http://www.enonic.com/cms/xslt/portal"
-    xmlns:util="http://www.enonic.com/cms/xslt/utilities">
+    xmlns:stk="http://www.enonic.com/cms/xslt/stk">
     
     <!-- Formats bytes -->
-    <xsl:function name="util:file.format-bytes" as="xs:string">
+    <xsl:function name="stk:file.format-bytes" as="xs:string">
         <xsl:param name="bytes" as="xs:integer"/>
         <xsl:value-of select="if ($bytes > 1073741824) then concat(format-number($bytes div 1073741824, '0.#'), ' GB') else if ($bytes > 1048576) then concat(format-number($bytes div 1048576, '0.#'), ' MB') else if ($bytes > 1024) then concat(format-number($bytes div 1024, '0'), ' KB') else concat($bytes, ' B')"/>
     </xsl:function>
     
     <!-- Displays icon image -->
-    <xsl:template name="util:file.create-icon-image">
+    <xsl:template name="stk:file.create-icon-image">
         <xsl:param name="file-name" as="xs:string"/>
         <xsl:param name="icon-folder-path" as="xs:string"/>
         <xsl:param name="icon-image-prefix" as="xs:string" select="'icon-'"/>
@@ -72,7 +71,7 @@
             <xsl:if test="not(starts-with($icon-image-file-extension, '.'))">.</xsl:if>
             <xsl:value-of select="$icon-image-file-extension"/>
         </xsl:variable>
-        <img src="{portal:createResourceUrl($image-url)}" alt="{concat(util:file.get-type($file-name), ' ', portal:localize('util.file.icon'))}">
+        <img src="{portal:createResourceUrl($image-url)}" alt="{concat(stk:file.get-type($file-name), ' ', portal:localize('stk.file.icon'))}">
             <xsl:if test="$icon-class != ''">
                 <xsl:attribute name="class">
                     <xsl:value-of select="$icon-class"/>
@@ -82,42 +81,42 @@
     </xsl:template>
     
     <!-- Displays file type -->
-    <xsl:function name="util:file.get-type" as="xs:string">
+    <xsl:function name="stk:file.get-type" as="xs:string">
         <xsl:param name="file-name" as="xs:string"/>
         <xsl:variable name="file-extension" select="lower-case(tokenize($file-name, '\.')[last()])"/>
         <xsl:choose>
             <xsl:when test="contains('htm', $file-extension)">
-                <xsl:value-of select="portal:localize('util.file.html')"/>
+                <xsl:value-of select="portal:localize('stk.file.html')"/>
             </xsl:when>
             <xsl:when test="contains('ppt|pps', $file-extension)">
-                <xsl:value-of select="portal:localize('util.file.powerpoint')"/>
+                <xsl:value-of select="portal:localize('stk.file.powerpoint')"/>
             </xsl:when>
             <xsl:when test="contains('gif|jpg|tif|psd', $file-extension)">
-                <xsl:value-of select="portal:localize('util.file.image')"/>
+                <xsl:value-of select="portal:localize('stk.file.image')"/>
             </xsl:when>
             <xsl:when test="contains('doc|dot', $file-extension)">
-                <xsl:value-of select="portal:localize('util.file.document')"/>
+                <xsl:value-of select="portal:localize('stk.file.document')"/>
             </xsl:when>
             <xsl:when test="contains('pdf', $file-extension)">
-                <xsl:value-of select="portal:localize('util.file.pdf')"/>
+                <xsl:value-of select="portal:localize('stk.file.pdf')"/>
             </xsl:when>
             <xsl:when test="contains('avi|mpg|wmv', $file-extension)">
-                <xsl:value-of select="portal:localize('util.file.video')"/>
+                <xsl:value-of select="portal:localize('stk.file.video')"/>
             </xsl:when>
             <xsl:when test="contains('xls|xlt|csv', $file-extension)">
-                <xsl:value-of select="portal:localize('util.file.excel')"/>
+                <xsl:value-of select="portal:localize('stk.file.excel')"/>
             </xsl:when>
             <xsl:when test="contains('xml', $file-extension)">
-                <xsl:value-of select="portal:localize('util.file.xml')"/>
+                <xsl:value-of select="portal:localize('stk.file.xml')"/>
             </xsl:when>
             <xsl:when test="contains('txt|dat|text', $file-extension)">
-                <xsl:value-of select="portal:localize('util.file.text')"/>
+                <xsl:value-of select="portal:localize('stk.file.text')"/>
             </xsl:when>
             <xsl:when test="contains('zip|tar|gz|qz|arj', $file-extension)">
-                <xsl:value-of select="portal:localize('util.file.zip')"/>
+                <xsl:value-of select="portal:localize('stk.file.zip')"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="portal:localize('util.file.file')"/>
+                <xsl:value-of select="portal:localize('stk.file.file')"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
