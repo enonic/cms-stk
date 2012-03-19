@@ -18,7 +18,7 @@
     <!-- Formats bytes -->
     <xsl:function name="stk:file.format-bytes" as="xs:string">
         <xsl:param name="bytes" as="xs:integer"/>
-        <xsl:value-of select="if ($bytes > 1073741824) then concat(format-number($bytes div 1073741824, '0.#'), ' GB') else if ($bytes > 1048576) then concat(format-number($bytes div 1048576, '0.#'), ' MB') else if ($bytes > 1024) then concat(format-number($bytes div 1024, '0'), ' KB') else concat($bytes, ' B')"/>
+        <xsl:value-of select="if ($bytes ge 1073741824) then concat(format-number($bytes div 1073741824, '0.#'), ' GB') else if ($bytes ge 1048576) then concat(format-number($bytes div 1048576, '0.#'), ' MB') else if ($bytes ge 1024) then concat(format-number($bytes div 1024, '0'), ' KB') else concat($bytes, ' B')"/>
     </xsl:function>
     
     <!-- Displays icon image -->
