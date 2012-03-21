@@ -348,6 +348,8 @@
         <xsl:param name="source-image-size" as="xs:integer*"/>
         <xsl:param name="new-width" as="xs:double?"/>
         <xsl:param name="new-height" as="xs:double?"/>
+        <!-- $source-image-size[1] is old width -->
+        <!-- $source-image-size[2] is old height -->
         <xsl:if test="$source-image-size[1] and $source-image-size[2]">
             <xsl:choose>
                 <xsl:when test="$new-width">

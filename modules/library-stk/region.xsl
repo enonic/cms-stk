@@ -108,23 +108,15 @@
         <xsl:param name="layout" as="xs:string" select="'default'"/>
         <style type="text/css">
             <xsl:apply-templates select="$stk:theme-device-class/layout[@name = $layout]//region[index-of($stk:region.active-regions/name, concat($stk:theme-region-prefix, @name)) castable as xs:integer]" mode="css"/>
-      
-        
             <xsl:if test="$stk:theme-config/layout-type = 'grid'">
                 <xsl:variable name="max-columns" as="xs:integer" select="xs:integer(max($stk:theme-device-class/layout[@name = $layout]//columns))"/>
                 <xsl:for-each select="1 to $max-columns">
                     <xsl:value-of select="concat('.span-', current(), '{')"/>
-                        <xsl:value-of select="concat('width: ', $stk:theme-config/column/@width * current(), 'px;')"/>
-        <xsl:text>}</xsl:text>
+                    <xsl:value-of select="concat('width: ', $stk:theme-config/column/@width * current(), 'px;')"/>
+                    <xsl:text>}</xsl:text>
                 </xsl:for-each>
             </xsl:if>
-        
-        
         </style>
-        
-        
-        
-        
     </xsl:template>
 
     <!-- region size css (width, margin, padding) for active regions -->

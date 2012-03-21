@@ -48,7 +48,7 @@
     <xsl:variable name="stk:config-imagesize" select="$stk:theme-device-class/image/sizes/size"/>
     
     <xsl:variable name="stk:default-image-format" as="xs:string" select="if ($stk:theme-device-class/image/format/text()) then $stk:theme-device-class/image/format else 'jpeg'"/>
-    <xsl:variable name="stk:default-image-quality" as="xs:string" select="if ($stk:theme-device-class/image/quality castable as xs:integer) then $stk:theme-device-class/image/quality else 75"/>
+    <xsl:variable name="stk:default-image-quality" as="xs:integer" select="if ($stk:theme-device-class/image/quality castable as xs:integer) then $stk:theme-device-class/image/quality else 75"/>
     
     
     <xsl:variable name="stk:site-admin-name" as="xs:string?" select="stk:system.get-config-param('site-admin-name', $stk:path)"/>
