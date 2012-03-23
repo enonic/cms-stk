@@ -42,7 +42,7 @@
     
    <xsl:variable name="stk:config-filter">
         <xsl:value-of select="string-join($stk:theme-device-class/image/filters/filter, ';')"/>
-        <xsl:if test="$stk:theme-device-class/image/filters/filter != ''">;</xsl:if>
+        <xsl:if test="normalize-space($stk:theme-device-class/image/filters/filter)">;</xsl:if>
     </xsl:variable>
     
     <xsl:variable name="stk:config-imagesize" select="$stk:theme-device-class/image/sizes/size"/>

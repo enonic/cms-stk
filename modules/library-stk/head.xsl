@@ -80,17 +80,19 @@
    <!-- Css common template -->
    <!-- Renders all CSS files and creates CSS for the regions defined in theme.xml  -->
    <xsl:template name="stk:head.create-css">
-      <xsl:for-each select="$stk:theme-device-class/styles/style[not(@condition != '')]">
+      <xsl:for-each select="$stk:theme-device-class/styles/style[not(normalize-space(@condition))]">
          <link rel="stylesheet" href="{portal:createResourceUrl(.)}" type="text/css">
-            <xsl:if test="@media = 'print'">
-               <xsl:attribute name="media">print</xsl:attribute>
+            <xsl:if test="normalize-space(@media)">
+               <xsl:attribute name="media">
+                  <xsl:value-of select="@media"/>
+               </xsl:attribute>
             </xsl:if>
          </link>
       </xsl:for-each>
 
       <xsl:if test="$stk:theme-device-class/styles/style[@condition != '']">
          <xsl:text disable-output-escaping="yes">&lt;!--[if </xsl:text>
-         <xsl:for-each-group select="$stk:theme-device-class/styles/style[@condition != '']" group-by="@condition">
+         <xsl:for-each-group select="$stk:theme-device-class/styles/style[normalize-space(@condition)]" group-by="@condition">
             <xsl:value-of select="@condition"/>
             <xsl:text disable-output-escaping="yes">]&gt;</xsl:text>
             <xsl:for-each select="$stk:theme-device-class/styles/style[@condition = current()/@condition]">
