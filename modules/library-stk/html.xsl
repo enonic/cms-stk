@@ -126,7 +126,7 @@
                         <xsl:with-param name="size" select="$url-size"/>
                         <xsl:with-param name="background" select="$url-background"/>
                         <xsl:with-param name="format" select="$url-format" />
-                        <xsl:with-param name="quality" select="$url-quality"/>
+                        <xsl:with-param name="quality" select="if ($url-quality castable as xs:integer) then $url-quality else $stk:default-image-quality"/>
                         <xsl:with-param name="filter" select="$url-filter"/>
                         <xsl:with-param name="imagesize" select="$imagesize"/>
                     </xsl:call-template>

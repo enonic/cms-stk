@@ -29,7 +29,7 @@
         <xsl:param name="style" as="xs:string?"/>
         <xsl:param name="id" as="xs:string?"/>
         <xsl:param name="format" as="xs:string?" select="$stk:default-image-format"/>
-        <xsl:param name="quality" as="xs:string?" select="$stk:default-image-quality"/>
+        <xsl:param name="quality" as="xs:integer?" select="$stk:default-image-quality"/>
         <xsl:param name="region-width" as="xs:integer" select="$stk:region-width"/>
         <xsl:param name="filter" as="xs:string?" select="$stk:config-filter"/><!-- Custom image filters -->
         <xsl:param name="imagesize" as="element()*" select="$stk:config-imagesize"/><!-- Rel image size config -->
@@ -88,7 +88,7 @@
         <xsl:param name="size" as="xs:string?"/>
         <xsl:param name="background" as="xs:string?"/>
         <xsl:param name="format" as="xs:string?" select="$stk:default-image-format"/>
-        <xsl:param name="quality" as="xs:string?" select="$stk:default-image-quality"/>
+        <xsl:param name="quality" as="xs:integer?" select="$stk:default-image-quality"/>
         <xsl:param name="region-width" as="xs:integer" select="$stk:region-width"/>
         <xsl:param name="filter" as="xs:string?" select="$stk:config-filter"/><!-- Custom image filters -->
         <xsl:param name="imagesize" as="element()*" select="$stk:config-imagesize"/><!-- Rel image size config -->
