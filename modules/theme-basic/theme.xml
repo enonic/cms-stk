@@ -1,6 +1,4 @@
 <theme>
-    <layout-type>normal</layout-type>
-    <column width="50" gutter="10"/>
     <region-prefix/>
     <!--<accessibility>
         <access-key key="m" text="stk.accessibility.main-menu" anchor="menu-main" />
@@ -10,18 +8,16 @@
     <device-classes>
         <device-class name="desktop,unknown">
             <layout name="default">
-                <area width="800" columns="20">
+                <area width="800">
                     <region name="north">
-                        <columns>20</columns>
                         <width>800</width>
                         <margin>
                             <bottom>10</bottom>
                         </margin>
                     </region>
                 </area>
-                <area width="800" columns="20">
+                <area width="800">
                     <region name="west">
-                        <columns>20</columns>
                         <width>180</width>
                         <margin>
                             <right>10</right>
@@ -38,16 +34,14 @@
                         <system>true</system>
                     </region>
                     <region name="east">
-                        <columns>5</columns>
                         <width>180</width>
                         <margin>
                             <left>10</left>
                         </margin>
                     </region>
                 </area>
-                <area width="950" columns="20">
+                <area width="950">
                     <region name="south">
-                        <columns>5</columns>
                         <width>950</width>
                     </region>
                 </area>
@@ -169,5 +163,4 @@
             </scripts>
         </device-class>
     </device-classes>
-
 </theme>

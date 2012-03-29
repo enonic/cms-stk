@@ -41,31 +41,15 @@
                         <xsl:when test="scalable = 'true'">
                             
                             <xsl:variable name="width-of-siblings" as="xs:integer">
-                                <xsl:choose>
-                                    <xsl:when test="$stk:theme-config/layout-type = 'grid'">
-                                        <!--<xsl:value-of select="sum($active-siblings/width) + sum($active-siblings/margin/node()[name() = 'left' or name() = 'right']) + sum($active-siblings/padding/node()[name() = 'left' or name() = 'right'])"/>
-                                                --><xsl:value-of select="sum($active-siblings[not(scalable = 'true')]/columns) * $stk:theme-config/column/@width"/>    
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="sum($active-siblings[not(scalable = 'true')]/width) + sum($active-siblings[not(scalable = 'true')]/margin/node()[name() = 'left' or name() = 'right']) + sum($active-siblings[not(scalable = 'true')]/padding/node()[name() = 'left' or name() = 'right'])"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>  
-                            </xsl:variable>
+                                <xsl:value-of select="sum($active-siblings[not(scalable = 'true')]/width) + sum($active-siblings[not(scalable = 'true')]/margin/node()[name() = 'left' or name() = 'right']) + sum($active-siblings[not(scalable = 'true')]/padding/node()[name() = 'left' or name() = 'right'])"/>
+                           </xsl:variable>
                             <xsl:variable name="padding-width" as="xs:integer">
                                 <xsl:value-of select="if (padding/node()) then sum(padding/node()[name() = 'left' or name() = 'right']) else 0"/>
                             </xsl:variable>
                             <xsl:value-of select="xs:integer(../@width) - $width-of-siblings - $padding-width"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:choose>
-                                <xsl:when test="$stk:theme-config/layout-type = 'grid'">
-                                    <!--<xsl:value-of select="width"/>-->
-                                    <xsl:value-of select="if (columns castable as xs:integer) then columns * $stk:theme-config/column/@width else 0"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="width"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
+                            <xsl:value-of select="width"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
@@ -76,9 +60,6 @@
                         <xsl:text>region</xsl:text>
                         <xsl:if test="normalize-space(current()/@class)">
                             <xsl:value-of select="concat(' ', current()/@class)"/>
-                        </xsl:if>
-                        <xsl:if test="$stk:theme-config/layout-type = 'grid'">
-                            <xsl:value-of select="concat(' ', 'span-', if (scalable = 'true') then (../@columns - sum($active-siblings[not(scalable = 'true')]/columns)) else columns)"/>
                         </xsl:if>
                     </xsl:attribute>
                     
@@ -107,15 +88,7 @@
     <xsl:template name="stk:region.create-css">
         <xsl:param name="layout" as="xs:string" select="'default'"/>
         <style type="text/css">
-            <xsl:apply-templates select="$stk:theme-device-class/layout[@name = $layout]//region[index-of($stk:region.active-regions/name, concat($stk:theme-region-prefix, @name)) castable as xs:integer]" mode="css"/>
-            <xsl:if test="$stk:theme-config/layout-type = 'grid'">
-                <xsl:variable name="max-columns" as="xs:integer" select="xs:integer(max($stk:theme-device-class/layout[@name = $layout]//columns))"/>
-                <xsl:for-each select="1 to $max-columns">
-                    <xsl:value-of select="concat('.span-', current(), '{')"/>
-                    <xsl:value-of select="concat('width: ', $stk:theme-config/column/@width * current(), 'px;')"/>
-                    <xsl:text>}</xsl:text>
-                </xsl:for-each>
-            </xsl:if>
+            <xsl:apply-templates select="$stk:theme-device-class/layout[@name = $layout]//region[index-of($stk:region.active-regions/name, concat($stk:theme-region-prefix, @name)) castable as xs:integer]" mode="css"/>    
         </style>
     </xsl:template>
 
@@ -131,16 +104,7 @@
                     <xsl:variable name="active-siblings-padding-width" select="sum($active-siblings[padding/left]/padding/left) + sum($active-siblings[padding/right]/padding/right)"/>
                     
                     <xsl:variable name="width-of-siblings" as="xs:integer"> 
-                        <xsl:choose>
-                            <xsl:when test="$stk:theme-config/layout-type = 'grid'">
-                                <!--<xsl:value-of select="sum($active-siblings/width) + $active-siblings-margin-width + $active-siblings-padding-width"/>
-                                --><xsl:value-of select="(sum($active-siblings/columns) * $stk:theme-config/column/@width) + $active-siblings-margin-width + $active-siblings-padding-width"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="sum($active-siblings/width) + $active-siblings-margin-width + $active-siblings-padding-width"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                       
+                        <xsl:value-of select="sum($active-siblings/width) + $active-siblings-margin-width + $active-siblings-padding-width"/>                       
                     </xsl:variable>
                     <xsl:variable name="padding-width" as="xs:integer">                        
                         <xsl:value-of select="sum(padding/left) + sum(padding/right)"/>
@@ -151,15 +115,7 @@
                     <xsl:value-of select="xs:integer(../@width) - $width-of-siblings - $padding-width - $margin-width"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:choose>
-                        <xsl:when test="$stk:theme-config/layout-type = 'grid'">
-                            
-                            <xsl:value-of select="if (columns castable as xs:integer) then columns * $stk:theme-config/column/@width else 0"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="width"/>
-                        </xsl:otherwise>
-                </xsl:choose>
+                    <xsl:value-of select="width"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
