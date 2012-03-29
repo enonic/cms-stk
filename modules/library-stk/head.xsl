@@ -81,7 +81,7 @@
    <!-- Renders all CSS files and creates CSS for the regions defined in theme.xml  -->
    <xsl:template name="stk:head.create-css">
       <xsl:for-each select="$stk:theme-device-class/styles/style[not(normalize-space(@condition))]">
-         <link rel="stylesheet" href="{portal:createResourceUrl(.)}" type="text/css">
+         <link rel="stylesheet" href="{if (starts-with(., 'http://')) then . else portal:createResourceUrl(.)}" type="text/css">
             <xsl:if test="normalize-space(@media)">
                <xsl:attribute name="media">
                   <xsl:value-of select="@media"/>
@@ -97,7 +97,7 @@
             <xsl:text disable-output-escaping="yes">]&gt;</xsl:text>
             <xsl:for-each select="$stk:theme-device-class/styles/style[@condition = current()/@condition]">
                <xsl:text disable-output-escaping="yes">&lt;link rel="stylesheet" type="text/css" href="</xsl:text>
-               <xsl:value-of select="portal:createResourceUrl(.)"/>
+               <xsl:value-of select="if (starts-with(., 'http://')) then . else portal:createResourceUrl(.)"/>
                <xsl:text disable-output-escaping="yes">"/&gt;</xsl:text>
             </xsl:for-each>
             <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
