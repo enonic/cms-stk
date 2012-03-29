@@ -17,7 +17,7 @@
 		});
 		
 		// bind branch button click event
-		tree.find('.branch-button').live('click', function() {
+		tree.find('.branch-button').live('click', function(e) {
 			$(this).nextAll('ul').each(function() {
 				if ($(this).is(':visible')) {
 					$(this).parent().addClass('contracted').removeClass('expanded');
@@ -27,6 +27,7 @@
 				}
 				$(this).slideToggle();
 			});
+			e.preventDefault();
 		});
 		
 		// bind click event for expanding/contracting entire menu
