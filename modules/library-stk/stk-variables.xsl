@@ -34,7 +34,7 @@
     <xsl:variable name="stk:theme-device-class" as="element()?" select="if ($stk:theme-config/device-classes/device-class[tokenize(@name, ',')[. = $stk:device-class]]) then $stk:theme-config/device-classes/device-class[tokenize(@name, ',')[. = $stk:device-class]] else $stk:theme-config/device-classes/device-class[1]"/>
     <xsl:variable name="stk:theme-region-prefix" as="xs:string?" select="$stk:theme-config/region-prefix"/>
     
-    <xsl:variable name="stk:theme-public" select="concat('/_public/themes/', $stk:config-theme, '/')" as="xs:string"/>
+    <xsl:variable name="stk:theme-public" select="concat('/_public/', $stk:config-theme, '/')" as="xs:string"/>
     
     <xsl:variable name="stk:front-page" as="element()?" select="stk:system.get-config-param('front-page', $stk:path)"/>
     <xsl:variable name="stk:error-page" as="element()?" select="/result/context/site/error-page/resource"/>
