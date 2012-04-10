@@ -24,7 +24,7 @@
         <xsl:param name="size" as="xs:string?"/>
         <xsl:param name="background" as="xs:string?"/>
         <xsl:param name="title" as="xs:string?" select="$image/title"/>
-        <xsl:param name="alt" as="xs:string" select="if (normalize-space($image/contentdata/description)) then $image/contentdata/description else $image/title"/>
+        <xsl:param name="alt" as="xs:string?" select="if (normalize-space($image/contentdata/description)) then $image/contentdata/description else $image/title"/>
         <xsl:param name="class" as="xs:string?"/>
         <xsl:param name="style" as="xs:string?"/>
         <xsl:param name="id" as="xs:string?"/>
