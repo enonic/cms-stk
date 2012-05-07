@@ -121,16 +121,23 @@
         <xsl:attribute name="{name()}">
             <xsl:choose>
                 <xsl:when test="$url-type = 'image'">
-                    <xsl:call-template name="stk:image.create-url">
-                        <xsl:with-param name="image" select="$source-image"/>
-                        <xsl:with-param name="size" select="$url-size"/>
-                        <xsl:with-param name="background" select="$url-background"/>
-                        <xsl:with-param name="format" select="$url-format" />
-                        <xsl:with-param name="quality" select="if ($url-quality castable as xs:integer) then $url-quality else $stk:default-image-quality"/>
-                        <xsl:with-param name="filter" select="$url-filter"/>
-                        <xsl:with-param name="imagesize" select="$imagesize"/>
-                    </xsl:call-template>
-                    </xsl:when>
+                    <xsl:choose>
+                        <xsl:when test="$source-image">
+                            <xsl:call-template name="stk:image.create-url">
+                                <xsl:with-param name="image" select="$source-image"/>
+                                <xsl:with-param name="size" select="$url-size"/>
+                                <xsl:with-param name="background" select="$url-background"/>
+                                <xsl:with-param name="format" select="$url-format" />
+                                <xsl:with-param name="quality" select="if ($url-quality castable as xs:integer) then $url-quality else $stk:default-image-quality"/>
+                                <xsl:with-param name="filter" select="$url-filter"/>
+                                <xsl:with-param name="imagesize" select="$imagesize"/>
+                            </xsl:call-template>
+                        </xsl:when>   
+                        <xsl:otherwise>
+                            <xsl:text>image-not-found</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>                                     
+                </xsl:when>
                 <xsl:when test="$url-type = 'attachment'">
                     <xsl:value-of select="portal:createAttachmentUrl($url-key, $url-parameters)"/>
                 </xsl:when>
@@ -158,5 +165,5 @@
             </xsl:if>
         </xsl:if>
     </xsl:template>
-
+    
 </xsl:stylesheet>
