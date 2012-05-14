@@ -91,8 +91,8 @@
       </xsl:for-each>
 
       <xsl:if test="$stk:theme-device-class/styles/style[@condition != '']">
-         <xsl:text disable-output-escaping="yes">&lt;!--[if </xsl:text>
-         <xsl:for-each-group select="$stk:theme-device-class/styles/style[normalize-space(@condition)]" group-by="@condition">
+         <xsl:for-each-group select="$stk:theme-device-class/styles/style[normalize-space(@condition)]" group-by="@condition">            
+            <xsl:text disable-output-escaping="yes">&lt;!--[if </xsl:text>
             <xsl:value-of select="@condition"/>
             <xsl:text disable-output-escaping="yes">]&gt;</xsl:text>
             <xsl:for-each select="$stk:theme-device-class/styles/style[@condition = current()/@condition]">
