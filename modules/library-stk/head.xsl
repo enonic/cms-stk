@@ -59,7 +59,7 @@
       </xsl:if>
       
       <xsl:if test="normalize-space($keywords) or normalize-space($stk:head.meta-keywords)">
-         <meta name="description" content="{if (normalize-space($keywords)) then $keywords else $stk:head.meta-keywords}"/>
+         <meta name="keywords" content="{if (normalize-space($keywords)) then $keywords else $stk:head.meta-keywords}"/>
       </xsl:if>
 
       <xsl:if test="normalize-space($stk:head.meta-google-site-verification)">
