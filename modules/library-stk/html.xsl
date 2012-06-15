@@ -169,9 +169,6 @@
     <xsl:function name="stk:html.process-url" as="xs:string?">
         <xsl:param name="url" as="xs:string"/>
         <xsl:choose>
-            <xsl:when test="contains($url, 'http://')">
-                <xsl:value-of select="$url"/>    
-            </xsl:when>
             <xsl:when test="matches($url, 'page://\d+')">
                 <xsl:value-of select="portal:createPageUrl(substring-after($url, 'page://'), ())"/>
             </xsl:when>
@@ -181,6 +178,9 @@
             <xsl:when test="matches($url, 'attachment://\d+')">
                 <xsl:value-of select="portal:createAttachmentUrl(substring-after($url, 'attachment://'), ('_download', 'true'))"/>
             </xsl:when>
+            <xsl:otherwise>                
+                <xsl:value-of select="$url"/>    
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
     
