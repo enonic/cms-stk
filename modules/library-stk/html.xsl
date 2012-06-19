@@ -18,91 +18,94 @@
     
     <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
     <xsl:import href="/modules/library-stk/image.xsl"/>
-
+    
     <xsl:variable name="filter-delimiter" select="';'"/>
-
+    
     <xsl:template name="stk:html.process">
         <xsl:param name="filter" as="xs:string?" select="$stk:config-filter"/>
         <xsl:param name="imagesize" as="element()*" select="$stk:config-imagesize"/>
         <xsl:param name="document" as="element()"/>
-        <xsl:param name="image" as="element()*"/>
-        <xsl:apply-templates select="$document/*|$document/text()" mode="html.process">
-            <xsl:with-param name="image" tunnel="yes" select="$image"/>
-            <xsl:with-param name="filter" tunnel="yes" select="$filter"/>
-            <xsl:with-param name="imagesize" tunnel="yes" select="$imagesize"/>
-        </xsl:apply-templates>
+        <xsl:param name="image" as="element()*" select="//content[contentdata/sourceimage]"/>
+        <xsl:param name="region-width" as="xs:integer" select="$stk:region-width"/>
+            <xsl:apply-templates select="$document/*|$document/text()" mode="html.process">
+                <xsl:with-param name="image" tunnel="yes" select="$image"/>
+                <xsl:with-param name="filter" tunnel="yes" select="$filter"/>
+                <xsl:with-param name="imagesize" tunnel="yes" select="$imagesize"/>
+                <xsl:with-param name="region-width" tunnel="yes" select="$region-width"/>
+            </xsl:apply-templates>
     </xsl:template>
-
+    
     <xsl:template match="element()" mode="html.process">
         <xsl:element name="{local-name()}">
             <xsl:apply-templates select="*|text()|@*" mode="html.process"/>
         </xsl:element>
     </xsl:template>
-
+    
     <xsl:template match="text()|@*" mode="html.process">
         <xsl:copy/>
     </xsl:template>
-
+    
     <!-- Replaces @target=_blank with @rel=external -->
     <xsl:template match="@target" mode="html.process">
         <xsl:if test=". = '_blank'">
             <xsl:attribute name="rel">external</xsl:attribute>
         </xsl:if>
     </xsl:template>
-
+    
     <!-- Replaces td, th @align with @style -->
     <xsl:template match="td/@align|th/@align" mode="html.process">
         <xsl:attribute name="style">
             <xsl:value-of select="concat('text-align: ', ., ';')"/>
         </xsl:attribute>
     </xsl:template>
-
+    
     <!-- Replaces @align with @style -->
     <xsl:template match="@align" mode="html.process">        
         <xsl:attribute name="style">
             <xsl:value-of select="concat('float: ', ., ';')"/>
         </xsl:attribute>
     </xsl:template>    
-
+    
     <!-- Replaces @valign with @style -->
     <xsl:template match="@valign" mode="html.process">
         <xsl:attribute name="style">
             <xsl:value-of select="concat('vertical-align: ', ., ';')"/>
         </xsl:attribute>
     </xsl:template>
-
-	<!-- Fixes anchor elements that are empty -->
+    
+    <!-- Fixes anchor elements that are empty -->
     <xsl:template match="a[@name and @name != '']" mode="html.process">
-		<a>
-			<xsl:attribute name="name">
-				<xsl:value-of select="@name"/>
-			</xsl:attribute>
-			<xsl:if test="@id and @id != ''">
-				<xsl:attribute name="id">
-					<xsl:value-of select="@id"/>
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="@href and @href != ''">
-				<xsl:attribute name="href">
-					<xsl:value-of select="@href"/>
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:choose>
-				<xsl:when test="*|text()">
-					<xsl:apply-templates select="*|text()"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:comment> </xsl:comment>
-				</xsl:otherwise>
-			</xsl:choose>
-		</a>
+        <a>
+            <xsl:attribute name="name">
+                <xsl:value-of select="@name"/>
+            </xsl:attribute>
+            <xsl:if test="@id and @id != ''">
+                <xsl:attribute name="id">
+                    <xsl:value-of select="@id"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="@href and @href != ''">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="@href"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="*|text()">
+                    <xsl:apply-templates select="*|text()"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:comment> </xsl:comment>
+                </xsl:otherwise>
+            </xsl:choose>
+        </a>
     </xsl:template>
-	
+    
     <!-- Matches img/@src, a/@href, object/@data and param/@src, sorts out native urls -->
     <xsl:template match="@src[parent::img]|@href[parent::a]|@data[parent::object]|@src[parent::param]|@src[parent::video]|@src[parent::audio]|@src[parent::source]|@src[parent::track]" mode="html.process">
         <xsl:param name="filter" tunnel="yes" as="xs:string?"/>
         <xsl:param name="imagesize" tunnel="yes" as="element()*"/> 
         <xsl:param name="image" tunnel="yes" as="element()*"/>
+        <xsl:param name="region-width" tunnel="yes" as="xs:integer?"/>
         <xsl:variable name="url-part" select="tokenize(., '://|\?|&amp;')"/>
         <xsl:variable name="url-type" select="$url-part[1]"/>
         <xsl:variable name="url-key" select="$url-part[2]"/>
@@ -153,8 +156,8 @@
             </xsl:choose>
         </xsl:attribute>
         <xsl:if test="$url-type = 'image' and $source-image">
-            <xsl:variable name="image-width" select="stk:image.get-size($stk:region-width, $imagesize, $url-size, $url-filter, $filter, $source-image, 'width')"/>
-            <xsl:variable name="image-height" select="stk:image.get-size($stk:region-width, $imagesize, $url-size, $url-filter, $filter, $source-image, 'height')"/>
+            <xsl:variable name="image-width" select="stk:image.get-size($region-width, $imagesize, $url-size, $url-filter, $filter, $source-image, 'width')"/>
+            <xsl:variable name="image-height" select="stk:image.get-size($region-width, $imagesize, $url-size, $url-filter, $filter, $source-image, 'height')"/>
             <xsl:if test="$image-width and $image-height">
                 <xsl:attribute name="width">
                     <xsl:value-of select="$image-width"/>
