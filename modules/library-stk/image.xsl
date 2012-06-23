@@ -210,6 +210,10 @@
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:when>
+                        <!-- Scaleblock -->
+                        <xsl:when test="contains($last-scale-filter, 'scaleblock')">
+                            <xsl:sequence select="xs:integer(tokenize($last-scale-filter, '\(|,|\)')[2]), xs:integer(normalize-space(tokenize($last-scale-filter, '\(|,|\)')[3]))"/>
+                        </xsl:when>
                         <!-- Scalewidth -->
                         <xsl:when test="contains($last-scale-filter, 'scalewidth')">
                             <xsl:sequence select="xs:integer(tokenize($last-scale-filter, '\(|\)')[2]), stk:image.calculate-size($source-image-size, xs:integer(tokenize($last-scale-filter, '\(|\)')[2]), ())"/>
@@ -255,6 +259,10 @@
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:when>
+                        <!-- Scaleblock -->
+                        <xsl:when test="$selected-imagesize/filter = 'scaleblock'">
+                            <xsl:sequence select="floor($region-width * $selected-imagesize/width), floor($region-width * $selected-imagesize/height)"/>
+                        </xsl:when>
                         <!-- Scalewidth -->
                         <xsl:when test="$selected-imagesize/filter = 'scalewidth'">
                             <xsl:sequence select="floor($region-width * $selected-imagesize/width), stk:image.calculate-size($source-image-size, floor($region-width * $selected-imagesize/width), ())"/>
@@ -294,12 +302,29 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        
+        <!-- make sure we don't output an image that is wider than the available region width -->
+        <xsl:variable name="max-height" select="stk:image.calculate-size($source-image-size, $region-width, ())" as="xs:double"/>
         <xsl:choose>
             <xsl:when test="$dimension = 'height' and $final-image-size[2]">
-                <xsl:value-of select="$final-image-size[2]"/>
+                <xsl:choose>
+                    <xsl:when test="$final-image-size[2] gt $max-height">
+                        <xsl:value-of select="$max-height"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$final-image-size[2]"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
             <xsl:when test="$final-image-size[1]">
-                <xsl:value-of select="$final-image-size[1]"/>
+                <xsl:choose>
+                    <xsl:when test="$final-image-size[1] gt $region-width">
+                        <xsl:value-of select="$region-width"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$final-image-size[1]"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
         </xsl:choose>
     </xsl:function>
@@ -361,6 +386,7 @@
             </xsl:choose>
         </xsl:if>
     </xsl:function>
+    
 
 
 </xsl:stylesheet>
