@@ -16,7 +16,7 @@
     xmlns:stk="http://www.enonic.com/cms/xslt/stk">
     
     <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
-
+    
     <xsl:template name="stk:video.embed-youtube">
         <xsl:param name="video-id" as="xs:string"/>
         <xsl:param name="width" as="xs:integer" select="560"/>
@@ -24,7 +24,7 @@
         <xsl:param name="region-width" as="xs:integer" select="$stk:region-width"/>
         <xsl:variable name="aspect-ratio" as="xs:double" select="$width div $height"/>
         
-        <iframe frameborder="0" class="youtube-video">
+        <iframe class="youtube-video">
             <!-- supports various ways of entering the ID -->
             <xsl:attribute name="src">
                 <xsl:text>http://www.youtube.com/embed/</xsl:text>
