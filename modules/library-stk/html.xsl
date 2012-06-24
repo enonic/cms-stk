@@ -18,8 +18,7 @@
     
     <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
     <xsl:import href="/modules/library-stk/image.xsl"/>
-    
-    <xsl:variable name="filter-delimiter" select="';'"/>
+    <xsl:import href="/modules/library-stk/video.xsl"/>
     
     <xsl:template name="stk:html.process">
         <xsl:param name="filter" as="xs:string?" select="$stk:config-filter"/>
@@ -27,12 +26,12 @@
         <xsl:param name="document" as="element()"/>
         <xsl:param name="image" as="element()*" select="//content[contentdata/sourceimage]"/>
         <xsl:param name="region-width" as="xs:integer" select="$stk:region-width"/>
-            <xsl:apply-templates select="$document/*|$document/text()" mode="html.process">
-                <xsl:with-param name="image" tunnel="yes" select="$image"/>
-                <xsl:with-param name="filter" tunnel="yes" select="$filter"/>
-                <xsl:with-param name="imagesize" tunnel="yes" select="$imagesize"/>
-                <xsl:with-param name="region-width" tunnel="yes" select="$region-width"/>
-            </xsl:apply-templates>
+        <xsl:apply-templates select="$document/*|$document/text()" mode="html.process">
+            <xsl:with-param name="image" tunnel="yes" select="$image"/>
+            <xsl:with-param name="filter" tunnel="yes" select="$filter"/>
+            <xsl:with-param name="imagesize" tunnel="yes" select="$imagesize"/>
+            <xsl:with-param name="region-width" tunnel="yes" select="$region-width"/>
+        </xsl:apply-templates>
     </xsl:template>
     
     <xsl:template match="element()" mode="html.process">
@@ -100,8 +99,7 @@
         </a>
     </xsl:template>
     
-    <!-- Matches img/@src, a/@href, object/@data and param/@src, sorts out native urls -->
-    <xsl:template match="@src[parent::img]|@href[parent::a]|@data[parent::object]|@src[parent::param]|@src[parent::video]|@src[parent::audio]|@src[parent::source]|@src[parent::track]" mode="html.process">
+    <xsl:template match="@src[parent::img]" mode="html.process">
         <xsl:param name="filter" tunnel="yes" as="xs:string?"/>
         <xsl:param name="imagesize" tunnel="yes" as="element()*"/> 
         <xsl:param name="image" tunnel="yes" as="element()*"/>
@@ -123,39 +121,23 @@
         </xsl:variable>
         <xsl:attribute name="{name()}">
             <xsl:choose>
-                <xsl:when test="$url-type = 'image'">
-                    <xsl:choose>
-                        <xsl:when test="$source-image">
-                            <xsl:call-template name="stk:image.create-url">
-                                <xsl:with-param name="image" select="$source-image"/>
-                                <xsl:with-param name="size" select="$url-size"/>
-                                <xsl:with-param name="background" select="$url-background"/>
-                                <xsl:with-param name="format" select="$url-format" />
-                                <xsl:with-param name="quality" select="if ($url-quality castable as xs:integer) then $url-quality else $stk:default-image-quality"/>
-                                <xsl:with-param name="filter" select="$url-filter"/>
-                                <xsl:with-param name="imagesize" select="$imagesize"/>
-                            </xsl:call-template>
-                        </xsl:when>   
-                        <xsl:otherwise>
-                            <xsl:text>image-not-found</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>                                     
-                </xsl:when>
-                <xsl:when test="$url-type = 'attachment'">
-                    <xsl:value-of select="portal:createAttachmentUrl($url-key, $url-parameters)"/>
-                </xsl:when>
-                <xsl:when test="$url-type = 'page'">
-                    <xsl:value-of select="portal:createPageUrl($url-key, $url-parameters)"/>
-                </xsl:when>
-                <xsl:when test="$url-type = 'content'">
-                    <xsl:value-of select="portal:createContentUrl($url-key, $url-parameters)"/>
-                </xsl:when>
+                <xsl:when test="$source-image">
+                    <xsl:call-template name="stk:image.create-url">
+                        <xsl:with-param name="image" select="$source-image"/>
+                        <xsl:with-param name="size" select="$url-size"/>
+                        <xsl:with-param name="background" select="$url-background"/>
+                        <xsl:with-param name="format" select="$url-format" />
+                        <xsl:with-param name="quality" select="if ($url-quality castable as xs:integer) then $url-quality else $stk:default-image-quality"/>
+                        <xsl:with-param name="filter" select="$url-filter"/>
+                        <xsl:with-param name="imagesize" select="$imagesize"/>
+                    </xsl:call-template>
+                </xsl:when>   
                 <xsl:otherwise>
-                    <xsl:value-of select="."/>
+                    <xsl:text>image-not-found</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
-        <xsl:if test="$url-type = 'image' and $source-image">
+        <xsl:if test="$source-image">
             <xsl:variable name="image-width" select="stk:image.get-size($region-width, $imagesize, $url-size, $url-filter, $filter, $source-image, 'width')"/>
             <xsl:variable name="image-height" select="stk:image.get-size($region-width, $imagesize, $url-size, $url-filter, $filter, $source-image, 'height')"/>
             <xsl:if test="$image-width and $image-height">
@@ -166,7 +148,21 @@
                     <xsl:value-of select="$image-height"/>
                 </xsl:attribute>
             </xsl:if>
-        </xsl:if>
+        </xsl:if>  
+    </xsl:template>
+    
+    <xsl:template match="@href[parent::a]|@data[parent::object]|@src[parent::param]|@src[parent::video]|@src[parent::audio]|@src[parent::source]|@src[parent::track]" mode="html.process">
+        <xsl:attribute name="{name()}" select="stk:html.process-url(.)"/>
+    </xsl:template>
+    
+    <xsl:template match="iframe[contains(@src, 'youtube')]" mode="html.process">
+        <xsl:param name="region-width" tunnel="yes"/>
+        <xsl:call-template name="stk:video.embed-youtube">
+            <xsl:with-param name="video-id" select="@src"/>
+            <xsl:with-param name="width" select="@width"/>
+            <xsl:with-param name="height" select="@height"/>
+            <xsl:with-param name="region-width" select="$region-width"/>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:function name="stk:html.process-url" as="xs:string?">
