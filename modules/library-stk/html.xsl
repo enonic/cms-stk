@@ -52,7 +52,7 @@
     </xsl:template>
     
     <!-- Replaces td, th @align with @style -->
-    <xsl:template match="td/@align|th/@align" mode="html.process">
+    <xsl:template match="table/@align|td/@align|th/@align" mode="html.process">
         <xsl:attribute name="style">
             <xsl:value-of select="concat('text-align: ', ., ';')"/>
         </xsl:attribute>
