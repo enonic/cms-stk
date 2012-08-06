@@ -23,7 +23,8 @@
 		<xsl:param name="content-count" as="xs:integer?" select="xs:integer($contents/@resultcount)"/>
 		<xsl:param name="total-count" as="xs:integer?" select="xs:integer($contents/@totalcount)"/>
 		<xsl:param name="contents-per-page" as="xs:integer?" select="xs:integer($contents/@count)"/>
-		<xsl:if test="$total-count gt $contents-per-page">
+		<xsl:param name="always-show" as="xs:boolean" select="false()"/>
+		<xsl:if test="$always-show or ($total-count gt $contents-per-page)">
 			<div class="pagination-header">
 				<xsl:variable name="range">
 					<xsl:value-of select="$index + 1"/>
