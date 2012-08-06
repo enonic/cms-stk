@@ -4,7 +4,7 @@
   <xsl:template match="/">
     <xsl:variable name="user-agent" select="lower-case(/context/request/user-agent)"/>
     <xsl:choose>
-      <xsl:when test="matches($user-agent, 'ipad')">
+      <xsl:when test="matches($user-agent, 'ipad') or (matches($user-agent, 'android') and not(matches($user-agent, 'mobile')))">
         <xsl:text>desktop</xsl:text>
       </xsl:when>
       <xsl:when test="matches($user-agent, 'windows ce; ppc;|windows ce; smartphone;|windows ce; iemobile|palm os|palm|hiptop|avantgo|plucker|xiino|blazer|elaine|iphone|android|opera mini|opera mobi|blackberry|up.browser|up.link|mmp|symbian|smartphone|midp|wap|vodafone|o2|pocket|kindle|mobile|pda|psp|treo')">
