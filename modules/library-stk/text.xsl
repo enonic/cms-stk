@@ -15,6 +15,12 @@
     xmlns:portal="http://www.enonic.com/cms/xslt/portal"
     xmlns:stk="http://www.enonic.com/cms/xslt/stk">
     
+    <!-- replaces newlines with line breaks -->
+    <xsl:template name="stk:text.process">
+        <xsl:param name="text" as="xs:string"/>        
+        <xsl:value-of select="replace($text, '\n', '&lt;br /&gt;')" disable-output-escaping="yes"/>
+    </xsl:template>
+    
     <!-- Crops text -->
     <xsl:function name="stk:text.crop" as="xs:string">
         <xsl:param name="source-text" as="xs:string"/>
@@ -34,5 +40,5 @@
         <xsl:param name="string" as="xs:string"/> 
         <xsl:value-of select="concat(upper-case(substring($string, 1, 1)), substring($string, 2))"/>
     </xsl:function>
-
+    
 </xsl:stylesheet>
