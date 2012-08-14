@@ -75,11 +75,11 @@
             </head>
             <body>
                 <div id="container">
-                    <xsl:call-template name="stk:menu.render">
+                    <!--<xsl:call-template name="stk:menu.render">
                         <xsl:with-param name="menuitems" select="/result/menus/menu/menuitems"/>
                         <xsl:with-param name="levels" select="1"/>
                         <xsl:with-param name="list-class" select="'menu horizontal main level1'" />
-                    </xsl:call-template>
+                    </xsl:call-template>-->
                     <!-- Create content bypass links if defined in config -->
                     <xsl:call-template name="stk:accessibility.create-bypass-links"/>
                                         
@@ -125,7 +125,7 @@
                     <!-- Create content bypass links if defined in config -->
                     <xsl:call-template name="stk:accessibility.create-bypass-links"/>
                     
-                    <xsl:call-template name="stk:menu.render">
+                    <!--<xsl:call-template name="stk:menu.render">
                         <xsl:with-param name="menuitems" select="/result/menus/menu/menuitems"/>
                         <xsl:with-param name="levels" select="3"/>
                         <xsl:with-param name="list-id" select="'main-menu'"/>
@@ -135,7 +135,7 @@
                         $(function() {
                             $('#main-menu').enonicTree();
                         });
-                    </script>
+                    </script>-->
                                         
                     <span class="current-device-class">Mobile version</span>
                     <h1>My first headline</h1>
