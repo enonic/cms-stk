@@ -8,9 +8,12 @@
     <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
     <xsl:import href="/modules/library-stk/region.xsl"/>
     <xsl:import href="/modules/library-stk/head.xsl"/>
-    <xsl:import href="/modules/library-stk/accessibility.xsl"/>
+    <xsl:import href="/modules/library-stk/accessibility.xsl"/>    
+    <xsl:import href="/modules/library-stk/menu.xsl"/>
     <xsl:import href="/modules/library-stk/google.xsl"/>    
     <xsl:import href="/modules/library-stk/system.xsl"/>
+    
+    <xsl:import href="/modules/library-stk/menu.xsl"/>
 
     
     <!-- HTML 5 doctype -->
@@ -59,7 +62,7 @@
         <html>
             <head>
                 <title>
-                    <xsl:value-of select="stk:menuitem-name($stk:current-resource)"/>
+                    <xsl:value-of select="stk:menu.menuitem-name($stk:current-resource)"/>
                     <xsl:value-of select="concat(' - ', $stk:site-name)"/>
                 </title>
                 <xsl:call-template name="stk:head.create-metadata"/>
@@ -72,6 +75,11 @@
             </head>
             <body>
                 <div id="container">
+                    <xsl:call-template name="stk:menu.render">
+                        <xsl:with-param name="menuitems" select="/result/menus/menu/menuitems"/>
+                        <xsl:with-param name="levels" select="1"/>
+                        <xsl:with-param name="list-class" select="'menu horizontal main level1'" />
+                    </xsl:call-template>
                     <!-- Create content bypass links if defined in config -->
                     <xsl:call-template name="stk:accessibility.create-bypass-links"/>
                                         
@@ -99,7 +107,7 @@
         <html>
             <head>                
                 <title>
-                    <xsl:value-of select="stk:menuitem-name($stk:current-resource)"/>
+                    <xsl:value-of select="stk:menu.menuitem-name($stk:current-resource)"/>
                 </title>
                 <xsl:call-template name="stk:head.create-metadata"/>                
                 <meta content="minimum-scale=1.0, width=device-width, user-scalable=yes" name="viewport" />
@@ -116,6 +124,18 @@
                 <div id="container">
                     <!-- Create content bypass links if defined in config -->
                     <xsl:call-template name="stk:accessibility.create-bypass-links"/>
+                    
+                    <xsl:call-template name="stk:menu.render">
+                        <xsl:with-param name="menuitems" select="/result/menus/menu/menuitems"/>
+                        <xsl:with-param name="levels" select="3"/>
+                        <xsl:with-param name="list-id" select="'main-menu'"/>
+                    </xsl:call-template>
+                    
+                    <script type="text/javascript">
+                        $(function() {
+                            $('#main-menu').enonicTree();
+                        });
+                    </script>
                                         
                     <span class="current-device-class">Mobile version</span>
                     <h1>My first headline</h1>
