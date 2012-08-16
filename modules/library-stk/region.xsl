@@ -29,7 +29,7 @@
         <xsl:param name="content-prepend" as="document-node()*"/>
         <xsl:param name="content-append" as="document-node()*"/>
         
-        <xsl:for-each select="$stk:theme-device-class/layout[@name = $layout]//region[if ($region-name) then @name = $region-name else *]">
+        <xsl:for-each select="$stk:theme-device-class/layout[tokenize(@name, ',') = $layout]//region[if ($region-name) then @name = $region-name else *]">
             <!-- Creates region if it contains portlets or this is system region and error page-->
             <xsl:if
                 test="count($stk:rendered-page/regions/region[name = concat($stk:theme-region-prefix, current()/@name)]/windows/window) gt 0 or (current()/system = 'true' and $stk:error-page/@key = portal:getPageKey())">
@@ -88,7 +88,7 @@
     <xsl:template name="stk:region.create-css">
         <xsl:param name="layout" as="xs:string" select="'default'"/>
         <style type="text/css">
-            <xsl:apply-templates select="$stk:theme-device-class/layout[@name = $layout]//region[index-of($stk:region.active-regions/name, concat($stk:theme-region-prefix, @name)) castable as xs:integer]" mode="css"/>    
+            <xsl:apply-templates select="$stk:theme-device-class/layout[tokenize(@name, ',') = $layout]//region[index-of($stk:region.active-regions/name, concat($stk:theme-region-prefix, @name)) castable as xs:integer]" mode="css"/>    
         </style>
     </xsl:template>
 
