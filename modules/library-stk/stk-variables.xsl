@@ -13,7 +13,7 @@
     <xsl:variable name="stk:rendered-page" as="element()" select="/result/context/page"/>
     <xsl:variable name="stk:path" as="xs:string" select="concat('/', string-join(tokenize(/result/context/querystring/@servletpath, '/')[position() gt 3], '/'))"/>
     
-    <xsl:variable name="stk:language" as="xs:string" select="/result/context/@languagecode"/>
+    <xsl:variable name="stk:language" as="xs:string" select="if (normalize-space(/result/context/locale)) then /result/context/locale else /result/context/@languagecode"/>
     <xsl:variable name="stk:device-class" as="xs:string" select="if (/result/context/device-class) then /result/context/device-class else 'not-set'"/>
     <xsl:variable name="stk:user" as="element()?" select="/result/context/user"/>
     <xsl:variable name="stk:public-resources" as="xs:string" select="/result/context/site/path-to-public-home-resources"/>
