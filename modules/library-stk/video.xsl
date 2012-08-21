@@ -28,7 +28,14 @@
             <!-- supports various ways of entering the ID -->
             <xsl:attribute name="src">
                 <xsl:text>http://www.youtube.com/embed/</xsl:text>
-                <xsl:value-of select="tokenize($video-id, '/|=')[last()]"/>
+                <xsl:choose>
+                    <xsl:when test="contains($video-id, '?')">
+                        <xsl:value-of select="tokenize(tokenize($video-id, '\?|&amp;')[contains(., 'v=')][1], '=')[2]"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="tokenize($video-id, '/')[last()]"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:attribute>
             <!-- make sure the video width fits inside the current region width -->
             <xsl:attribute name="width" select="if ($width gt $region-width) then $region-width else $width"/>
