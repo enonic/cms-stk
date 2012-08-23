@@ -66,6 +66,11 @@
          <meta name="google-site-verification" content="{$stk:head.meta-google-site-verification}"/>
       </xsl:if>
       
+      <xsl:if test="$stk:device-class = 'mobile'">
+         <meta content="minimum-scale=1.0, width=device-width, user-scalable=yes" name="viewport" />
+         <meta name="apple-mobile-web-app-capable" content="yes" />
+      </xsl:if>
+      
       <!-- for Google Search Appliance -->
       <xsl:if test="normalize-space($stk:head.meta-content-key)">
          <meta name="_key" content="{$stk:head.meta-content-key}"/>
