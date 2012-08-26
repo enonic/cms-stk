@@ -51,7 +51,7 @@
 				<ol>
 					<!-- First page -->
 					<xsl:if test="$index gt 0">
-						<li class="end first button">
+						<li class="first">
 							<a href="{stk:pagination.create-url(0, $parameters, $index-parameter-name)}" title="{portal:localize('stk.pagination.first-page')}">
 								<xsl:value-of select="portal:localize('stk.pagination.first-page')"/>
 							</a>
@@ -59,7 +59,7 @@
 					</xsl:if>
 					<!-- Previous page -->
 					<xsl:if test="($index - $contents-per-page) ge 0">
-						<li class="previous button">
+						<li class="previous">
 							<a href="{stk:pagination.create-url($index - $contents-per-page, $parameters, $index-parameter-name)}" title="{portal:localize('stk.pagination.previous-page')}">
 								<xsl:value-of select="portal:localize('stk.pagination.previous-page')"/>
 							</a>
@@ -80,7 +80,7 @@
 					</xsl:call-template>
 					<!-- Next page -->
 					<xsl:if test="$index + $contents-per-page lt $total-count">
-						<li class="next button">
+						<li class="next">
 							<a href="{stk:pagination.create-url($index + $contents-per-page, $parameters, $index-parameter-name)}" title="{portal:localize('stk.pagination.next-page')}">
 								<xsl:value-of select="portal:localize('stk.pagination.next-page')"/>
 							</a>
@@ -88,7 +88,7 @@
 					</xsl:if>
 					<!-- Last page -->
 					<xsl:if test="$index + $contents-per-page lt $total-count">
-						<li class="end last button">
+						<li class="last">
 							<a href="{stk:pagination.create-url(xs:integer(ceiling(($total-count div $contents-per-page) - 1) * $contents-per-page), $parameters, $index-parameter-name)}" title="{portal:localize('stk.pagination.last-page')}">
 								<xsl:value-of select="portal:localize('stk.pagination.last-page')"/>
 							</a>
