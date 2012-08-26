@@ -36,9 +36,9 @@
     
     <xsl:variable name="stk:theme-public" select="concat('/_public/', $stk:config-theme, '/')" as="xs:string"/>
     
-    <xsl:variable name="stk:front-page" as="element()?" select="stk:system.get-config-param('front-page', $stk:path)"/>
-    <xsl:variable name="stk:error-page" as="element()?" select="/result/context/site/error-page/resource"/>
-    <xsl:variable name="stk:login-page" as="element()?" select="/result/context/site/login-page/resource"/>
+    <xsl:variable name="stk:front-page" as="xs:integer?" select="if (stk:system.get-config-param('front-page', $stk:path) castable as xs:integer) then stk:system.get-config-param('front-page', $stk:path) else /result/context/site/front-page/resource/@key"/>
+    <xsl:variable name="stk:error-page" as="xs:integer?" select="/result/context/site/error-page/resource"/>
+    <xsl:variable name="stk:login-page" as="xs:integer?" select="/result/context/site/login-page/resource"/>
     
    <xsl:variable name="stk:config-filter">
         <xsl:value-of select="string-join($stk:theme-device-class/image/filters/filter, ';')"/>
