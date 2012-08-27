@@ -51,7 +51,7 @@
                                 </xsl:attribute>
                             </xsl:if>
                             <xsl:for-each select="$menuitems/menuitem">
-                                <xsl:if test="(@type != 'label') or (@type = 'label' and current()/menuitems)">
+                                <xsl:if test="((@type != 'label') or (@type = 'label' and current()/menuitems)) and not(current()/parameters/parameter[@name='hideFromMenu'] = 'true')">
                                     <li>
                                         <xsl:attribute name="class">
                                             <xsl:value-of select="concat('menu-level-', $currentLevel)"/>
