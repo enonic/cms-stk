@@ -84,7 +84,8 @@
                 <style>/_public/theme-basic/css/desktop.css</style>
             </styles>
             <scripts>
-                <script>/_public/theme-basic/javascript/common.js</script>
+                <script>/_public/theme-basic/javascript/all.js</script>
+                <script>/_public/theme-basic/javascript/desktop.js</script>
             </scripts>
         </device-class>
         <device-class name="mobile">
@@ -159,7 +160,8 @@
                 <style>/_public/theme-basic/css/mobile.css</style>
             </styles>
             <scripts>
-                <script>/_public/theme-basic/javascript/common.js</script>
+                <script>/_public/theme-basic/javascript/all.js</script>
+                <script>/_public/theme-basic/javascript/mobile.js</script>
             </scripts>
         </device-class>
     </device-classes>
