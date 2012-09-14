@@ -63,15 +63,29 @@
                                     <xsl:value-of select="$picture"/>
                                 </xsl:otherwise>
                             </xsl:choose>
-                        </xsl:variable>
-                        <span class="date">                            
-                            <xsl:value-of select="format-date(xs:date($date-parts[1]), $final-picture)"/>
-                        </span>
-                        <xsl:if test="$include-time and normalize-space($date-parts[2])">
-                            <xsl:call-template name="stk:time.format-time">
-                                <xsl:with-param name="time" select="$date-parts[2]"/>
-                            </xsl:call-template>
-                        </xsl:if>
+                        </xsl:variable><!--
+                        <span class="date">  -->                   
+                        <time>
+                            <xsl:attribute name="datetime">
+                                <xsl:value-of select="$date-parts[1]"/>
+                                <xsl:if test="$include-time and normalize-space($date-parts[2])">
+                                    <xsl:text>T</xsl:text>
+                                    <xsl:value-of select="$date-parts[2]"/>
+                                </xsl:if>
+                            </xsl:attribute>
+                            <span class="date">                                
+                                <xsl:value-of select="format-date(xs:date($date-parts[1]), $final-picture)"/>
+                            </span>
+                            <xsl:if test="$include-time and normalize-space($date-parts[2])">
+                                <xsl:text> </xsl:text>
+                                <xsl:call-template name="stk:time.format-time">
+                                    <xsl:with-param name="time" select="$date-parts[2]"/>
+                                </xsl:call-template>
+                            </xsl:if>
+                        </time>
+                            <!--
+                        </span>-->
+                        
                     </xsl:otherwise>
                 </xsl:choose>                
             </xsl:otherwise>
