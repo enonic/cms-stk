@@ -99,7 +99,7 @@
         </a>
     </xsl:template>
     
-    <xsl:template match="@src[parent::img]" mode="html.process">
+    <xsl:template match="@src[parent::img][starts-with(., 'image://')]" mode="html.process">
         <xsl:param name="filter" tunnel="yes" as="xs:string?"/>
         <xsl:param name="imagesize" tunnel="yes" as="element()*"/> 
         <xsl:param name="image" tunnel="yes" as="element()*"/>
