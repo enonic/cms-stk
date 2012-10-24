@@ -74,12 +74,13 @@
                                 </xsl:if>
                             </xsl:attribute>
                             <span class="date">                                
-                                <xsl:value-of select="format-date(xs:date($date-parts[1]), $final-picture)"/>
+                                <xsl:value-of select="format-date(xs:date($date-parts[1]), $final-picture, $language, (), ())"/>
                             </span>
                             <xsl:if test="$include-time and normalize-space($date-parts[2])">
                                 <xsl:text> </xsl:text>
                                 <xsl:call-template name="stk:time.format-time">
                                     <xsl:with-param name="time" select="$date-parts[2]"/>
+                                    <xsl:with-param name="language" select="$language"/>
                                 </xsl:call-template>
                             </xsl:if>
                         </time>
@@ -126,7 +127,7 @@
                     </xsl:choose>
                 </xsl:variable>
                 <span class="time">                    
-                    <xsl:value-of select="format-time($final-time, $final-picture)"/>
+                    <xsl:value-of select="format-time($final-time, $final-picture, $language)"/>
                 </span>
             </xsl:otherwise>
         </xsl:choose>           
