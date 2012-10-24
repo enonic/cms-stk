@@ -127,7 +127,7 @@
                     </xsl:choose>
                 </xsl:variable>
                 <span class="time">                    
-                    <xsl:value-of select="format-time($final-time, $final-picture, $language)"/>
+                    <xsl:value-of select="format-time($final-time, $final-picture, $language,(), ())"/>
                 </span>
             </xsl:otherwise>
         </xsl:choose>           
