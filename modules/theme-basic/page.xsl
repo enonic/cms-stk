@@ -59,7 +59,7 @@
     
     <!-- Desktop template -->
     <xsl:template name="desktop">
-        <html>
+        <html lang="{$stk:language}">
             <head>
                 <title>
                     <xsl:value-of select="stk:menu.menuitem-name($stk:current-resource)"/>
@@ -105,7 +105,7 @@
     
     <!-- MOBILE template -->
     <xsl:template name="mobile">
-        <html>
+        <html lang="{$stk:language}">
             <head>                
                 <title>
                     <xsl:value-of select="stk:menu.menuitem-name($stk:current-resource)"/>
