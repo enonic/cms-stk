@@ -26,12 +26,14 @@
         <xsl:param name="document" as="element()"/>
         <xsl:param name="image" as="element()*" select="//content[contentdata/sourceimage]"/>
         <xsl:param name="region-width" as="xs:integer" select="$stk:region-width"/>
-        <xsl:apply-templates select="$document/*|$document/text()" mode="html.process">
-            <xsl:with-param name="image" tunnel="yes" select="$image"/>
-            <xsl:with-param name="filter" tunnel="yes" select="$filter"/>
-            <xsl:with-param name="imagesize" tunnel="yes" select="$imagesize"/>
-            <xsl:with-param name="region-width" tunnel="yes" select="$region-width"/>
-        </xsl:apply-templates>
+        <div class="editor">
+            <xsl:apply-templates select="$document/*|$document/text()" mode="html.process">
+                <xsl:with-param name="image" tunnel="yes" select="$image"/>
+                <xsl:with-param name="filter" tunnel="yes" select="$filter"/>
+                <xsl:with-param name="imagesize" tunnel="yes" select="$imagesize"/>
+                <xsl:with-param name="region-width" tunnel="yes" select="$region-width"/>
+            </xsl:apply-templates>
+        </div>        
     </xsl:template>
     
     <xsl:template match="element()" mode="html.process">
