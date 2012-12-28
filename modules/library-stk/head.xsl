@@ -86,7 +86,7 @@
    <!-- Renders all CSS files and creates CSS for the regions defined in theme.xml  -->
    <xsl:template name="stk:head.create-css">
       <xsl:for-each select="$stk:theme-device-class/styles/style[not(normalize-space(@condition))]">
-         <link rel="stylesheet" href="{if (starts-with(., 'http://')) then . else portal:createResourceUrl(.)}" type="text/css">
+         <link rel="stylesheet" href="{if (matches(., '^http(s)?://')) then . else portal:createResourceUrl(.)}" type="text/css">
             <xsl:if test="normalize-space(@media)">
                <xsl:attribute name="media">
                   <xsl:value-of select="@media"/>
@@ -101,7 +101,7 @@
             <xsl:value-of select="@condition"/>
             <xsl:text disable-output-escaping="yes">]&gt;</xsl:text>
             <xsl:for-each select="$stk:theme-device-class/styles/style[@condition = current()/@condition]">
-               <link rel="stylesheet" type="text/css" href="{if (starts-with(., 'http://')) then . else portal:createResourceUrl(.)}">
+               <link rel="stylesheet" type="text/css" href="{if (matches(., '^http(s)?://')) then . else portal:createResourceUrl(.)}">
                   <xsl:if test="normalize-space(@media)">
                      <xsl:attribute name="media">
                         <xsl:value-of select="@media"/>
@@ -118,7 +118,7 @@
    <!-- Renders all javascript for current device as defined in the theme.xml -->
    <xsl:template name="stk:head.create-javascript">
       <xsl:for-each select="$stk:theme-device-class/scripts/script[not(normalize-space(@condition))]">
-         <script type="text/javascript" src="{if (starts-with(., 'http://')) then . else portal:createResourceUrl(.)}"/>
+         <script type="text/javascript" src="{if (matches(., '^http(s)?://')) then . else portal:createResourceUrl(.)}"/>
       </xsl:for-each>      
       
       <xsl:if test="$stk:theme-device-class/scripts/script[@condition != '']">
@@ -127,7 +127,7 @@
             <xsl:value-of select="@condition"/>
             <xsl:text disable-output-escaping="yes">]&gt; </xsl:text>
             <xsl:for-each select="$stk:theme-device-class/scripts/script[@condition = current()/@condition]">
-               <script type="text/javascript" src="{if (starts-with(., 'http://')) then . else portal:createResourceUrl(.)}"/>
+               <script type="text/javascript" src="{if (matches(., '^http(s)?://')) then . else portal:createResourceUrl(.)}"/>
             </xsl:for-each>
             <xsl:text disable-output-escaping="yes"> &lt;![endif]--&gt; </xsl:text>
          </xsl:for-each-group>
