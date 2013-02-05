@@ -21,7 +21,7 @@
     <!-- Displays menu item name -->
     <xsl:function name="stk:menu.menuitem-name" as="xs:string">
         <xsl:param name="menuitem" as="element()?"/>
-        <xsl:value-of select="if (normalize-space($menuitem/display-name)) then $menuitem/display-name else if (normalize-space($menuitem/alternative-name)) then $menuitem/alternative-name else $menuitem/name"/>
+        <xsl:value-of select="if (normalize-space($menuitem/menu-name)) then $menuitem/menu-name else $menuitem/display-name"/>
     </xsl:function>
     
     <!-- Menu template -->
