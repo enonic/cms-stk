@@ -14,7 +14,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:portal="http://www.enonic.com/cms/xslt/portal"
     xmlns:stk="http://www.enonic.com/cms/xslt/stk">
-    
+        
     <!-- Formats bytes -->
     <xsl:function name="stk:file.format-bytes" as="xs:string">
         <xsl:param name="bytes" as="xs:integer"/>
@@ -27,7 +27,7 @@
         <xsl:param name="icon-folder-path" as="xs:string"/>
         <xsl:param name="icon-image-prefix" as="xs:string" select="'icon-'"/>
         <xsl:param name="icon-image-file-extension" as="xs:string" select="'png'"/>
-        <xsl:variable name="file-extension" select="lower-case(tokenize($file-name, '\.')[last()])"/>
+        <xsl:variable name="file-extension" select="stk:file.get-extension($file-name)"/>
         <xsl:variable name="image-url">
             <xsl:value-of select="$icon-folder-path"/>
             <xsl:if test="not(ends-with($icon-folder-path, '/'))">/</xsl:if>
@@ -39,7 +39,7 @@
                 <xsl:when test="contains('ppt|pps', $file-extension)">
                     <xsl:text>ppt</xsl:text>
                 </xsl:when>
-                <xsl:when test="contains('gif|jpg|tif|psd', $file-extension)">
+                <xsl:when test="contains('gif|png|jpg|tif|psd', $file-extension)">
                     <xsl:text>img</xsl:text>
                 </xsl:when>
                 <xsl:when test="contains('doc|dot', $file-extension)">
@@ -70,13 +70,15 @@
             <xsl:if test="not(starts-with($icon-image-file-extension, '.'))">.</xsl:if>
             <xsl:value-of select="$icon-image-file-extension"/>
         </xsl:variable>
-        <img src="{portal:createResourceUrl($image-url)}" alt="{concat(stk:file.get-type($file-name), ' ', portal:localize('stk.file.icon'))}" class="icon"/>
+        <!--
+        <xsl:value-of select="stk:file.create-resource-url($image-url)"/>-->
+        <img src="{stk:file.create-resource-url($image-url)}" alt="{concat(stk:file.get-type($file-name), ' ', portal:localize('stk.file.icon'))}" class="icon"/>
     </xsl:template>
     
     <!-- Displays file type -->
     <xsl:function name="stk:file.get-type" as="xs:string">
         <xsl:param name="file-name" as="xs:string"/>
-        <xsl:variable name="file-extension" select="lower-case(tokenize($file-name, '\.')[last()])"/>
+        <xsl:variable name="file-extension" select="stk:file.get-extension($file-name)"/>
         <xsl:choose>
             <xsl:when test="contains('htm', $file-extension)">
                 <xsl:value-of select="portal:localize('stk.file.html')"/>
@@ -112,6 +114,37 @@
                 <xsl:value-of select="portal:localize('stk.file.file')"/>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:function>
+    
+    <xsl:function name="stk:file.get-extension" as="xs:string?">
+        <xsl:param name="file-path" as="xs:string"/>
+        <xsl:if test="contains($file-path, '.')">
+            <xsl:value-of select="lower-case(tokenize($file-path, '\.')[last()])"/>
+        </xsl:if>            
+    </xsl:function>
+    
+    <!-- generate public resource url -->
+    <xsl:function name="stk:file.create-resource-url">
+        <xsl:param name="file-path" as="xs:string"/>
+        <xsl:variable name="file-extension" as="xs:string?" select="stk:file.get-extension($file-path)"/>            
+        <xsl:if test="normalize-space($file-extension)">
+            <xsl:variable name="file-type" as="xs:string?">
+                <xsl:choose>
+                    <xsl:when test="matches($file-extension, 'png|jpe?g|gif|ico')">
+                        <xsl:text>img</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$file-extension = 'css'">
+                        <xsl:text>css</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="$file-extension = 'js'">
+                        <xsl:text>js</xsl:text>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:if test="normalize-space($file-type)">                    
+                <xsl:value-of select="portal:createResourceUrl(concat($stk:theme-public, '/', $file-type, '/', $file-path))"/>
+            </xsl:if>
+        </xsl:if>
     </xsl:function>
 
 </xsl:stylesheet>

@@ -1,0 +1,41 @@
+@import 'mixins.less';
+
+.accessibility {
+    &.bypass-links {
+        position: absolute;
+        
+        a {
+            position: absolute;
+            left: -10000em;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            
+            &:focus, &:active {
+                position: static;
+                left: 0;
+                width: auto;
+                height: auto;
+                overflow: visible;
+            }
+        }
+    }
+    
+    &.text-resizing-guidance {
+        span {
+            cursor: pointer;
+        }
+        
+        p {
+            display: none;
+            position: absolute;
+            z-index: 999;
+            top: 30px;
+            right: 30px;
+            background: #fff;
+            .border-radius(5px);
+            padding: 20px;
+            min-width: 1000px;
+        }
+    }
+}

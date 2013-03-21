@@ -1,5 +1,5 @@
 <config>
-    <theme>theme-basic</theme>
+    <theme>theme-sample-site</theme>
     <parameters>
         <parameter path="/" name="meta-generator">Enonic CMS</parameter>
         <parameter path="/" name="meta-author">Enonic</parameter>

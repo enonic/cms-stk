@@ -9,11 +9,9 @@
     <xsl:import href="/modules/library-stk/region.xsl"/>
     <xsl:import href="/modules/library-stk/head.xsl"/>
     <xsl:import href="/modules/library-stk/accessibility.xsl"/>    
-    <xsl:import href="/modules/library-stk/menu.xsl"/>
+    <xsl:import href="/modules/library-stk/navigation.xsl"/>
     <xsl:import href="/modules/library-stk/google.xsl"/>    
-    <xsl:import href="/modules/library-stk/system.xsl"/>
-    
-    <xsl:import href="/modules/library-stk/menu.xsl"/>
+    <xsl:import href="/modules/library-stk/system.xsl"/>   
 
     
     <!-- HTML 5 doctype -->
@@ -62,7 +60,7 @@
         <html lang="{$stk:language}">
             <head>
                 <title>
-                    <xsl:value-of select="stk:menu.menuitem-name($stk:current-resource)"/>
+                    <xsl:value-of select="stk:navigation.get-menuitem-name($stk:current-resource)"/>
                     <xsl:value-of select="concat(' - ', $stk:site-name)"/>
                 </title>
                 <link rel="shortcut icon" type="image/x-icon" href="{portal:createResourceUrl(concat($stk:theme-public, '/images/all/favicon.ico'))}"/>
@@ -76,11 +74,6 @@
             </head>
             <body>
                 <div id="container">
-                    <!--<xsl:call-template name="stk:menu.render">
-                        <xsl:with-param name="menuitems" select="/result/menus/menu/menuitems"/>
-                        <xsl:with-param name="levels" select="1"/>
-                        <xsl:with-param name="list-class" select="'menu horizontal main level1'" />
-                    </xsl:call-template>-->
                     <!-- Create content bypass links if defined in config -->
                     <xsl:call-template name="stk:accessibility.create-bypass-links"/>
                                         
@@ -88,7 +81,7 @@
                     <h1>My first headline</h1>
                     
                     <!-- Renders all regions defined in config -->
-                    <xsl:call-template name="stk:region.render">
+                    <xsl:call-template name="stk:region.create">
                         <xsl:with-param name="layout" select="$layout" as="xs:string"/>
                     </xsl:call-template>
                     
@@ -108,7 +101,7 @@
         <html lang="{$stk:language}">
             <head>                
                 <title>
-                    <xsl:value-of select="stk:menu.menuitem-name($stk:current-resource)"/>
+                    <xsl:value-of select="stk:navigation.get-menuitem-name($stk:current-resource)"/>
                 </title>
                 <link rel="shortcut icon" type="image/x-icon" href="{portal:createResourceUrl(concat($stk:theme-public, '/images/all/favicon.ico'))}"/>                
                 <xsl:call-template name="stk:head.create-metadata"/>                
@@ -127,7 +120,7 @@
                     <!-- Create content bypass links if defined in config -->
                     <xsl:call-template name="stk:accessibility.create-bypass-links"/>
                     
-                    <!--<xsl:call-template name="stk:menu.render">
+                    <!--<xsl:call-template name="stk:navigation.create">
                         <xsl:with-param name="menuitems" select="/result/menus/menu/menuitems"/>
                         <xsl:with-param name="levels" select="3"/>
                         <xsl:with-param name="list-id" select="'main-menu'"/>
@@ -143,7 +136,7 @@
                     <h1>My first headline</h1>
                     
                     <!-- Renders all regions defined in config -->
-                    <xsl:call-template name="stk:region.render">
+                    <xsl:call-template name="stk:region.create">
                         <xsl:with-param name="layout" select="$layout" as="xs:string"/>
                     </xsl:call-template>
                     
