@@ -21,6 +21,7 @@
     <!-- Generates image element -->
     <xsl:template name="stk:image.create">
         <xsl:param name="image" as="element()"/><!-- Image content node -->
+        <xsl:param name="scaling" as="xs:string?"/>
         <xsl:param name="size" as="xs:string?"/>
         <xsl:param name="background" as="xs:string?"/>
         <xsl:param name="title" as="xs:string?" select="$image/title"/>
@@ -31,22 +32,23 @@
         <xsl:param name="format" as="xs:string?" select="$stk:default-image-format"/>
         <xsl:param name="quality" as="xs:integer?" select="$stk:default-image-quality"/>
         <xsl:param name="region-width" as="xs:integer" select="$stk:region-width"/>
-        <xsl:param name="filter" as="xs:string?" select="$stk:config-filter"/><!-- Custom image filters -->
-        <xsl:param name="imagesize" as="element()*" select="$stk:config-imagesize"/><!-- Rel image size config -->
-        <xsl:variable name="width" select="stk:image.get-size($region-width, $imagesize, $size, (), $filter, $image, 'width')"/>
-        <xsl:variable name="height" select="stk:image.get-size($region-width, $imagesize, $size, (), $filter, $image, 'height')"/>
-        
+        <xsl:param name="filter" as="xs:string?" select="$stk:config-filter"/>
+        <!-- ensure that we have a trailing semicolon -->
+        <xsl:variable name="final-scaling" as="xs:string?" select="if (normalize-space($scaling) and not(ends-with($scaling, ';'))) then concat($scaling, ';') else $scaling"/>
+        <xsl:variable name="width" select="stk:image.get-size($region-width, $size, concat($final-scaling, $filter), $image, 'width')"/>
+        <xsl:variable name="height" select="stk:image.get-size($region-width, $size, concat($final-scaling, $filter), $image, 'height')"/>
+       
         <img alt="{$alt}">
             <xsl:attribute name="src">
                 <xsl:call-template name="stk:image.create-url">
                     <xsl:with-param name="image" select="$image"/>
+                    <xsl:with-param name="scaling" select="$final-scaling"/>
                     <xsl:with-param name="size" select="$size"/>
                     <xsl:with-param name="background" select="$background"/>
                     <xsl:with-param name="format" select="$format"/>
                     <xsl:with-param name="quality" select="$quality"/>
                     <xsl:with-param name="region-width" select="$region-width"/>
                     <xsl:with-param name="filter" select="$filter"/>
-                    <xsl:with-param name="imagesize" select="$imagesize"/>
                 </xsl:call-template>
             </xsl:attribute>
             <xsl:if test="$title">
@@ -85,25 +87,26 @@
     <!-- Generates image url -->
     <xsl:template name="stk:image.create-url">
         <xsl:param name="image" as="element()"/><!-- Image content node -->
+        <xsl:param name="scaling" as="xs:string?"/>
         <xsl:param name="size" as="xs:string?"/>
         <xsl:param name="background" as="xs:string?"/>
         <xsl:param name="format" as="xs:string?" select="$stk:default-image-format"/>
         <xsl:param name="quality" as="xs:integer?" select="$stk:default-image-quality"/>
         <xsl:param name="region-width" as="xs:integer" select="$stk:region-width"/>
         <xsl:param name="filter" as="xs:string?" select="$stk:config-filter"/><!-- Custom image filters -->
-        <xsl:param name="imagesize" as="element()*" select="$stk:config-imagesize"/><!-- Rel image size config -->
-        
-        <xsl:value-of select="portal:createImageUrl(stk:image.get-attachment-key($image/@key, $region-width, $imagesize, $size, (), $filter, $image), stk:image.create-filter($region-width, $imagesize, $size, (), $filter), $background, $format, $quality)"/>
+        <!-- ensure that we have a trailing semicolon -->
+        <xsl:variable name="final-scaling" as="xs:string?" select="if (normalize-space($scaling) and not(ends-with($scaling, ';'))) then concat($scaling, ';') else $scaling"/>
+        <xsl:value-of select="portal:createImageUrl(stk:image.get-attachment-key($image/@key, $region-width, $size, concat($final-scaling, $filter), $image), stk:image.create-filter($region-width, $size, concat($final-scaling, $filter), $image), $background, $format, $quality)"/>
     </xsl:template>
 
     <!-- Returns final image filter as xs:string? -->
     <xsl:function name="stk:image.create-filter" as="xs:string?">
         <xsl:param name="region-width" as="xs:integer"/>
-        <xsl:param name="imagesize" as="element()*"/>
         <xsl:param name="size" as="xs:string?"/>
-        <xsl:param name="url-filter" as="xs:string?"/>
         <xsl:param name="filter" as="xs:string?"/>
-        <xsl:variable name="selected-imagesize" select="$imagesize[@name = $size]"/>
+        <xsl:param name="image" as="element()"/>
+        <xsl:variable name="selected-imagesize" select="$stk:config-imagesize[@name = $size]"/>
+        <xsl:variable name="source-image-size" as="xs:integer*" select="$image/contentdata/sourceimage/@width, $image/contentdata/sourceimage/@height"/>
         <xsl:variable name="final-filter">
             <xsl:choose>
                 <!-- If custom image size definitions exists -->
@@ -132,97 +135,108 @@
                     <xsl:text>);</xsl:text>
                 </xsl:when>
                 <!-- If no custom image size definitions exists default sizes are used -->
-                <xsl:when test="$size = 'full'">
+                <xsl:when test="$size = 'full' or $size = 'regular' or $size = 'list'">
                     <xsl:value-of select="concat('scalewidth(', stk:image.calculate-size-by-default-ratio($region-width, $size), ');')"/>
                 </xsl:when>
                 <xsl:when test="$size = 'wide'">
                     <xsl:value-of select="concat('scalewide(', stk:image.calculate-size-by-default-ratio($region-width, 'wide-width'), ',', stk:image.calculate-size-by-default-ratio($region-width, 'wide-height'), ');')"/>
                 </xsl:when>
-                <xsl:when test="$size = 'regular'">
-                    <xsl:value-of select="concat('scalewidth(', stk:image.calculate-size-by-default-ratio($region-width, $size), ');')"/>
-                </xsl:when>
-                <xsl:when test="$size = 'list'">
-                    <xsl:value-of select="concat('scalewidth(', stk:image.calculate-size-by-default-ratio($region-width, $size), ');')"/>
-                </xsl:when>
-                <xsl:when test="$size = 'square'">
+                <xsl:when test="$size = 'square' or $size = 'thumbnail'">
                     <xsl:value-of select="concat('scalesquare(', stk:image.calculate-size-by-default-ratio($region-width, $size), ');')"/>
                 </xsl:when>
-                <xsl:when test="$size = 'thumbnail'">
-                    <xsl:value-of select="concat('scalesquare(', stk:image.calculate-size-by-default-ratio($region-width, $size),');')"/>
-                </xsl:when>
             </xsl:choose>
-            <xsl:if test="$url-filter != ''">
-                <xsl:value-of select="concat($url-filter, ';')"/>
-            </xsl:if>
-            <xsl:if test="$filter != ''">
-                <xsl:value-of select="$filter"/>
+            <xsl:if test="normalize-space($filter)">
+                <xsl:variable name="last-scale-filter" select="tokenize($filter, ';')[starts-with(., 'scale')][position() = last()]"/>
+                <xsl:if test="$last-scale-filter">
+                    <xsl:variable name="scale-type" select="tokenize($last-scale-filter, '\(')[1]"/>
+                    <xsl:variable name="scale-params" as="xs:double*">
+                        <xsl:for-each select="tokenize(tokenize($last-scale-filter, '\(|\)')[2], ',')">
+                            <xsl:sequence select="number(.)"/>
+                        </xsl:for-each>
+                    </xsl:variable>
+                    <xsl:value-of select="concat($scale-type, '(')"/>
+                    <xsl:if test="$scale-type = 'scalewide' or $scale-type = 'scalewidth' or $scale-type = 'scalemax' or $scale-type = 'scalesquare' or $scale-type = 'scaleblock'">
+                        <xsl:value-of select="if ($scale-params[1] gt $region-width) then $region-width else $scale-params[1]"/>
+                    </xsl:if>
+                    <xsl:if test="$scale-type = 'scaleheight'">
+                        <xsl:value-of select="if (stk:image.calculate-size($source-image-size, (), $scale-params[1]) gt $region-width) then stk:image.calculate-size($source-image-size, $region-width, ()) else $scale-params[1]"/>    
+                    </xsl:if>
+                    <xsl:if test="$scale-type = 'scalewide' or $scale-type = 'scaleblock'">
+                        <xsl:text>,</xsl:text>
+                        <xsl:value-of select="if ($scale-params[1] gt $region-width) then $region-width * ($scale-params[2] div $scale-params[1]) else $scale-params[2]"/>
+                        <xsl:if test="$scale-params[3]">
+                            <xsl:value-of select="concat(',', $scale-params[3])"/>
+                        </xsl:if>
+                        <xsl:if test="$scale-params[4]">
+                            <xsl:value-of select="concat(',', $scale-params[4])"/>
+                        </xsl:if>
+                    </xsl:if>
+                    <xsl:value-of select="');'"/>
+                </xsl:if>
+                <xsl:for-each select="tokenize($filter, ';')[not(starts-with(., 'scale'))][normalize-space(.)]">
+                    <xsl:value-of select="concat(., ';')"/>
+                </xsl:for-each>      
             </xsl:if>
         </xsl:variable>
-        <xsl:value-of select="$final-filter"/>
+        <xsl:value-of select="translate($final-filter, ' ', '')"/>
     </xsl:function>
     
     <!-- Returns final image width or height as xs:integer? -->
     <xsl:function name="stk:image.get-size" as="xs:integer?">
         <xsl:param name="region-width" as="xs:integer"/>
-        <xsl:param name="imagesize" as="element()*"/>
         <xsl:param name="size" as="xs:string?"/>
-        <xsl:param name="url-filter" as="xs:string?"/>
-        <xsl:param name="filter" as="xs:string?"/>
+        <xsl:param name="scaling" as="xs:string?"/>
         <xsl:param name="source-image" as="element()?"/>
         <xsl:param name="dimension" as="xs:string?"/>
-        <xsl:variable name="selected-imagesize" select="$imagesize[@name = $size]"/>
-        <xsl:variable name="source-image-size" as="xs:integer*" select="$source-image/contentdata/sourceimage/@width, $source-image/contentdata/sourceimage/@height"/>
+        <xsl:variable name="selected-imagesize" select="$stk:config-imagesize[@name = $size]"/>
+        <xsl:variable name="source-image-size" as="xs:integer*" select="$source-image/contentdata/sourceimage/@width, $source-image/contentdata/sourceimage/@height"/> 
         <xsl:variable name="final-image-size" as="xs:double*">
             <xsl:choose>
                 <!-- If custom scale filter applied. Possible weakness here; only the last scalefilter is taken into consideration -->
-                <xsl:when test="contains($filter, 'scale')">
-                    <xsl:variable name="last-scale-filter" select="tokenize($filter, ';')[contains(., 'scale')][position() = last()]"/>
-                    <!-- Supports all scale filters -->
+                <xsl:when test="normalize-space($scaling) and count(tokenize($scaling, ';')[starts-with(., 'scale')]) gt 0">
+                    <xsl:variable name="last-scale-filter" select="tokenize($scaling, ';')[starts-with(., 'scale')][position() = last()]"/>
+                    <xsl:variable name="scale-type" select="tokenize($last-scale-filter, '\(')[1]"/>                    
+                    <xsl:variable name="scale-params" as="xs:double*">
+                        <xsl:for-each select="tokenize(tokenize($last-scale-filter, '\(|\)')[2], ',')">
+                            <xsl:sequence select="number(.)"/>
+                        </xsl:for-each>
+                    </xsl:variable>
+                    
+                    <!-- make sure that the image fits within the current region width -->
                     <xsl:choose>
-                        <!-- Scaleheight -->
-                        <xsl:when test="contains($last-scale-filter, 'scaleheight')">
-                            <xsl:sequence select="stk:image.calculate-size($source-image-size, (), xs:integer(tokenize($last-scale-filter, '\(|\)')[2])), xs:integer(tokenize($last-scale-filter, '\(|\)')[2])"/>
+                        <xsl:when test="$scale-type = 'scalewidth'">
+                            <xsl:value-of select="if ($scale-params[1] gt $region-width) then $region-width else $scale-params[1]"/>                            
+                            <xsl:value-of select="stk:image.calculate-size($source-image-size, if ($scale-params[1] gt $region-width) then $region-width else $scale-params[1], ())"/>   
+                         </xsl:when>
+                         <xsl:when test="$scale-type = 'scaleheight'">
+                            <xsl:value-of select="if (stk:image.calculate-size($source-image-size, (), $scale-params[1]) gt $region-width) then $region-width else stk:image.calculate-size($source-image-size, (), $scale-params[1])"/> 
+                            <xsl:value-of select="if (stk:image.calculate-size($source-image-size, (), $scale-params[1]) gt $region-width) then stk:image.calculate-size($source-image-size, $region-width, ()) else $scale-params[1]"/>    
+                        </xsl:when>                        
+                        <xsl:when test="$scale-type = 'scalesquare'">
+                            <xsl:value-of select="if ($scale-params[1] gt $region-width) then $region-width else $scale-params[1]"/>
+                            <xsl:value-of select="if ($scale-params[1] gt $region-width) then $region-width else $scale-params[1]"/>
                         </xsl:when>
-                        <!-- Scalemax -->
-                        <xsl:when test="contains($last-scale-filter, 'scalemax')">
+                        <xsl:when test="$scale-type = 'scalemax'">
                             <xsl:choose>
                                 <xsl:when test="$source-image-size[1] ge $source-image-size[2]">
-                                    <xsl:sequence select="xs:integer(tokenize($last-scale-filter, '\(|\)')[2]), stk:image.calculate-size($source-image-size, xs:integer(tokenize($last-scale-filter, '\(|\)')[2]), ())"/>
+                                    <xsl:value-of select="if ($scale-params[1] gt $region-width) then $region-width else $scale-params[1]"/>
+                                    <xsl:value-of select="stk:image.calculate-size($source-image-size, if ($scale-params[1] gt $region-width) then $region-width else $scale-params[1], ())"/> 
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:sequence select="stk:image.calculate-size($source-image-size, (), xs:integer(tokenize($last-scale-filter, '\(|\)')[2])), xs:integer(tokenize($last-scale-filter, '\(|\)')[2])"/>
+                                    <xsl:value-of select="if (stk:image.calculate-size($source-image-size, (), $scale-params[1]) gt $region-width) then $region-width else stk:image.calculate-size($source-image-size, (), $scale-params[1])"/>    
+                                    <xsl:value-of select="if (stk:image.calculate-size($source-image-size, (), $scale-params[1]) gt $region-width) then stk:image.calculate-size($source-image-size, $region-width, ()) else $scale-params[1]"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:when>
-                        <!-- Scalesquare -->
-                        <xsl:when test="contains($last-scale-filter, 'scalesquare')">
-                            <xsl:sequence select="xs:integer(tokenize($last-scale-filter, '\(|\)')[2]), xs:integer(tokenize($last-scale-filter, '\(|\)')[2])"/>
+                        <xsl:when test="$scale-type = 'scaleblock'">
+                            <xsl:value-of select="if ($scale-params[1] gt $region-width) then $region-width else $scale-params[1]"/>
+                            <xsl:value-of select="if ($scale-params[1] gt $region-width) then $region-width * ($scale-params[2] div $scale-params[1]) else $scale-params[2]"/>
                         </xsl:when>
-                        <!-- Scalewide -->
-                        <xsl:when test="contains($last-scale-filter, 'scalewide')">
-                            <xsl:sequence select="xs:integer(tokenize($last-scale-filter, '\(|,|\)')[2])"/>
-                            <xsl:choose>
-                                <xsl:when test="stk:image.calculate-size($source-image-size, xs:integer(tokenize($last-scale-filter, '\(|,|\)')[2]), ()) le xs:integer(normalize-space(tokenize($last-scale-filter, '\(|,|\)')[3]))">
-                                    <xsl:sequence select="stk:image.calculate-size($source-image-size, xs:integer(tokenize($last-scale-filter, '\(|,|\)')[2]), ())"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:sequence select="xs:integer(normalize-space(tokenize($last-scale-filter, '\(|,|\)')[3]))"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:when>
-                        <!-- Scaleblock -->
-                        <xsl:when test="contains($last-scale-filter, 'scaleblock')">
-                            <xsl:sequence select="xs:integer(tokenize($last-scale-filter, '\(|,|\)')[2]), xs:integer(normalize-space(tokenize($last-scale-filter, '\(|,|\)')[3]))"/>
-                        </xsl:when>
-                        <!-- Scalewidth -->
-                        <xsl:when test="contains($last-scale-filter, 'scalewidth')">
-                            <xsl:sequence select="xs:integer(tokenize($last-scale-filter, '\(|\)')[2]), stk:image.calculate-size($source-image-size, xs:integer(tokenize($last-scale-filter, '\(|\)')[2]), ())"/>
-                        </xsl:when>
+                        <xsl:when test="$scale-type = 'scalewide'">
+                            <xsl:value-of select="if ($scale-params[1] gt $region-width) then $region-width else $scale-params[1]"/>
+                            <xsl:value-of select="min((stk:image.calculate-size($source-image-size, if ($scale-params[1] gt $region-width) then $region-width else $scale-params[1], ()), if ($scale-params[1] gt $region-width) then $scale-params[2] * ($region-width div $scale-params[1]) else $scale-params[2]))"/>
+                        </xsl:when>   
                     </xsl:choose>
-                </xsl:when>
-                <!-- If custom image size selected -->
-                <xsl:when test="$size = 'custom' and contains($url-filter, 'scalewidth')">
-                    <xsl:sequence select="xs:integer(tokenize($url-filter, '\(|\)')[2]), stk:image.calculate-size($source-image-size, xs:integer(tokenize($url-filter, '\(|\)')[2]), ())"/>
                 </xsl:when>
                 <!-- If custom image size definitions exists -->
                 <xsl:when test="$selected-imagesize">
@@ -270,7 +284,7 @@
                     </xsl:choose>
                 </xsl:when>
                 <!-- If no custom image size definitions exists default sizes are used -->
-                <xsl:when test="$size = 'full'">
+                <xsl:when test="$size = 'full' or $size = 'regular' or $size = 'list'">
                     <xsl:sequence select="stk:image.calculate-size-by-default-ratio($region-width, $size), stk:image.calculate-size($source-image-size, stk:image.calculate-size-by-default-ratio($region-width, $size), ())"/>
                 </xsl:when>
                 <xsl:when test="$size = 'wide'">
@@ -284,16 +298,7 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
-                <xsl:when test="$size = 'regular'">
-                    <xsl:sequence select="stk:image.calculate-size-by-default-ratio($region-width, $size), stk:image.calculate-size($source-image-size, stk:image.calculate-size-by-default-ratio($region-width, $size), ())"/>
-                </xsl:when>
-                <xsl:when test="$size = 'list'">
-                    <xsl:sequence select="stk:image.calculate-size-by-default-ratio($region-width, $size), stk:image.calculate-size($source-image-size, stk:image.calculate-size-by-default-ratio($region-width, $size), ())"/>
-                </xsl:when>
-                <xsl:when test="$size = 'square'">
-                    <xsl:sequence select="stk:image.calculate-size-by-default-ratio($region-width, $size), stk:image.calculate-size-by-default-ratio($region-width, $size)"/>
-                </xsl:when>
-                <xsl:when test="$size = 'thumbnail'">
+                <xsl:when test="$size = 'square' or $size = 'thumbnail'">
                     <xsl:sequence select="stk:image.calculate-size-by-default-ratio($region-width, $size), stk:image.calculate-size-by-default-ratio($region-width, $size)"/>
                 </xsl:when>
                 <!-- Original image size -->
@@ -301,30 +306,13 @@
                     <xsl:sequence select="$source-image-size[1], $source-image-size[2]"/>
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:variable>
-        
-        <!-- make sure we don't output an image that is wider than the available region width -->
-        <xsl:variable name="max-height" select="stk:image.calculate-size($source-image-size, $region-width, ())" as="xs:double"/>
+        </xsl:variable>        
         <xsl:choose>
             <xsl:when test="$dimension = 'height' and $final-image-size[2]">
-                <xsl:choose>
-                    <xsl:when test="$final-image-size[2] gt $max-height">
-                        <xsl:value-of select="$max-height"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$final-image-size[2]"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:value-of select="$final-image-size[2]"/>
             </xsl:when>
             <xsl:when test="$final-image-size[1]">
-                <xsl:choose>
-                    <xsl:when test="$final-image-size[1] gt $region-width">
-                        <xsl:value-of select="$region-width"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$final-image-size[1]"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:value-of select="$final-image-size[1]"/>
             </xsl:when>
         </xsl:choose>
     </xsl:function>
@@ -333,12 +321,10 @@
     <xsl:function name="stk:image.get-attachment-key" as="xs:string">
         <xsl:param name="key" as="xs:string"/>
         <xsl:param name="region-width" as="xs:integer"/>
-        <xsl:param name="imagesize" as="element()*"/>
         <xsl:param name="size" as="xs:string?"/>
-        <xsl:param name="url-filter" as="xs:string?"/>
-        <xsl:param name="filter" as="xs:string?"/>
+        <xsl:param name="scaling" as="xs:string?"/>
         <xsl:param name="source-image" as="element()?"/>
-        <xsl:variable name="image-width" select="stk:image.get-size($region-width, $imagesize, $size, $url-filter, $filter, $source-image, 'width')"/>
+        <xsl:variable name="image-width" select="stk:image.get-size($region-width, $size, $scaling, $source-image, 'width')"/>
         <xsl:variable name="attachment-key">
             <xsl:value-of select="$key"/>
             <xsl:choose>
@@ -378,14 +364,16 @@
         <xsl:if test="$source-image-size[1] and $source-image-size[2]">
             <xsl:choose>
                 <xsl:when test="$new-width">
-                    <xsl:value-of select="floor($new-width * $source-image-size[2] div $source-image-size[1])"/>
+                    <xsl:value-of select="floor($new-width div ($source-image-size[1] div $source-image-size[2]))"/>
                 </xsl:when>
                 <xsl:when test="$new-height">
-                    <xsl:value-of select="floor($new-height * $source-image-size[1] div $source-image-size[2])"/>
+                    <xsl:value-of select="floor($new-height * ($source-image-size[1] div $source-image-size[2]))"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:if>
     </xsl:function>
+    
+    
     
 
 

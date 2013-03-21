@@ -20,19 +20,29 @@
    <!-- Accessibility links -->
    <!-- Renders hotkeys to access different anchors as defined in the theme.xml -->
    <xsl:template name="stk:accessibility.create-bypass-links">
-      <xsl:if test="exists($stk:theme-config/accessibility/access-key)">
-         <nav id="accessibility-links">
-            <ul>
-               <xsl:for-each select="$stk:theme-config/accessibility/access-key">
+      <xsl:if test="exists($stk:theme-config/accessibility/bypass[@text][@anchor])">
+         <ul class="accessibility bypass-links">
+               <xsl:for-each select="$stk:theme-config/accessibility/bypass[@text][@anchor]">
                   <li>
-                     <a href="#{@anchor}" accesskey="{@key}">
+                     <a href="#{@anchor}">
+                        <xsl:if test="normalize-space(@access-key)">
+                           <xsl:attribute name="accesskey" select="@access-key"/>
+                        </xsl:if>
                         <xsl:value-of select="portal:localize(@text)"/>
                      </a>
                   </li>
                </xsl:for-each>
-            </ul>
-         </nav>
+         </ul>         
       </xsl:if>
+   </xsl:template>
+   
+   <xsl:template name="stk:accessibility.create-text-resizing-guidance">
+      <div class="accessibility text-resizing-guidance">
+         <span>AAA</span>
+         <p>
+            <xsl:value-of select="portal:localize('stk.accessibility.text-resizing-guidance')"/>
+         </p>
+      </div>
    </xsl:template>
   
 </xsl:stylesheet>

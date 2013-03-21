@@ -6,7 +6,8 @@
    xmlns:stk="http://www.enonic.com/cms/xslt/stk">
   
    <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
-   <xsl:import href="/modules/library-stk/system.xsl"/>
+   <xsl:import href="/modules/library-stk/system.xsl"/>   
+   <xsl:import href="/modules/library-stk/file.xsl"/>
    
    <!-- Metadata template -->
    <xsl:template name="stk:head.create-metadata">
@@ -45,6 +46,7 @@
       </xsl:variable>      
       
       <meta charset="utf-8"/>
+      <meta content="IE=Edge" http-equiv="X-UA-Compatible"/>
       
       <xsl:if test="normalize-space($stk:head.meta-generator)">
          <meta name="generator" content="{$stk:head.meta-generator}"/>
@@ -72,21 +74,26 @@
       </xsl:if>
       
       <!-- for Google Search Appliance -->
-      <xsl:if test="normalize-space($stk:head.meta-content-key)">
-         <meta name="_key" content="{$stk:head.meta-content-key}"/>
+      <xsl:if test="stk:system.get-config-param('gsa-version', $stk:path)">
+         <xsl:if test="normalize-space($stk:head.meta-content-key)">
+            <meta name="{if (number(stk:system.get-config-param('gsa-version', $stk:path)) ge 1.1) then 'dcterms.identifier' else '_key'}" content="{$stk:head.meta-content-key}"/>
+         </xsl:if>
+         <xsl:if test="normalize-space($stk:head.meta-content-type)">
+            <meta name="{if (number(stk:system.get-config-param('gsa-version', $stk:path)) ge 1.1) then 'dcterms.type' else '_cty'}" content="{$stk:head.meta-content-type}"/>
+         </xsl:if>
       </xsl:if>
-      <xsl:if test="normalize-space($stk:head.meta-content-type)">
-         <meta name="_cty" content="{$stk:head.meta-content-type}"/>
-      </xsl:if>
+      
    </xsl:template>
-   
-   
 
    <!-- Css common template -->
    <!-- Renders all CSS files and creates CSS for the regions defined in theme.xml  -->
    <xsl:template name="stk:head.create-css">
-      <xsl:for-each select="$stk:theme-device-class/styles/style[not(normalize-space(@condition))]">
-         <link rel="stylesheet" href="{if (matches(., '^http(s)?://')) then . else portal:createResourceUrl(.)}" type="text/css">
+      <!-- resources without a condition -->
+      <xsl:for-each select="($stk:theme-all-devices | $stk:theme-device-class)/styles/style[not(normalize-space(@condition))]">
+         <xsl:variable name="resource-url" as="xs:string">
+            <xsl:apply-templates select="." mode="stk:head"/>
+         </xsl:variable>
+         <link rel="stylesheet" href="{$resource-url}">
             <xsl:if test="normalize-space(@media)">
                <xsl:attribute name="media">
                   <xsl:value-of select="@media"/>
@@ -94,45 +101,65 @@
             </xsl:if>
          </link>
       </xsl:for-each>
-
-      <xsl:if test="$stk:theme-device-class/styles/style[@condition != '']">
-         <xsl:for-each-group select="$stk:theme-device-class/styles/style[normalize-space(@condition)]" group-by="@condition">            
-            <xsl:text disable-output-escaping="yes">&lt;!--[if </xsl:text>
-            <xsl:value-of select="@condition"/>
-            <xsl:text disable-output-escaping="yes">]&gt;</xsl:text>
-            <xsl:for-each select="$stk:theme-device-class/styles/style[@condition = current()/@condition]">
-               <link rel="stylesheet" type="text/css" href="{if (matches(., '^http(s)?://')) then . else portal:createResourceUrl(.)}">
-                  <xsl:if test="normalize-space(@media)">
-                     <xsl:attribute name="media">
-                        <xsl:value-of select="@media"/>
-                     </xsl:attribute>
-                  </xsl:if>
-               </link>
-            </xsl:for-each>
-            <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
-         </xsl:for-each-group>
-      </xsl:if>
+      <!-- resources with a condition -->
+      <xsl:for-each-group select="($stk:theme-all-devices | $stk:theme-device-class)/styles/style" group-by="@condition">  
+         <xsl:text disable-output-escaping="yes">&lt;!--[if </xsl:text>
+         <xsl:value-of select="current-grouping-key()"/>
+         <xsl:text disable-output-escaping="yes">]&gt;</xsl:text>
+         <xsl:for-each select="current-group()">
+            <xsl:variable name="resource-url" as="xs:string">
+               <xsl:apply-templates select="." mode="stk:head"/>
+            </xsl:variable>
+            <link rel="stylesheet" href="{$resource-url}">
+               <xsl:if test="normalize-space(@media)">
+                  <xsl:attribute name="media">
+                     <xsl:value-of select="@media"/>
+                  </xsl:attribute>
+               </xsl:if>
+            </link>
+         </xsl:for-each>
+         <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
+      </xsl:for-each-group>
    </xsl:template>
 
    <!-- Script common template -->
    <!-- Renders all javascript for current device as defined in the theme.xml -->
    <xsl:template name="stk:head.create-javascript">
-      <xsl:for-each select="$stk:theme-device-class/scripts/script[not(normalize-space(@condition))]">
-         <script type="text/javascript" src="{if (matches(., '^http(s)?://')) then . else portal:createResourceUrl(.)}"/>
-      </xsl:for-each>      
-      
-      <xsl:if test="$stk:theme-device-class/scripts/script[@condition != '']">
-         <xsl:for-each-group select="$stk:theme-device-class/scripts/script[normalize-space(@condition)]" group-by="@condition">            
-            <xsl:text disable-output-escaping="yes"> &lt;!--[if </xsl:text>
-            <xsl:value-of select="@condition"/>
-            <xsl:text disable-output-escaping="yes">]&gt; </xsl:text>
-            <xsl:for-each select="$stk:theme-device-class/scripts/script[@condition = current()/@condition]">
-               <script type="text/javascript" src="{if (matches(., '^http(s)?://')) then . else portal:createResourceUrl(.)}"/>
-            </xsl:for-each>
-            <xsl:text disable-output-escaping="yes"> &lt;![endif]--&gt; </xsl:text>
-         </xsl:for-each-group>
-      </xsl:if>
+      <xsl:for-each select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script[not(normalize-space(@condition))]">
+         <xsl:variable name="resource-url" as="xs:string">
+            <xsl:apply-templates select="." mode="stk:head"/>
+         </xsl:variable>
+         <script src="{$resource-url}"/>
+      </xsl:for-each>   
+      <xsl:for-each-group select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script" group-by="@condition">            
+         <xsl:text disable-output-escaping="yes"> &lt;!--[if </xsl:text>
+         <xsl:value-of select="current-grouping-key()"/>
+         <xsl:text disable-output-escaping="yes">]&gt; </xsl:text>
+         <xsl:for-each select="current-group()">
+            <xsl:variable name="resource-url" as="xs:string">
+               <xsl:apply-templates select="." mode="stk:head"/>
+            </xsl:variable>
+            <script src="{$resource-url}"/>
+         </xsl:for-each>
+         <xsl:text disable-output-escaping="yes"> &lt;![endif]--&gt; </xsl:text>
+      </xsl:for-each-group>
    </xsl:template>
    
+   <xsl:template match="style|script" mode="stk:head">
+      <xsl:choose>
+         <!-- external resource -->
+         <xsl:when test="matches(., '^http(s)?://')">
+            <xsl:value-of select="."/>
+         </xsl:when>
+         <!-- theme resource -->
+         <xsl:when test="matches(., '\{theme\}')">
+            <xsl:value-of select="stk:file.create-resource-url(substring-after(., '{theme}'))"/>
+         </xsl:when>
+         <!-- other local resources -->
+         <xsl:otherwise>
+            <xsl:value-of select="portal:createResourceUrl(.)"/>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
 
 </xsl:stylesheet>

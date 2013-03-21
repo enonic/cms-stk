@@ -74,7 +74,7 @@
                                 </xsl:if>
                             </xsl:attribute>
                             <span class="date">                                
-                                <xsl:value-of select="format-date(xs:date($date-parts[1]), $final-picture, $language, (), ())"/>
+                                <xsl:value-of select="format-date(xs:date($date-parts[1]), $final-picture, $language, (), ())" disable-output-escaping="yes"/>
                             </span>
                             <xsl:if test="$include-time and normalize-space($date-parts[2])">
                                 <xsl:text> </xsl:text>

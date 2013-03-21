@@ -1,0 +1,93 @@
+<theme>
+    <region-prefix/>
+    <!--
+    <accessibility>
+        <bypass text="stk.accessibility.skip-to-main-content" anchor="main" access-key=""/>
+    </accessibility>
+    -->
+    <device-classes>
+        <device-class name="all">
+            <image>
+                <format>jpeg</format>
+                <quality>80</quality>
+                <filters>
+                    <filter>rounded(4)</filter>
+                </filters>
+                <sizes>
+                    <size name="full">
+                        <filter>scalewidth</filter>
+                        <width>1</width>
+                    </size>
+                    <size name="wide">
+                        <filter>scalewide</filter>
+                        <width>1</width>
+                        <height>0.4</height>
+                    </size>
+                    <size name="regular">
+                        <filter>scalewidth</filter>
+                        <width>0.4</width>
+                    </size>
+                    <size name="list">
+                        <filter>scalewidth</filter>
+                        <width>0.3</width>
+                    </size>
+                    <size name="square">
+                        <filter>scalesquare</filter>
+                        <size>0.4</size>
+                    </size>
+                    <size name="thumbnail">
+                        <filter>scalesquare</filter>
+                        <size>0.1</size>
+                    </size>
+                </sizes>
+            </image>
+        </device-class>
+        <device-class name="desktop,unknown">
+            <layout name="default">
+                <area width="960">
+                    <region name="center">
+                        <padding>
+                            <right>0</right>
+                            <left>0</left>
+                            <top>0</top>
+                            <bottom>0</bottom>
+                        </padding>
+                        <scalable>true</scalable>
+                    </region>
+                </area>
+            </layout>            
+            <styles>
+                <style>{theme}desktop.css</style>
+            </styles>
+            <scripts>
+                <script>{theme}desktop-min.js</script>
+            </scripts>
+        </device-class>
+        <device-class name="mobile">
+            <layout name="default">
+                <area width="320">
+                    <regions>
+                        <region name="center">
+                            <width>296</width>
+                            <padding>
+                                <left>0</left>
+                                <right>0</right>
+                                <top>0</top>
+                                <bottom>0</bottom>
+                            </padding>
+                        </region>
+                    </regions>
+                </area>                    
+            </layout>
+            <image>
+                <quality>70</quality>
+            </image>
+            <styles>
+                <style>{theme}mobile.css</style>
+            </styles>
+            <scripts>
+                <script>{theme}mobile-min.js</script>
+            </scripts>
+        </device-class>
+    </device-classes>
+</theme>

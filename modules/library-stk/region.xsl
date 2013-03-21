@@ -23,16 +23,16 @@
 
     <!-- Regions template -->
     <!-- Renders region(s), either specified by region-name or all available regions -->
-    <xsl:template name="stk:region.render">
+    <xsl:template name="stk:region.create">
         <xsl:param name="region-name" as="xs:string?"/>
         <xsl:param name="layout" as="xs:string" select="'default'"/>
         <xsl:param name="content-prepend" as="document-node()*"/>
         <xsl:param name="content-append" as="document-node()*"/>
         
         <xsl:for-each select="$stk:theme-device-class/layout[tokenize(@name, ',') = $layout]//region[if ($region-name) then @name = $region-name else *]">
-            <!-- Creates region if it contains portlets or this is system region and error page-->
+            <!-- Creates region if it contains portlets -->
             <xsl:if
-                test="count($stk:rendered-page/regions/region[name = concat($stk:theme-region-prefix, current()/@name)]/windows/window) gt 0 or (current()/system = 'true' and $stk:error-page/@key = portal:getPageKey())">
+                test="count($stk:rendered-page/regions/region[name = concat($stk:theme-region-prefix, current()/@name)]/windows/window) gt 0">
                 
                 <xsl:variable name="active-siblings" as="element()*" select="../region[index-of($stk:region.active-regions/name, concat($stk:theme-region-prefix, @name)) castable as xs:integer]"/>
                 
@@ -62,6 +62,10 @@
                             <xsl:value-of select="concat(' ', current()/@class)"/>
                         </xsl:if>
                     </xsl:attribute>
+                    
+                    <xsl:if test="normalize-space(current()/@role)">
+                        <xsl:attribute name="role" select="current()/@role"/>
+                    </xsl:if>
                     
                     <xsl:if test="$content-prepend/node()">
                         <xsl:copy-of select="$content-prepend"/>

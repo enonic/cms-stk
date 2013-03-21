@@ -1,0 +1,66 @@
+.font-size(@sizeValue) {
+  @remValue: @sizeValue / 16;
+  @pxValue: @sizeValue;
+  font-size: ~"@{pxValue}px"; 
+  font-size: ~"@{remValue}rem";
+}
+
+.border-radius(@radius) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  -ms-border-radius: @radius;
+  -o-border-radius: @radius;
+  border-radius: @radius;
+}
+
+.box-shadow(@shadow) {
+  -webkit-box-shadow: @shadow;  
+  -moz-box-shadow: @shadow;
+  box-shadow: @shadow;
+}
+
+.user-select(@select) {    
+    -webkit-user-select: @select;
+    -moz-user-select: @select;
+    -ms-user-select: @select;
+    -o-user-select: @select;
+    user-select: @select;
+}
+
+.rotate(@degrees) {
+  -webkit-transform: rotate(@degrees);
+     -moz-transform: rotate(@degrees);
+      -ms-transform: rotate(@degrees);
+       -o-transform: rotate(@degrees);
+          transform: rotate(@degrees);
+}
+
+#gradient {    
+    .horizontal (@startColor: #555, @endColor: #333) {
+        background-color: @endColor;
+        background-repeat: repeat-x;
+        background-image: -moz-linear-gradient(left, @startColor, @endColor);
+        background-image: -ms-linear-gradient(left, @startColor, @endColor);
+        background-image: -webkit-gradient(linear, left top, right top, color-stop(0%, @startColor), color-stop(100%, @endColor));
+        background-image: -webkit-linear-gradient(left, @startColor, @endColor);
+        background-image: -o-linear-gradient(left, @startColor, @endColor);
+        background-image: linear-gradient(left, @startColor, @endColor);
+    }
+  
+    .vertical (@startColor: #555, @endColor: #333) {
+        background-color: @endColor;
+        background-repeat: repeat-x;
+        background-image: -moz-linear-gradient(@startColor, @endColor);
+        background-image: -ms-linear-gradient(@startColor, @endColor);
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @startColor), color-stop(100%, @endColor));
+        background-image: -webkit-linear-gradient(@startColor, @endColor);
+        background-image: -o-linear-gradient(@startColor, @endColor);
+        background-image: linear-gradient(@startColor, @endColor);
+    }
+}
+
+.box-sizing(@sizing) {
+    -webkit-box-sizing: @sizing;
+	-moz-box-sizing: @sizing;
+	box-sizing: @sizing;
+}

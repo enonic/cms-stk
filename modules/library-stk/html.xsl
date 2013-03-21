@@ -46,13 +46,6 @@
         <xsl:copy/>
     </xsl:template>
     
-    <!-- Replaces @target=_blank with @rel=external -->
-    <xsl:template match="@target" mode="html.process">
-        <xsl:if test=". = '_blank'">
-            <xsl:attribute name="rel">external</xsl:attribute>
-        </xsl:if>
-    </xsl:template>
-    
     <!-- Replaces td, th @align with @style -->
     <xsl:template match="table/@align|td/@align|th/@align" mode="html.process">
         <xsl:attribute name="style">
@@ -102,8 +95,8 @@
     </xsl:template>
     
     <xsl:template match="@src[parent::img][starts-with(., 'image://')]" mode="html.process">
-        <xsl:param name="filter" tunnel="yes" as="xs:string?"/>
-        <xsl:param name="imagesize" tunnel="yes" as="element()*"/> 
+        <xsl:param name="filter" tunnel="yes" as="xs:string?"/><!--
+        <xsl:param name="imagesize" tunnel="yes" as="element()*"/> -->
         <xsl:param name="image" tunnel="yes" as="element()*"/>
         <xsl:param name="region-width" tunnel="yes" as="xs:integer?"/>
         <xsl:variable name="url-part" select="tokenize(., '://|\?|&amp;')"/>
@@ -128,10 +121,9 @@
                         <xsl:with-param name="image" select="$source-image"/>
                         <xsl:with-param name="size" select="$url-size"/>
                         <xsl:with-param name="background" select="$url-background"/>
-                        <xsl:with-param name="format" select="$url-format" />
+                        <xsl:with-param name="format" select="if (normalize-space($url-format)) then $url-format else $stk:default-image-format" />
                         <xsl:with-param name="quality" select="if ($url-quality castable as xs:integer) then $url-quality else $stk:default-image-quality"/>
-                        <xsl:with-param name="filter" select="$url-filter"/>
-                        <xsl:with-param name="imagesize" select="$imagesize"/>
+                        <xsl:with-param name="scaling" select="$url-filter"/>
                     </xsl:call-template>
                 </xsl:when>   
                 <xsl:otherwise>
@@ -140,8 +132,8 @@
             </xsl:choose>
         </xsl:attribute>
         <xsl:if test="$source-image">
-            <xsl:variable name="image-width" select="stk:image.get-size($region-width, $imagesize, $url-size, $url-filter, $filter, $source-image, 'width')"/>
-            <xsl:variable name="image-height" select="stk:image.get-size($region-width, $imagesize, $url-size, $url-filter, $filter, $source-image, 'height')"/>
+            <xsl:variable name="image-width" select="stk:image.get-size($region-width, $url-size, concat($url-filter, $filter), $source-image, 'width')"/>
+            <xsl:variable name="image-height" select="stk:image.get-size($region-width, $url-size, concat($url-filter, $filter), $source-image, 'height')"/>
             <xsl:if test="$image-width and $image-height">
                 <xsl:attribute name="width">
                     <xsl:value-of select="$image-width"/>
