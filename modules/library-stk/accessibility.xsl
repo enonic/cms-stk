@@ -38,7 +38,11 @@
    
    <xsl:template name="stk:accessibility.create-text-resizing-guidance">
       <div class="accessibility text-resizing-guidance">
-         <span>AAA</span>
+         <span>
+            <xsl:for-each select="1 to 3">               
+               <span>A</span>
+            </xsl:for-each>
+         </span>
          <p>
             <xsl:value-of select="portal:localize('stk.accessibility.text-resizing-guidance')"/>
          </p>
