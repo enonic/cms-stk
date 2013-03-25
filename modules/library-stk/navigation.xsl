@@ -72,7 +72,7 @@
         <xsl:param name="class" as="xs:string?"/>
         <xsl:param name="id" as="xs:string?"/>
         <xsl:if test="$current-level le $levels">
-            <ol>
+            <ol role="menu">
                 <xsl:attribute name="class">
                     <xsl:value-of select="concat('menu-level-', $current-level)"/>
                     <xsl:if test="normalize-space($class)">
@@ -95,16 +95,16 @@
     <xsl:template match="menuitem" mode="stk:navigation.create-menu">
         <xsl:param name="levels" as="xs:integer" tunnel="yes"/>
         <xsl:param name="current-level" as="xs:integer"/>
-        <xsl:if test="((@type != 'label') or (@type = 'label' and ./menuitems)) and not(./parameters/parameter[@name='hideFromMenu'] = 'true') and (@type != 'section')">
-            <li>
+        <xsl:if test="((@type != 'label') or (@type = 'label' and menuitems)) and not(parameters/parameter[@name='hideFromMenu'] = 'true') and (@type != 'section')">
+            <li role="menuitem">
                 <xsl:variable name="classes" as="text()*">
-                    <xsl:if test="./@path = 'true'">
+                    <xsl:if test="@path = 'true'">
                         <xsl:text>path</xsl:text>
                     </xsl:if>
-                    <xsl:if test="./@active = 'true'">
+                    <xsl:if test="@active = 'true'">
                         <xsl:text>active</xsl:text>
                     </xsl:if>
-                    <xsl:if test="./menuitems/menuitem">
+                    <xsl:if test="menuitems/menuitem">
                         <xsl:text>parent</xsl:text>
                     </xsl:if>                    
                 </xsl:variable>
@@ -117,6 +117,9 @@
                             </xsl:if>
                         </xsl:for-each>    
                     </xsl:attribute>
+                </xsl:if>                
+                <xsl:if test="@active = 'true'">
+                    <xsl:attribute name="aria-selected" select="'true'"/>
                 </xsl:if>                
                 <xsl:choose>
                     <xsl:when test="@type = 'label'">
@@ -158,6 +161,11 @@
     
     <xsl:template match="resource" mode="stk:navigation.create-breadcrumbs">
         <xsl:choose>
+            <xsl:when test="type = 'label'">
+                <span class="label">                    
+                    <xsl:value-of select="stk:navigation.get-menuitem-name(.)"/>
+                </span>
+            </xsl:when>
             <xsl:when test="position() != last() or (position() = last() and @key != ../../@key)">
                 <a href="{portal:createPageUrl(@key,())}">
                     <xsl:value-of select="stk:navigation.get-menuitem-name(.)"/>
