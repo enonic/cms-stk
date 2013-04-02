@@ -13,7 +13,9 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:portal="http://www.enonic.com/cms/xslt/portal"
-    xmlns:stk="http://www.enonic.com/cms/xslt/stk">
+    xmlns:stk="http://www.enonic.com/cms/xslt/stk">    
+    
+    <xsl:import href="stk-variables.xsl"/> 
         
     <!-- Formats bytes -->
     <xsl:function name="stk:file.format-bytes" as="xs:string">
@@ -24,7 +26,7 @@
     <!-- Displays icon image -->
     <xsl:template name="stk:file.create-icon-image">
         <xsl:param name="file-name" as="xs:string"/>
-        <xsl:param name="icon-folder-path" as="xs:string"/>
+        <xsl:param name="icon-folder-path" as="xs:string" select="concat($stk:theme-public, '/img/all/')"/>
         <xsl:param name="icon-image-prefix" as="xs:string" select="'icon-'"/>
         <xsl:param name="icon-image-file-extension" as="xs:string" select="'png'"/>
         <xsl:variable name="file-extension" select="stk:file.get-extension($file-name)"/>
@@ -33,34 +35,34 @@
             <xsl:if test="not(ends-with($icon-folder-path, '/'))">/</xsl:if>
             <xsl:value-of select="$icon-image-prefix"/>
             <xsl:choose>
-                <xsl:when test="contains('htm', $file-extension)">
+                <xsl:when test="matches($file-extension, 'html?')">
                     <xsl:text>htm</xsl:text>
                 </xsl:when>
-                <xsl:when test="contains('ppt|pps', $file-extension)">
+                <xsl:when test="matches($file-extension, 'ppt|pps')">
                     <xsl:text>ppt</xsl:text>
                 </xsl:when>
-                <xsl:when test="contains('gif|png|jpg|tif|psd', $file-extension)">
+                <xsl:when test="matches($file-extension, 'png|gif|jpe?g|tif|psd')">
                     <xsl:text>img</xsl:text>
                 </xsl:when>
-                <xsl:when test="contains('doc|dot', $file-extension)">
+                <xsl:when test="matches($file-extension, 'doc|dot')">
                     <xsl:text>doc</xsl:text>
                 </xsl:when>
-                <xsl:when test="contains('pdf', $file-extension)">
+                <xsl:when test="matches($file-extension, 'pdf')">
                     <xsl:text>pdf</xsl:text>
                 </xsl:when>
-                <xsl:when test="contains('avi|mpg|wmv', $file-extension)">
+                <xsl:when test="matches($file-extension, 'avi|mpe?g|wmv')">
                     <xsl:text>vid</xsl:text>
                 </xsl:when>
-                <xsl:when test="contains('xls|xlt|csv', $file-extension)">
+                <xsl:when test="matches($file-extension, 'xls|xlt|csv')">
                     <xsl:text>xls</xsl:text>
                 </xsl:when>
-                <xsl:when test="contains('xml', $file-extension)">
+                <xsl:when test="matches($file-extension, 'xml')">
                     <xsl:text>xml</xsl:text>
                 </xsl:when>
-                <xsl:when test="contains('txt|dat|text', $file-extension)">
+                <xsl:when test="matches($file-extension, 'te?xt|dat')">
                     <xsl:text>txt</xsl:text>
                 </xsl:when>
-                <xsl:when test="contains('zip|tar|gz|qz|arj', $file-extension)">
+                <xsl:when test="matches($file-extension, 'zip|tar|gz|qz|arj')">
                     <xsl:text>zip</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -80,34 +82,34 @@
         <xsl:param name="file-name" as="xs:string"/>
         <xsl:variable name="file-extension" select="stk:file.get-extension($file-name)"/>
         <xsl:choose>
-            <xsl:when test="contains('htm', $file-extension)">
+            <xsl:when test="matches($file-extension, 'html?')">
                 <xsl:value-of select="portal:localize('stk.file.html')"/>
             </xsl:when>
-            <xsl:when test="contains('ppt|pps', $file-extension)">
+            <xsl:when test="matches($file-extension, 'ppt|pps')">
                 <xsl:value-of select="portal:localize('stk.file.powerpoint')"/>
             </xsl:when>
-            <xsl:when test="contains('gif|jpg|tif|psd', $file-extension)">
+            <xsl:when test="matches($file-extension, 'png|gif|jpe?g|tif|psd')">
                 <xsl:value-of select="portal:localize('stk.file.image')"/>
             </xsl:when>
-            <xsl:when test="contains('doc|dot', $file-extension)">
+            <xsl:when test="matches($file-extension, 'doc|dot')">
                 <xsl:value-of select="portal:localize('stk.file.document')"/>
             </xsl:when>
-            <xsl:when test="contains('pdf', $file-extension)">
+            <xsl:when test="matches($file-extension, 'pdf')">
                 <xsl:value-of select="portal:localize('stk.file.pdf')"/>
             </xsl:when>
-            <xsl:when test="contains('avi|mpg|wmv', $file-extension)">
+            <xsl:when test="matches($file-extension, 'avi|mpe?g|wmv')">
                 <xsl:value-of select="portal:localize('stk.file.video')"/>
             </xsl:when>
-            <xsl:when test="contains('xls|xlt|csv', $file-extension)">
+            <xsl:when test="matches($file-extension, 'xls|xlt|csv')">
                 <xsl:value-of select="portal:localize('stk.file.excel')"/>
             </xsl:when>
-            <xsl:when test="contains('xml', $file-extension)">
+            <xsl:when test="matches($file-extension, 'xml')">
                 <xsl:value-of select="portal:localize('stk.file.xml')"/>
             </xsl:when>
-            <xsl:when test="contains('txt|dat|text', $file-extension)">
+            <xsl:when test="matches($file-extension, 'te?xt|dat')">
                 <xsl:value-of select="portal:localize('stk.file.text')"/>
             </xsl:when>
-            <xsl:when test="contains('zip|tar|gz|qz|arj', $file-extension)">
+            <xsl:when test="matches($file-extension, 'zip|tar|gz|qz|arj')">
                 <xsl:value-of select="portal:localize('stk.file.zip')"/>
             </xsl:when>
             <xsl:otherwise>
