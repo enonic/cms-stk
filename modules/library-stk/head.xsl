@@ -124,7 +124,7 @@
 
    <!-- Script common template -->
    <!-- Renders all javascript for current device as defined in the theme.xml -->
-   <xsl:template name="stk:head.create-javascript">
+   <xsl:template name="stk:head.create-js">
       <xsl:for-each select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script[not(normalize-space(@condition))]">
          <xsl:variable name="resource-url" as="xs:string">
             <xsl:apply-templates select="." mode="stk:head"/>
