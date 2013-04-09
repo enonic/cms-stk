@@ -10,7 +10,7 @@
     <xsl:import href="/modules/library-stk/head.xsl"/>
     <xsl:import href="/modules/library-stk/accessibility.xsl"/>    
     <xsl:import href="/modules/library-stk/navigation.xsl"/>
-    <xsl:import href="/modules/library-stk/google.xsl"/>    
+    <xsl:import href="/modules/library-stk/analytics.xsl"/>    
     <xsl:import href="/modules/library-stk/system.xsl"/>   
 
     
@@ -90,7 +90,7 @@
                     </a>
                     
                 </div>
-                <xsl:call-template name="stk:google.analytics"/>
+                <xsl:call-template name="stk:analytics.google"/>
             </body>
         </html>
     </xsl:template>
@@ -145,7 +145,7 @@
                     </a>
                     
                 </div>
-                <xsl:call-template name="stk:google.analytics"/>
+                <xsl:call-template name="stk:analytics.google"/>
             </body>
         </html>
     </xsl:template>
