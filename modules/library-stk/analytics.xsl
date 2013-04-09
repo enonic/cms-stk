@@ -3,7 +3,7 @@
 <!--
     **************************************************
     
-    google.xsl
+    analytics.xsl
     version: ###VERSION-NUMBER-IS-INSERTED-HERE###
     
     **************************************************
@@ -17,7 +17,7 @@
     <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
     <xsl:import href="/modules/library-stk/system.xsl"/>
     
-    <xsl:template name="stk:google.analytics">
+    <xsl:template name="stk:analytics.google">
         <xsl:variable name="google-analytics-web-property-id" select="stk:system.get-config-param('google-analytics-web-property-id', $stk:path)" as="xs:string?"/>
         <xsl:if test="normalize-space($google-analytics-web-property-id)">
             <script type="text/javascript">

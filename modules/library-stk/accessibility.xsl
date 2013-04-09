@@ -16,22 +16,22 @@
    xmlns:stk="http://www.enonic.com/cms/xslt/stk">
    
    <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
-        
+   
    <!-- Accessibility links -->
    <!-- Renders hotkeys to access different anchors as defined in the theme.xml -->
    <xsl:template name="stk:accessibility.create-bypass-links">
       <xsl:if test="exists($stk:theme-config/accessibility/bypass[@text][@anchor])">
          <ul class="accessibility bypass-links">
-               <xsl:for-each select="$stk:theme-config/accessibility/bypass[@text][@anchor]">
-                  <li>
-                     <a href="#{@anchor}">
-                        <xsl:if test="normalize-space(@access-key)">
-                           <xsl:attribute name="accesskey" select="@access-key"/>
-                        </xsl:if>
-                        <xsl:value-of select="portal:localize(@text)"/>
-                     </a>
-                  </li>
-               </xsl:for-each>
+            <xsl:for-each select="$stk:theme-config/accessibility/bypass[@text][@anchor]">
+               <li>
+                  <a href="#{@anchor}">
+                     <xsl:if test="normalize-space(@access-key)">
+                        <xsl:attribute name="accesskey" select="@access-key"/>
+                     </xsl:if>
+                     <xsl:value-of select="portal:localize(@text)"/>
+                  </a>
+               </li>
+            </xsl:for-each>
          </ul>         
       </xsl:if>
    </xsl:template>
@@ -48,5 +48,5 @@
          </p>
       </div>
    </xsl:template>
-  
+   
 </xsl:stylesheet>
