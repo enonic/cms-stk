@@ -65,7 +65,7 @@
                 </title>
                 <link rel="shortcut icon" type="image/x-icon" href="{portal:createResourceUrl(concat($stk:theme-public, '/images/all/favicon.ico'))}"/>
                 <xsl:call-template name="stk:head.create-metadata"/>
-                <xsl:call-template name="stk:head.create-javascript"/>
+                <xsl:call-template name="stk:head.create-js"/>
                 <xsl:call-template name="stk:head.create-css"/>
                 
                 <xsl:call-template name="stk:region.create-css">
@@ -108,7 +108,7 @@
                 <meta content="minimum-scale=1.0, width=device-width, user-scalable=yes" name="viewport" />
                 <meta name="apple-mobile-web-app-capable" content="yes" />
                 
-                <xsl:call-template name="stk:head.create-javascript"/>
+                <xsl:call-template name="stk:head.create-js"/>
                 <xsl:call-template name="stk:head.create-css"/>
                 
                 <xsl:call-template name="stk:region.create-css">
