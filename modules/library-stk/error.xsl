@@ -32,16 +32,16 @@
             </p>
             <xsl:if test="normalize-space($exception-message)">
                <p class="exception-message">
-                  <span class="exception-message">
-                     <xsl:value-of select="portal:localize('stk.error.exception-message', (), $locale)"/>
+                  <span>
+                     <xsl:value-of select="concat(portal:localize('stk.error.exception-message', (), $locale), ' ')"/>
                   </span>
                   <xsl:value-of select="$exception-message"/>
                </p>               
             </xsl:if>
             <xsl:if test="normalize-space($url)">
                <p class="url">
-                  <span class="url">
-                     <xsl:value-of select="portal:localize('stk.error.url', (), $locale)"/>
+                  <span>
+                     <xsl:value-of select="concat(portal:localize('stk.error.url', (), $locale), ' ')"/>
                   </span>
                   <xsl:value-of select="$url"/>
                </p>               
