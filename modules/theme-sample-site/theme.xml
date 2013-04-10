@@ -41,6 +41,10 @@
                     </size>
                 </sizes>
             </image>
+            <scripts>                
+                <script condition="lt IE 9">/_public/library-stk/js/html5shiv.js</script>
+                <script condition="lt IE 9">/_public/library-stk/js/selectivizr-min.js</script>
+            </scripts>
         </device-class>
         <device-class name="desktop,unknown">
             <layout name="default">
