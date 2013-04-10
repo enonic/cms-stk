@@ -10,8 +10,7 @@
 
     <xsl:variable name="stk:current-resource" as="element()" select="/result/context/resource"/>
     <xsl:variable name="stk:site-name" as="xs:string" select="/result/context/site/name"/>
-    <xsl:variable name="stk:rendered-page" as="element()" select="/result/context/page"/><!--
-    <xsl:variable name="stk:path" as="xs:string" select="concat('/', string-join(tokenize(/result/context/querystring/@servletpath, '/')[position() gt 3], '/'))"/>-->
+    <xsl:variable name="stk:rendered-page" as="element()?" select="/result/context/page"/>
     
     <xsl:variable name="stk:path" as="xs:string" select="concat('/', string-join($stk:current-resource/path/resource/name, '/'))"/>
         
@@ -53,7 +52,6 @@
     </xsl:variable> 
     <xsl:variable name="stk:default-image-format" as="xs:string" select="if ($stk:theme-device-class/image/format/text()) then $stk:theme-device-class/image/format else if ($stk:theme-all-devices/image/format/text()) then $stk:theme-all-devices/image/format else 'jpeg'"/>
     <xsl:variable name="stk:default-image-quality" as="xs:integer" select="if ($stk:theme-device-class/image/quality castable as xs:integer) then $stk:theme-device-class/image/quality else if ($stk:theme-all-devices/image/quality castable as xs:integer) then $stk:theme-all-devices/image/quality else 75"/>
-    <xsl:variable name="stk:site-admin-name" as="xs:string?" select="stk:system.get-config-param('site-admin-name', $stk:path)"/>
-    <xsl:variable name="stk:site-admin-email" as="xs:string?" select="stk:system.get-config-param('site-admin-email', $stk:path)"/>
+
     
 </xsl:stylesheet>
