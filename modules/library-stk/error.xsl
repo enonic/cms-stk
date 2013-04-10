@@ -46,11 +46,11 @@
                </p>               
             </xsl:if>
          </div>
-         <xsl:if test="string($stk:site-admin-name) and string($stk:site-admin-email)">
+         <xsl:if test="string(stk:system.get-config-param('site-admin-name', $stk:path)) and string(stk:system.get-config-param('site-admin-email', $stk:path))">
             <p>
                <xsl:value-of select="concat(portal:localize('stk.error.general-text'), ' ')"/>
-               <a href="mailto:{$stk:site-admin-email}">
-                  <xsl:value-of select="$stk:site-admin-name"/>
+               <a href="mailto:{stk:system.get-config-param('site-admin-email', $stk:path)}">
+                  <xsl:value-of select="stk:system.get-config-param('site-admin-name', $stk:path)"/>
                </a>
             </p>
          </xsl:if>
