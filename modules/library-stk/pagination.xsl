@@ -47,8 +47,9 @@
 		<xsl:param name="pages-in-pagination" select="10" as="xs:integer"/>
 		<xsl:param name="index-parameter-name" select="'index'" as="xs:string"/>
 		<xsl:if test="$total-count gt $contents-per-page">
-			<nav class="pagination">
-				<ol>
+			<p id="{generate-id($contents)}" class="audible">Pagination</p>
+			<nav class="pagination" aria-labelledby="{generate-id($contents)}">
+				<ul>
 					<!-- First page -->
 					<xsl:if test="$index gt 0">
 						<li class="first">
@@ -94,7 +95,7 @@
 							</a>
 						</li>
 					</xsl:if>
-				</ol>
+				</ul>
 			</nav>
 		</xsl:if>
 	</xsl:template>
@@ -127,6 +128,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<a href="{stk:pagination.create-url(xs:integer($start + (($counter - 1) * $contents-per-page)), $parameters, $index-parameter-name)}">
+							<span class="audible">Page</span>
 							<xsl:value-of select="($start div $contents-per-page) + $counter"/>
 						</a>
 					</xsl:otherwise>
