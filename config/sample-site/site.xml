@@ -4,19 +4,6 @@
         <parameter path="/" name="meta-generator">Enonic CMS</parameter>
         <parameter path="/" name="meta-author">Enonic</parameter>
         
-        <parameter path="/" name="front-page">0</parameter>
-        <parameter path="/" name="search-result">/search-result</parameter>
-        <parameter path="/" name="sitemap">/sitemap</parameter>
-        <parameter path="/en" name="rss">/en/rss</parameter>
-        <parameter path="/no" name="front-page" key="160">/no/forsiden</parameter>
-        <parameter path="/no" name="search-result">/no/forsiden/søkeresultat</parameter>
-        <parameter path="/no" name="sitemap">/no/forsiden/nettstedskart</parameter>
-        <parameter path="/no" name="rss">/no/rss</parameter>
-        
-        
-        <parameter path="/" name="site-admin-name"></parameter>
-        <parameter path="/" name="site-admin-email"></parameter>
-        
         <parameter path="/" name="google-analytics-web-property-id"></parameter>
         <parameter path="/" name="google-site-verification"></parameter>
     </parameters>
