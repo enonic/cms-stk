@@ -123,12 +123,17 @@
 				<xsl:choose>
 					<xsl:when test="$start + (($counter - 1) * $contents-per-page) = $index">
 						<span>
+							<span class="audible">
+								<xsl:value-of select="portal:localize('stk.pagination.page')"/>
+							</span>
 							<xsl:value-of select="($start div $contents-per-page) + $counter"/>
 						</span>
 					</xsl:when>
 					<xsl:otherwise>
 						<a href="{stk:pagination.create-url(xs:integer($start + (($counter - 1) * $contents-per-page)), $parameters, $index-parameter-name)}">
-							<span class="audible">Page</span>
+							<span class="audible">
+								<xsl:value-of select="portal:localize('stk.pagination.page')"/>
+							</span>
 							<xsl:value-of select="($start div $contents-per-page) + $counter"/>
 						</a>
 					</xsl:otherwise>
