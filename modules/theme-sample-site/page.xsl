@@ -65,8 +65,8 @@
                 </title>
                 <link rel="shortcut icon" type="image/x-icon" href="{portal:createResourceUrl(concat($stk:theme-public, '/images/all/favicon.ico'))}"/>
                 <xsl:call-template name="stk:head.create-metadata"/>
-                <xsl:call-template name="stk:head.create-js"/>
                 <xsl:call-template name="stk:head.create-css"/>
+                <xsl:call-template name="stk:head.create-js"/>
                 
                 <xsl:call-template name="stk:region.create-css">
                     <xsl:with-param name="layout" select="$layout"/>
@@ -85,9 +85,7 @@
                         <xsl:with-param name="layout" select="$layout" as="xs:string"/>
                     </xsl:call-template>
                     
-                    <a href="{portal:createServicesUrl('portal','forceDeviceClass', ('deviceclass', 'mobile', 'lifetime', 'session'))}" class="change-device-class" rel="nofollow">
-                        <xsl:value-of select="portal:localize('theme-basic.change-to-mobile-version')"/>
-                    </a>
+                    <a href="{portal:createServicesUrl('portal','forceDeviceClass', ('deviceclass', 'mobile', 'lifetime', 'session'))}" class="change-device-class" rel="nofollow">Change to mobile version</a>
                     
                 </div>
                 <xsl:call-template name="stk:analytics.google"/>
@@ -108,8 +106,8 @@
                 <meta content="minimum-scale=1.0, width=device-width, user-scalable=yes" name="viewport" />
                 <meta name="apple-mobile-web-app-capable" content="yes" />
                 
-                <xsl:call-template name="stk:head.create-js"/>
                 <xsl:call-template name="stk:head.create-css"/>
+                <xsl:call-template name="stk:head.create-js"/>
                 
                 <xsl:call-template name="stk:region.create-css">
                     <xsl:with-param name="layout" select="$layout"/>
@@ -120,18 +118,7 @@
                     <!-- Create content bypass links if defined in config -->
                     <xsl:call-template name="stk:accessibility.create-bypass-links"/>
                     
-                    <!--<xsl:call-template name="stk:navigation.create">
-                        <xsl:with-param name="menuitems" select="/result/menus/menu/menuitems"/>
-                        <xsl:with-param name="levels" select="3"/>
-                        <xsl:with-param name="list-id" select="'main-menu'"/>
-                    </xsl:call-template>
-                    
-                    <script type="text/javascript">
-                        $(function() {
-                            $('#main-menu').enonicTree();
-                        });
-                    </script>-->
-                                        
+                                                            
                     <span class="current-device-class">Mobile version</span>
                     <h1>My first headline</h1>
                     
@@ -140,9 +127,7 @@
                         <xsl:with-param name="layout" select="$layout" as="xs:string"/>
                     </xsl:call-template>
                     
-                    <a href="{portal:createServicesUrl('portal','forceDeviceClass', ('deviceclass', 'desktop', 'lifetime', 'session'))}" class="change-device-class" rel="nofollow">
-                        <xsl:value-of select="portal:localize('theme-basic.change-to-desktop-version')"/>
-                    </a>
+                    <a href="{portal:createServicesUrl('portal','forceDeviceClass', ('deviceclass', 'desktop', 'lifetime', 'session'))}" class="change-device-class" rel="nofollow">Change to desktop version</a>
                     
                 </div>
                 <xsl:call-template name="stk:analytics.google"/>

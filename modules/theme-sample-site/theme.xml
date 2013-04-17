@@ -41,7 +41,8 @@
                     </size>
                 </sizes>
             </image>
-            <scripts>                
+            <scripts>               
+                <script>{theme}less-min.js</script> 
                 <script condition="lt IE 9">/_public/library-stk/js/html5shiv.js</script>
                 <script condition="lt IE 9">/_public/library-stk/js/selectivizr-min.js</script>
             </scripts>
@@ -61,7 +62,7 @@
                 </area>
             </layout>            
             <styles>
-                <style>{theme}desktop.css</style>
+                <style>{theme}desktop.less</style>
             </styles>
             <scripts>
                 <script>{theme}desktop-min.js</script>
@@ -87,7 +88,7 @@
                 <quality>70</quality>
             </image>
             <styles>
-                <style>{theme}mobile.css</style>
+                <style>{theme}mobile.less</style>
             </styles>
             <scripts>
                 <script>{theme}mobile-min.js</script>
