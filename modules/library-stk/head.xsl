@@ -93,7 +93,10 @@
          <xsl:variable name="resource-url" as="xs:string">
             <xsl:apply-templates select="." mode="stk:head"/>
          </xsl:variable>
-         <link rel="stylesheet" href="{$resource-url}">
+         <link rel="stylesheet" href="{$resource-url}">            
+            <xsl:if test="stk:file.get-extension(.) = 'less'">
+               <xsl:attribute name="rel" select="'stylesheet/less'"/>
+            </xsl:if>
             <xsl:if test="normalize-space(@media)">
                <xsl:attribute name="media">
                   <xsl:value-of select="@media"/>
@@ -111,6 +114,9 @@
                <xsl:apply-templates select="." mode="stk:head"/>
             </xsl:variable>
             <link rel="stylesheet" href="{$resource-url}">
+               <xsl:if test="stk:file.get-extension(.) = 'less'">
+                  <xsl:attribute name="rel" select="'stylesheet/less'"/>
+               </xsl:if>
                <xsl:if test="normalize-space(@media)">
                   <xsl:attribute name="media">
                      <xsl:value-of select="@media"/>

@@ -135,7 +135,7 @@
                     <xsl:when test="matches($file-extension, 'png|jpe?g|gif|ico')">
                         <xsl:text>img</xsl:text>
                     </xsl:when>
-                    <xsl:when test="$file-extension = 'css'">
+                    <xsl:when test="matches($file-extension, 'css|less')">
                         <xsl:text>css</xsl:text>
                     </xsl:when>
                     <xsl:when test="$file-extension = 'js'">
