@@ -43,16 +43,13 @@ STK.navigation = {
         });
         menu.parent().click(function (e) {
             e.stopPropagation();
-        });
-        $('html').click(function () {
-            menu.slideUp(speed);
-        });
+        });        
     }
 };
 
 STK.pagination = {
     // add ajax (click triggered) pagination to a content list
-    clickLoad: function (list) {
+    clickLoad: function (list, callback) {
         var indexCounter = 0;
         var count = parseInt(list.data('count'));
         var totalCount = parseInt(list.data('totalcount'));
@@ -81,10 +78,15 @@ STK.pagination = {
                             }
                             trigger.find('.showing').text(showingText());
                             var listElements = $(document.createElement('div')).append(data).find(list.selector + ' > li');
-                            list.append(listElements);
+                            list.append(listElements);                            
                         },
                         error: function() {
                             indexCounter -= count;
+                        },
+                        complete: function() {
+                            if (typeof(callback) == 'function') {
+                                callback();                                
+                            }
                         }
                     }).always( function() {
                         trigger.removeClass('loading');
@@ -95,3 +97,48 @@ STK.pagination = {
         }
     }
 };
+
+STK.responsive = {
+    optimizeImages: function () {
+        $('img[data-srcset]').each(function() {
+            var img = $(this);
+            var srcset = img.data('srcset');
+            //console.log(srcset);
+            if (typeof srcset === 'object') {
+                var sizes = [];
+                for (var k in srcset) {
+                    sizes.push(parseInt(k));
+                }        
+                sizes.sort(function(a,b) {return a-b});
+                //console.log(sizes);
+                var width = Math.floor(img.width() * (window.devicePixelRatio || 1));
+                var srcIndex = getClosestHigherNum(width, sizes);
+                img.attr('src', srcset[srcIndex]);
+            }
+        });
+    },
+    
+    
+    optimizeIframes: function (selectors) {
+        $(selectors).each(function() {
+            var iframe = $(this);
+            var ratio = (iframe.height() / iframe.width()) * 100;
+            var wrapper = $('<div/>').addClass('iframe-wrapper').css('padding-top', ratio + '%');
+            iframe.wrap(wrapper);
+        });
+    }
+};
+
+
+
+
+// Get's the closest higher number in array 
+function getClosestHigherNum(num, ar) {
+    var closest = ar[ar.length - 1];
+    for (var i = ar.length; i > 0; i--) {
+        if (ar[i] > num) {
+            closest = ar[i];
+        }
+    }
+    return closest;
+}

@@ -14,8 +14,8 @@
     xmlns:portal="http://www.enonic.com/cms/xslt/portal"
     xmlns:stk="http://www.enonic.com/cms/xslt/stk">
     
-    <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
-    <xsl:import href="/modules/library-stk/system.xsl"/>    
+    <xsl:import href="stk-variables.xsl"/>
+    <xsl:import href="system.xsl"/>    
     
     <!-- Displays menu item name -->
     <xsl:function name="stk:navigation.get-menuitem-name" as="xs:string">
@@ -123,7 +123,9 @@
                 </xsl:if>                
                 <xsl:choose>
                     <xsl:when test="@type = 'label'">
-                        <xsl:value-of select="stk:navigation.get-menuitem-name(.)"/>
+                        <span class="label">                            
+                            <xsl:value-of select="stk:navigation.get-menuitem-name(.)"/>
+                        </span>
                     </xsl:when>
                     <xsl:otherwise>
                         <a href="{portal:createPageUrl(@key, ())}">

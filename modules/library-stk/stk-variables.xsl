@@ -4,7 +4,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:stk="http://www.enonic.com/cms/xslt/stk">
 
-    <xsl:import href="/modules/library-stk/system.xsl"/>
+    <xsl:import href="system.xsl"/>
     
     <!-- ########## Context variables ########## -->
 
@@ -46,12 +46,13 @@
        </xsl:choose>
     </xsl:variable>
     <xsl:variable name="stk:config-imagesize" as="element()*">
-        <xsl:for-each select="'full','wide','regular','list','square','thumbnail'">
+        <xsl:for-each select="distinct-values(($stk:theme-device-class/image/sizes/size/@name,$stk:theme-all-devices/image/sizes/size/@name))">
             <xsl:sequence select="if ($stk:theme-device-class/image/sizes/size[@name = current()]) then $stk:theme-device-class/image/sizes/size[@name = current()] else $stk:theme-all-devices/image/sizes/size[@name = current()]"/>
         </xsl:for-each>
     </xsl:variable> 
     <xsl:variable name="stk:default-image-format" as="xs:string" select="if ($stk:theme-device-class/image/format/text()) then $stk:theme-device-class/image/format else if ($stk:theme-all-devices/image/format/text()) then $stk:theme-all-devices/image/format else 'jpeg'"/>
     <xsl:variable name="stk:default-image-quality" as="xs:integer" select="if ($stk:theme-device-class/image/quality castable as xs:integer) then $stk:theme-device-class/image/quality else if ($stk:theme-all-devices/image/quality castable as xs:integer) then $stk:theme-all-devices/image/quality else 75"/>
 
+    <xsl:variable name="stk:img-max-width" as="xs:integer" select="if ($stk:theme-all-devices/image/max-width castable as xs:integer) then $stk:theme-all-devices/image/max-width else 1350"/>
     
 </xsl:stylesheet>

@@ -1,0 +1,110 @@
+
+/* Modify this to reflect the number of columns in your grid */
+@columns: 12;
+
+/********** "DO NOT MODIFY THIS" *********/
+
+/* Create width for all column classes */
+.loop-grid-span (@index) when (@index > 0) {
+	.span-@{index} {
+		width: 100% * (@index / @columns);
+	}
+	.loop-grid-span (@index - 1);
+}
+.loop-grid-span (0) {}
+.loop-grid-span (@columns);
+
+.row {
+	overflow: hidden;
+}
+
+.group {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.col {
+	float: left;
+	.box-sizing(border-box);
+}
+
+.iframe-wrapper {
+    width: 100%;
+    position: relative;
+    margin: 0;
+    
+    iframe {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/********** END OF "DO NOT MODIFY THIS" **********/
+
+
+figure {
+	
+	width: 100%;
+
+	&.thumbnail {
+		max-width: 10%;
+	}  
+	
+	&.list {
+		max-width: 30%;
+	}
+	
+	&.square {
+		max-width: 40%;
+	}
+	
+	&.regular {
+		max-width: 40%;
+	}
+	
+	img {
+		width: 100%;
+		display: block;
+	}
+}
+
+
+
+
+
+
+
+
+#container {
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+@media (min-width: 870px) {
+	#container {
+		max-width: 1000px;
+	}
+}
+
+@media (min-width: 580px) and (max-width: 870px) {
+	#container {
+		width: 100%;
+		border-top: 1px solid #f00;
+	}
+	.region {
+		width: 100%;
+	}	
+}
+
+@media (max-width: 580px) {
+	#container {
+		width: 100%;
+	}
+	
+	.span-6, .span-3 {
+		width: 100%;
+	}	
+}

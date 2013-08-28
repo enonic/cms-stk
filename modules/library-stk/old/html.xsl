@@ -20,13 +20,12 @@
     <xsl:import href="image.xsl"/>
     <xsl:import href="video.xsl"/>
     
-        
     <xsl:template name="stk:html.process">
         <xsl:param name="filter" as="xs:string?" select="$stk:config-filter"/>
         <xsl:param name="imagesize" as="element()*" select="$stk:config-imagesize"/>
         <xsl:param name="document" as="element()"/>
         <xsl:param name="image" as="element()*" select="//content[contentdata/sourceimage]"/>
-        <xsl:param name="region-width" as="xs:integer" select="$stk:img-max-width"/>
+        <xsl:param name="region-width" as="xs:integer" select="$stk:region-width"/>
         <div class="editor">
             <xsl:apply-templates select="$document/*|$document/text()" mode="html.process">
                 <xsl:with-param name="image" tunnel="yes" select="$image"/>
@@ -37,16 +36,6 @@
         </div>        
     </xsl:template>
     
-    
-    <!-- because images are replaced with figure elements, we must remove the wrapping p element, as a figure element inside a p element isn't allowed -->
-    <xsl:template match="p[img]" mode="html.process">        
-        <xsl:apply-templates select="img" mode="html.process"/>
-        <xsl:element name="p">            
-            <xsl:apply-templates select="*[not(self::img)]|text()|@*" mode="html.process"/>
-        </xsl:element>
-    </xsl:template>
-    
-    
     <xsl:template match="element()" mode="html.process">
         <xsl:element name="{local-name()}">
             <xsl:apply-templates select="*|text()|@*" mode="html.process"/>
@@ -56,19 +45,6 @@
     <xsl:template match="text()|@*" mode="html.process">
         <xsl:copy/>
     </xsl:template>
-    
-    
-    <!--<xsl:template match="element()" mode="html.process">
-        <!-\-<xsl:element name="{local-name()}">
-            <xsl:apply-templates select="*|text()|@*" mode="html.process"/>
-        </xsl:element>-\->
-        <xsl:apply-templates select="*|text()|@*" mode="html.process"/>
-    </xsl:template>   --> 
-    <!--
-    <xsl:template match="text()|@*" mode="html.process">
-        <xsl:copy/>
-    </xsl:template>-->
-    
     
     <!-- Replaces td, th @align with @style -->
     <xsl:template match="table/@align|td/@align|th/@align" mode="html.process">
@@ -118,14 +94,12 @@
         </a>
     </xsl:template>
     
-   
-    
-    <xsl:template match="img[starts-with(@src, 'image://')]" mode="html.process">
+    <xsl:template match="@src[parent::img][starts-with(., 'image://')]" mode="html.process">
         <xsl:param name="filter" tunnel="yes" as="xs:string?"/><!--
         <xsl:param name="imagesize" tunnel="yes" as="element()*"/> -->
         <xsl:param name="image" tunnel="yes" as="element()*"/>
         <xsl:param name="region-width" tunnel="yes" as="xs:integer?"/>
-        <xsl:variable name="url-part" select="tokenize(@src, '://|\?|&amp;')"/>
+        <xsl:variable name="url-part" select="tokenize(., '://|\?|&amp;')"/>
         <xsl:variable name="url-type" select="$url-part[1]"/>
         <xsl:variable name="url-key" select="$url-part[2]"/>
         <xsl:variable name="url-parameter" select="$url-part[position() gt 2]"/>
@@ -140,61 +114,36 @@
                 <xsl:sequence select="substring-after(tokenize(., '=')[1], '_'), tokenize(., '=')[2]"/>
             </xsl:for-each>
         </xsl:variable>
-        <xsl:variable name="class" select="@class"/>
-        
-        <xsl:variable name="last-scale-filter" select="tokenize($url-filter, ';')[starts-with(., 'scale')][position() = last()]"/>
-        <!--
-        <xsl:value-of select="$last-scale-filter"/>-->
-        
-        
+        <xsl:attribute name="{name()}">
+            <xsl:choose>
+                <xsl:when test="$source-image">
+                    <xsl:call-template name="stk:image.create-url">
+                        <xsl:with-param name="image" select="$source-image"/>
+                        <xsl:with-param name="size" select="$url-size"/>
+                        <xsl:with-param name="background" select="$url-background"/>
+                        <xsl:with-param name="format" select="if (normalize-space($url-format)) then $url-format else $stk:default-image-format" />
+                        <xsl:with-param name="quality" select="if ($url-quality castable as xs:integer) then $url-quality else $stk:default-image-quality"/>
+                        <xsl:with-param name="scaling" select="$url-filter"/>
+                    </xsl:call-template>
+                </xsl:when>   
+                <xsl:otherwise>
+                    <xsl:text>image-not-found</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
         <xsl:if test="$source-image">
-            <xsl:call-template name="stk:image.create">
-                <xsl:with-param name="image" select="$source-image"/>
-                <xsl:with-param name="scaling" select="$last-scale-filter"/>
-                <xsl:with-param name="size" select="$url-size"/>
-                <xsl:with-param name="class" select="$class"/>
-            </xsl:call-template>
-        </xsl:if>
-        
-        
-        
-        <!--<xsl:element name="img">
-            <xsl:attribute name="src">
-                <xsl:choose>
-                    <xsl:when test="$source-image">
-                        <xsl:call-template name="stk:image.create-url">
-                            <xsl:with-param name="image" select="$source-image"/>
-                            <xsl:with-param name="size" select="$url-size"/>
-                            <xsl:with-param name="background" select="$url-background"/>
-                            <xsl:with-param name="format" select="if (normalize-space($url-format)) then $url-format else $stk:default-image-format" />
-                            <xsl:with-param name="quality" select="if ($url-quality castable as xs:integer) then $url-quality else $stk:default-image-quality"/>
-                            <xsl:with-param name="scaling" select="$url-filter"/>
-                        </xsl:call-template>
-                    </xsl:when>   
-                    <xsl:otherwise>
-                        <xsl:text>image-not-found</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-            <xsl:if test="$source-image">
-                <xsl:variable name="image-width" select="stk:image.get-size($region-width, $url-size, concat($url-filter, $filter), $source-image, 'width')"/>
-                <xsl:variable name="image-height" select="stk:image.get-size($region-width, $url-size, concat($url-filter, $filter), $source-image, 'height')"/>
-                <xsl:if test="$image-width and $image-height">
-                    <xsl:attribute name="width">
-                        <xsl:value-of select="$image-width"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="height">
-                        <xsl:value-of select="$image-height"/>
-                    </xsl:attribute>
-                </xsl:if>
-            </xsl:if>  
-        </xsl:element>-->
-        
-        
+            <xsl:variable name="image-width" select="stk:image.get-size($region-width, $url-size, concat($url-filter, $filter), $source-image, 'width')"/>
+            <xsl:variable name="image-height" select="stk:image.get-size($region-width, $url-size, concat($url-filter, $filter), $source-image, 'height')"/>
+            <xsl:if test="$image-width and $image-height">
+                <xsl:attribute name="width">
+                    <xsl:value-of select="$image-width"/>
+                </xsl:attribute>
+                <xsl:attribute name="height">
+                    <xsl:value-of select="$image-height"/>
+                </xsl:attribute>
+            </xsl:if>
+        </xsl:if>  
     </xsl:template>
-    
-    
-    
     
     <xsl:template match="@href[parent::a]|@data[parent::object]|@src[parent::param]|@src[parent::video]|@src[parent::audio]|@src[parent::source]|@src[parent::track]" mode="html.process">
         <xsl:attribute name="{name()}" select="stk:html.process-url(.)"/>

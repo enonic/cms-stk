@@ -15,7 +15,7 @@
    xmlns:portal="http://www.enonic.com/cms/xslt/portal"
    xmlns:stk="http://www.enonic.com/cms/xslt/stk">
    
-   <xsl:import href="/modules/library-stk/stk-variables.xsl"/>
+   <xsl:import href="stk-variables.xsl"/>
    
    <!-- Accessibility links -->
    <!-- Renders hotkeys to access different anchors as defined in the theme.xml -->

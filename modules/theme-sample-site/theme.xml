@@ -49,50 +49,20 @@
         </device-class>
         <device-class name="desktop,unknown">
             <layout name="default">
-                <area width="960">
-                    <region name="center">
-                        <padding>
-                            <right>0</right>
-                            <left>0</left>
-                            <top>0</top>
-                            <bottom>0</bottom>
-                        </padding>
-                        <scalable>true</scalable>
+                <row cols="12">
+                    <region name="my-region-1">
+                        <cols>12</cols>
                     </region>
-                </area>
+                </row>
+                <row cols="12">
+                    <region name="my-region-2">
+                        <cols>12</cols>
+                    </region>
+                </row>
             </layout>            
             <styles>
-                <style>{theme}desktop.less</style>
+                <style>{theme}main.less</style>
             </styles>
-            <scripts>
-                <script>{theme}desktop-min.js</script>
-            </scripts>
-        </device-class>
-        <device-class name="mobile">
-            <layout name="default">
-                <area width="320">
-                    <regions>
-                        <region name="center">
-                            <width>296</width>
-                            <padding>
-                                <left>0</left>
-                                <right>0</right>
-                                <top>0</top>
-                                <bottom>0</bottom>
-                            </padding>
-                        </region>
-                    </regions>
-                </area>                    
-            </layout>
-            <image>
-                <quality>70</quality>
-            </image>
-            <styles>
-                <style>{theme}mobile.less</style>
-            </styles>
-            <scripts>
-                <script>{theme}mobile-min.js</script>
-            </scripts>
         </device-class>
     </device-classes>
 </theme>

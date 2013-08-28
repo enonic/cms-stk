@@ -64,3 +64,20 @@
 	-moz-box-sizing: @sizing;
 	box-sizing: @sizing;
 }
+
+.text-shadow (@string: 0 1px 3px rgba(0, 0, 0, 0.25)) {
+	text-shadow: @string;
+}
+
+.background-size(@size) {
+  -webkit-background-size: @size;
+     -moz-background-size: @size;
+       -o-background-size: @size;
+          background-size: @size;
+}
+
+.audible-text {
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}

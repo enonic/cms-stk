@@ -125,7 +125,7 @@
         </xsl:if>            
     </xsl:function>
     
-    <!-- generate public resource url -->
+    <!-- generate public resource url (theme or stk resource) -->
     <xsl:function name="stk:file.create-resource-url">
         <xsl:param name="file-path" as="xs:string"/>
         <xsl:variable name="file-extension" as="xs:string?" select="stk:file.get-extension($file-path)"/>            
@@ -143,8 +143,19 @@
                     </xsl:when>
                 </xsl:choose>
             </xsl:variable>
+            <xsl:variable name="resource-folder" as="xs:string">
+                <xsl:choose>
+                    <xsl:when test="contains($file-path, '{stk}')">
+                        <xsl:text>/_public/library-stk</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$stk:theme-public"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="trimmed-file-path" as="xs:string" select="replace($file-path, '\{stk\}|\{theme\}', '')"/>
             <xsl:if test="normalize-space($file-type)">                    
-                <xsl:value-of select="portal:createResourceUrl(concat($stk:theme-public, '/', $file-type, '/', $file-path))"/>
+                <xsl:value-of select="portal:createResourceUrl(concat($resource-folder, '/', $file-type, '/', $trimmed-file-path))"/>
             </xsl:if>
         </xsl:if>
     </xsl:function>

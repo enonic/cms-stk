@@ -15,7 +15,7 @@
 	xmlns:portal="http://www.enonic.com/cms/xslt/portal"
 	xmlns:stk="http://www.enonic.com/cms/xslt/stk">
 	
-	<xsl:import href="/modules/library-stk/stk-variables.xsl"/>
+	<xsl:import href="stk-variables.xsl"/>
 	
 	<xsl:template name="stk:pagination.create-header">
 		<xsl:param name="contents" as="element()"/>
