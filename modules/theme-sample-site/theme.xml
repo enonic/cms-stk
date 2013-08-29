@@ -13,6 +13,13 @@
                 <filters>
                     <filter>rounded(4)</filter>
                 </filters>
+                <prescaled>
+                    <size>64</size>
+                    <size>128</size>
+                    <size>256</size>
+                    <size>512</size>
+                    <size>1024</size>
+                </prescaled>
                 <sizes>
                     <size name="full">
                         <filter>scalewidth</filter>
@@ -42,9 +49,17 @@
                 </sizes>
             </image>
             <scripts>               
-                <script>{theme}less-min.js</script> 
-                <script condition="lt IE 9">/_public/library-stk/js/html5shiv.js</script>
-                <script condition="lt IE 9">/_public/library-stk/js/selectivizr-min.js</script>
+                <script>
+                    <path>{theme}less-min.js</path>
+                </script> 
+                <script>
+                    <path>//html5shiv.googlecode.com/svn/trunk/html5.js</path>                    
+                    <condition>lt IE 9</condition>
+                </script>
+                <script>
+                    <path>{stk}selectivizr-min.js</path>
+                    <condition>lt IE 9</condition>
+                </script>
             </scripts>
         </device-class>
         <device-class name="desktop,unknown">
@@ -61,7 +76,9 @@
                 </row>
             </layout>            
             <styles>
-                <style>{theme}main.less</style>
+                <style>
+                    <path>{theme}main.less</path>
+                </style>
             </styles>
         </device-class>
     </device-classes>

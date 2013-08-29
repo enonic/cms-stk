@@ -53,6 +53,7 @@
     <xsl:variable name="stk:default-image-format" as="xs:string" select="if ($stk:theme-device-class/image/format/text()) then $stk:theme-device-class/image/format else if ($stk:theme-all-devices/image/format/text()) then $stk:theme-all-devices/image/format else 'jpeg'"/>
     <xsl:variable name="stk:default-image-quality" as="xs:integer" select="if ($stk:theme-device-class/image/quality castable as xs:integer) then $stk:theme-device-class/image/quality else if ($stk:theme-all-devices/image/quality castable as xs:integer) then $stk:theme-all-devices/image/quality else 75"/>
 
+    <xsl:variable name="stk:theme-prescaled-image-sizes" as="xs:integer*" select="if ($stk:theme-all-devices/image/prescaled/size[. castable as xs:integer]) then $stk:theme-all-devices/image/prescaled/size[. castable as xs:integer] else 64,128,256,512,1024"/>
     <xsl:variable name="stk:img-max-width" as="xs:integer" select="if ($stk:theme-all-devices/image/max-width castable as xs:integer) then $stk:theme-all-devices/image/max-width else 1350"/>
     
 </xsl:stylesheet>

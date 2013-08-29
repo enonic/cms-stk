@@ -85,7 +85,7 @@
    </xsl:template>
 
    <!-- Css common template -->
-   <!-- Renders all CSS files and creates CSS for the regions defined in theme.xml  -->
+   <!-- Renders all CSS files defined in theme.xml  -->
    <xsl:template name="stk:head.create-css">
       <!-- resources without a condition -->
       <xsl:for-each select="($stk:theme-all-devices | $stk:theme-device-class)/styles/style[normalize-space(path)][not(normalize-space(condition))][stk:head.check-resource-filter(.)]">

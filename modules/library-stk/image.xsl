@@ -64,7 +64,7 @@
                         
             <xsl:variable name="data-srcset">
                 <xsl:text>{</xsl:text>
-                <xsl:for-each select="64, 128, 256, 512, 1024">
+                <xsl:for-each select="$stk:theme-prescaled-image-sizes">
                     <xsl:variable name="src-width" select="."/>
                     <xsl:text>"</xsl:text>
                     <xsl:value-of select="."/>

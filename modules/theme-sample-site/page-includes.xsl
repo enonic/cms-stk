@@ -17,18 +17,6 @@
     <!-- HTML 5 doctype -->
     <xsl:output doctype-system="about:legacy-compat" method="xhtml" encoding="utf-8" indent="no" omit-xml-declaration="yes" include-content-type="no"/>
     
-    <!-- page type -->
-    <!-- For multiple layouts on one site. Various layouts can be configured in theme.xml, each with a different 'name' attribute on the 'layout' element. -->
-    <xsl:param name="layout" as="xs:string" select="'default'"/>
-    
-    <!-- regions -->
-    <xsl:param name="my-region-1">
-        <type>region</type>
-    </xsl:param>
-    <xsl:param name="my-region-2">
-        <type>region</type>
-    </xsl:param>
-    
     <!-- Select template based on current device -->
     <xsl:template match="/">
         <!-- Run config check to make sure everything is OK -->
@@ -55,7 +43,8 @@
                 <link rel="shortcut icon" type="image/x-icon" href="{stk:file.create-resource-url('/all/favicon.ico')}"/>
                 <xsl:call-template name="stk:head.create-metadata"/>
                 <xsl:call-template name="stk:head.create-css"/>
-                <xsl:call-template name="stk:head.create-js"/>  
+                
+                <script src="{portal:createResourceUrl('/_public/library-stk/js/head.load.min.js')}"/>
                 <noscript>
                     <style>
                         .js-img {display:none;}
@@ -77,6 +66,8 @@
                 </div>
                 <!-- This is outputted if set in config -->
                 <xsl:call-template name="stk:analytics.google"/>
+                
+                <xsl:call-template name="stk:head.create-js"/>  
             </body>
         </html>
     </xsl:template>
