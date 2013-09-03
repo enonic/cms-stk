@@ -1,6 +1,17 @@
 var STK = STK || {
 };
 
+// Get's the closest higher number in array 
+function getClosestHigherNum(num, ar) {
+    var closest = ar[ar.length - 1];
+    for (var i = ar.length; i > 0; i--) {
+        if (ar[i] > num) {
+            closest = ar[i];
+        }
+    }
+    return closest;
+}
+
 STK.accessibility = {
     textResizing: function () {
         $('.accessibility.text-resizing-guidance span').hover(function () {
@@ -51,13 +62,13 @@ STK.pagination = {
     // add ajax (click triggered) pagination to a content list
     clickLoad: function (list, callback) {
         var indexCounter = 0;
-        var count = parseInt(list.data('count'));
-        var totalCount = parseInt(list.data('totalcount'));
+        var count = parseInt(list.data('count'), 10);
+        var totalCount = parseInt(list.data('totalcount'), 10);
         var windowUrl = list.data('windowurl');        
         var showMoreText = (list.data('show-more-text') || 'Show #count more').replace('#count', count);        
         var showingText = function() {
             return (list.data('showing-text') || 'Showing #count of #totalcount').replace('#totalcount', totalCount).replace('#count', count + indexCounter);
-        }
+        };
         
         if (count && totalCount && windowUrl && count < totalCount) {            
             var wait = false;
@@ -84,7 +95,7 @@ STK.pagination = {
                             indexCounter -= count;
                         },
                         complete: function() {
-                            if (typeof(callback) == 'function') {
+                            if (typeof(callback) === 'function') {
                                 callback();                                
                             }
                         }
@@ -107,9 +118,9 @@ STK.responsive = {
             if (typeof srcset === 'object') {
                 var sizes = [];
                 for (var k in srcset) {
-                    sizes.push(parseInt(k));
+                    sizes.push(parseInt(k, 10));
                 }        
-                sizes.sort(function(a,b) {return a-b});
+                sizes.sort(function(a,b) {return a-b;});
                 //console.log(sizes);
                 var width = Math.floor(img.width() * (window.devicePixelRatio || 1));
                 var srcIndex = getClosestHigherNum(width, sizes);
@@ -132,13 +143,3 @@ STK.responsive = {
 
 
 
-// Get's the closest higher number in array 
-function getClosestHigherNum(num, ar) {
-    var closest = ar[ar.length - 1];
-    for (var i = ar.length; i > 0; i--) {
-        if (ar[i] > num) {
-            closest = ar[i];
-        }
-    }
-    return closest;
-}
