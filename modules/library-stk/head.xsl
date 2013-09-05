@@ -88,7 +88,7 @@
    <!-- Renders all CSS files defined in theme.xml  -->
    <xsl:template name="stk:head.create-css">
       <!-- resources without a condition -->
-      <xsl:for-each select="($stk:theme-all-devices | $stk:theme-device-class)/styles/style[normalize-space(path)][not(normalize-space(condition))][stk:head.check-resource-filter(.)]">
+      <xsl:for-each select="($stk:theme-all-devices | $stk:theme-device-class)/styles/style[normalize-space(path)][not(normalize-space(condition))][stk:head.check-resource-include-filter(.)]">
          <xsl:variable name="resource-url" as="xs:string">
             <xsl:apply-templates select="." mode="stk:head"/>
          </xsl:variable>
@@ -104,7 +104,7 @@
          </link>
       </xsl:for-each>
       <!-- resources with a condition -->
-      <xsl:for-each-group select="($stk:theme-all-devices | $stk:theme-device-class)/styles/style[normalize-space(path)][stk:head.check-resource-filter(.)]" group-by="condition">  
+      <xsl:for-each-group select="($stk:theme-all-devices | $stk:theme-device-class)/styles/style[normalize-space(path)][stk:head.check-resource-include-filter(.)]" group-by="condition">  
          <xsl:text disable-output-escaping="yes">&lt;!--[if </xsl:text>
          <xsl:value-of select="current-grouping-key()"/>
          <xsl:text disable-output-escaping="yes">]&gt;</xsl:text>
@@ -132,7 +132,7 @@
    <xsl:template name="stk:head.create-js">      
       <script>
          <xsl:text>head.js(</xsl:text>
-         <xsl:for-each select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script[normalize-space(path)][not(normalize-space(condition))][stk:head.check-resource-filter(.)]">
+         <xsl:for-each select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script[normalize-space(path)][not(normalize-space(condition))][stk:head.check-resource-include-filter(.)]">
                <xsl:variable name="resource-url" as="xs:string">
                   <xsl:apply-templates select="." mode="stk:head"/>
                </xsl:variable>
@@ -147,7 +147,7 @@
          <xsl:text>);</xsl:text>
       </script>
       
-      <xsl:for-each-group select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script[normalize-space(path)][stk:head.check-resource-filter(.)]" group-by="condition">            
+      <xsl:for-each-group select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script[normalize-space(path)][stk:head.check-resource-include-filter(.)]" group-by="condition">            
          <xsl:text disable-output-escaping="yes"> &lt;!--[if </xsl:text>
          <xsl:value-of select="current-grouping-key()"/>
          <xsl:text disable-output-escaping="yes">]&gt; </xsl:text>
@@ -187,7 +187,7 @@
       </xsl:choose>
    </xsl:template>
    
-   <xsl:function name="stk:head.check-resource-filter" as="xs:boolean">
+   <xsl:function name="stk:head.check-resource-include-filter" as="xs:boolean">
       <xsl:param name="resource" as="element()"/>
       
       <xsl:choose>

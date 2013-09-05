@@ -50,7 +50,7 @@
             </image>
             <scripts>               
                 <script>
-                    <path>{theme}less-min.js</path>
+                    <path>{stk}less-min.js</path>
                 </script>
                 <script>
                     <path>//code.jquery.com/jquery-latest.min.js</path>
@@ -62,7 +62,7 @@
                     <path>{stk}stk-aria.js</path>
                 </script>
                 <script>
-                    <path>{theme}all.js</path>
+                    <path>{theme}main.js</path>
                 </script>
                 <script>
                     <path>//html5shiv.googlecode.com/svn/trunk/html5.js</path>                    
