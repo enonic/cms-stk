@@ -51,7 +51,19 @@
             <scripts>               
                 <script>
                     <path>{theme}less-min.js</path>
-                </script> 
+                </script>
+                <script>
+                    <path>//code.jquery.com/jquery-latest.min.js</path>
+                </script>
+                <script>
+                    <path>{stk}stk.js</path>
+                </script>
+                <script>
+                    <path>{stk}stk-aria.js</path>
+                </script>
+                <script>
+                    <path>{theme}all.js</path>
+                </script>
                 <script>
                     <path>//html5shiv.googlecode.com/svn/trunk/html5.js</path>                    
                     <condition>lt IE 9</condition>
