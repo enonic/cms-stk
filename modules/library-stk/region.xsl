@@ -14,7 +14,7 @@
 
     <!-- Regions template -->
     <!-- Renders region(s), either specified by region-name or all available regions -->
-    <xsl:template name="stk:region.create">
+    <xsl:template name="stk:region.create" as="element()*">
        <!-- <xsl:param name="region-name" as="xs:string?"/>
        --> <xsl:param name="layout" as="xs:string" select="'default'"/>
         <!--<xsl:param name="content-prepend" as="document-node()*"/>

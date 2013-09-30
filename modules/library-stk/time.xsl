@@ -31,11 +31,11 @@
 
     <!-- Formats date (and time) -->
     <!-- Valid input formats: ISO 8601 -->
-    <xsl:template name="stk:time.format-date">
+    <xsl:template name="stk:time.format-date" as="xs:string">
         <xsl:param name="date"/>
         <xsl:param name="language" as="xs:string?" select="$stk:language"/>
         <xsl:param name="picture" as="xs:string?"/>
-        <xsl:param name="include-time" as="xs:boolean?" select="false()"/>
+        <xsl:param name="include-time" as="xs:boolean" select="false()"/>
         <xsl:choose>
             <xsl:when test="not($date castable as xs:string)">                
                 <xsl:text>Erroneous date format</xsl:text>
@@ -95,7 +95,7 @@
     
     <!-- Formats time -->
     <!-- Valid input formats: ISO 8601 and hh:mm -->
-    <xsl:template name="stk:time.format-time">
+    <xsl:template name="stk:time.format-time" as="xs:string">
         <xsl:param name="time"/>
         <xsl:param name="language" as="xs:string?" select="$stk:language"/>
         <xsl:param name="picture" as="xs:string?"/>

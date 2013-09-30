@@ -19,7 +19,7 @@
    
    <!-- Accessibility links -->
    <!-- Renders hotkeys to access different anchors as defined in the theme.xml -->
-   <xsl:template name="stk:accessibility.create-bypass-links">
+   <xsl:template name="stk:accessibility.create-bypass-links" as="element()?">
       <xsl:if test="exists($stk:theme-config/accessibility/bypass[@text][@anchor])">
          <ul class="accessibility bypass-links">
             <xsl:for-each select="$stk:theme-config/accessibility/bypass[@text][@anchor]">
@@ -36,7 +36,7 @@
       </xsl:if>
    </xsl:template>
    
-   <xsl:template name="stk:accessibility.create-text-resizing-guidance">
+   <xsl:template name="stk:accessibility.create-text-resizing-guidance" as="element()">
       <div class="accessibility text-resizing-guidance">
          <span>
             <xsl:for-each select="1 to 3">               

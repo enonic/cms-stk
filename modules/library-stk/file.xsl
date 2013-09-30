@@ -24,9 +24,9 @@
     </xsl:function>
     
     <!-- Displays icon image -->
-    <xsl:template name="stk:file.create-icon-image">
+    <xsl:template name="stk:file.create-icon-image" as="element()">
         <xsl:param name="file-name" as="xs:string"/>
-        <xsl:param name="icon-folder-path" as="xs:string" select="concat($stk:theme-public, '/img/all/')"/>
+        <xsl:param name="icon-folder-path" as="xs:string" select="'{theme}/all/icons/'"/>
         <xsl:param name="icon-image-prefix" as="xs:string" select="'icon-'"/>
         <xsl:param name="icon-image-file-extension" as="xs:string" select="'png'"/>
         <xsl:variable name="file-extension" select="stk:file.get-extension($file-name)"/>

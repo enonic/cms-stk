@@ -17,7 +17,7 @@
     <xsl:import href="stk-variables.xsl"/>
     <xsl:import href="system.xsl"/>
     
-    <xsl:template name="stk:analytics.google">
+    <xsl:template name="stk:analytics.google" as="element()?">
         <xsl:variable name="google-analytics-web-property-id" select="stk:system.get-config-param('google-analytics-web-property-id', $stk:path)" as="xs:string?"/>
         <xsl:variable name="google-analytics-type" select="if (normalize-space(stk:system.get-config-param('google-analytics-type', $stk:path))) then stk:system.get-config-param('google-analytics-type', $stk:path) else 'classic'" as="xs:string"/>
         <xsl:if test="normalize-space($google-analytics-web-property-id)">

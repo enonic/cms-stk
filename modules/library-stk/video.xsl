@@ -44,7 +44,7 @@
     </xsl:template>-->
     
     
-    <xsl:template name="stk:video.embed-youtube">
+    <xsl:template name="stk:video.embed-youtube" as="element()">
         <xsl:param name="video-id" as="xs:string"/>
         <xsl:param name="width" as="xs:integer" select="560"/>
         <xsl:param name="height" as="xs:integer" select="315"/>
@@ -85,7 +85,8 @@
                 <img src="{$src}" alt="Video screenshot" class="youtube screenshot"/>
             </xsl:when>
             <xsl:otherwise>
-                <iframe class="youtube video" src="{$src}" id="youtube-video-{$video-id}">                    
+                <iframe class="youtube video" src="{$src}" id="youtube-video-{$video-id}">    
+                    <xsl:comment>required for validation</xsl:comment>
                     <!-- make sure the video width fits inside the current region width --><!--
                     <xsl:attribute name="width" select="if ($width gt $region-width) then $region-width else $width"/>
                     <xsl:attribute name="height" select="if ($width gt $region-width) then $region-width div $aspect-ratio else $height"/>-->
@@ -95,7 +96,7 @@
         
     </xsl:template>
     
-    <xsl:template name="stk:video.embed-vimeo">
+    <xsl:template name="stk:video.embed-vimeo" as="element()">
         <xsl:param name="video-id" as="xs:string"/>
         <xsl:param name="width" as="xs:integer" select="560"/>
         <xsl:param name="height" as="xs:integer" select="315"/>

@@ -17,38 +17,35 @@
 	
 	<xsl:import href="stk-variables.xsl"/>
 	
-	<xsl:template name="stk:pagination.create-header">
+	<xsl:template name="stk:pagination.create-header" as="element()?">
 		<xsl:param name="contents" as="element()"/>
-		<xsl:param name="index" as="xs:integer?" select="xs:integer($contents/@index)"/>
-		<xsl:param name="content-count" as="xs:integer?" select="xs:integer($contents/@resultcount)"/>
-		<xsl:param name="total-count" as="xs:integer?" select="xs:integer($contents/@totalcount)"/>
-		<xsl:param name="contents-per-page" as="xs:integer?" select="xs:integer($contents/@count)"/>
+		<xsl:param name="index" as="xs:integer" select="xs:integer($contents/@index)"/>
+		<xsl:param name="content-count" as="xs:integer" select="xs:integer($contents/@resultcount)"/>
+		<xsl:param name="total-count" as="xs:integer" select="xs:integer($contents/@totalcount)"/>
+		<xsl:param name="contents-per-page" as="xs:integer" select="xs:integer($contents/@count)"/>
 		<xsl:param name="always-show" as="xs:boolean" select="false()"/>
 		<xsl:if test="$always-show or ($total-count gt $contents-per-page)">
-			<div class="pagination-header">
-				<xsl:variable name="range">
-					<xsl:value-of select="$index + 1"/>
-					<xsl:if test="$content-count gt 1">
-						<xsl:value-of select="concat(' - ', $index + $content-count)"/>
-					</xsl:if>
-				</xsl:variable>
+			<xsl:variable name="range" as="xs:string" select="concat($index + 1, if ($content-count gt 1) then concat(' - ', $index + $content-count) else null)"/>
+			<div class="pagination header">
 				<xsl:value-of select="portal:localize('stk.pagination.header-text', ($range, $total-count))"/>
 			</div>
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template name="stk:pagination.create-menu">
+	<xsl:template name="stk:pagination.create-menu" as="element()?">
 		<xsl:param name="contents" as="element()"/>
-		<xsl:param name="index" as="xs:integer?" select="xs:integer($contents/@index)"/>
-		<xsl:param name="content-count" as="xs:integer?" select="xs:integer($contents/@resultcount)"/>
-		<xsl:param name="total-count" as="xs:integer?" select="xs:integer($contents/@totalcount)"/>
-		<xsl:param name="contents-per-page" as="xs:integer?" select="xs:integer($contents/@count)"/>
+		<xsl:param name="index" as="xs:integer" select="xs:integer($contents/@index)"/>
+		<xsl:param name="content-count" as="xs:integer" select="xs:integer($contents/@resultcount)"/>
+		<xsl:param name="total-count" as="xs:integer" select="xs:integer($contents/@totalcount)"/>
+		<xsl:param name="contents-per-page" as="xs:integer" select="xs:integer($contents/@count)"/>
 		<xsl:param name="parameters" as="element()*" select="$stk:querystring-parameter[not(@name = 'index' or @name = 'id' or starts-with(@name, '_config-'))]"/>
-		<xsl:param name="pages-in-pagination" select="10" as="xs:integer"/>
-		<xsl:param name="index-parameter-name" select="'index'" as="xs:string"/>
+		<xsl:param name="pages-in-pagination" as="xs:integer" select="10"/>
+		<xsl:param name="index-parameter-name" as="xs:string" select="'index'"/>
+		<xsl:param name="show-more-text" as="xs:string" select="portal:localize('stk.pagination.show-more-text')"/>
+		<xsl:param name="showing-text" as="xs:string" select="portal:localize('stk.pagination.showing-text')"/>
 		<xsl:if test="$total-count gt $contents-per-page">
-			<p id="{generate-id($contents)}" class="audible">Pagination</p>
-			<nav class="pagination" aria-labelledby="{generate-id($contents)}">
+			<nav class="pagination" aria-labelledby="{generate-id($contents)}" data-count="{$contents-per-page}" data-totalcount="{$total-count}" data-windowurl="{portal:createWindowUrl(('index', 'REPLACEWITHINDEX'))}" data-show-more-text="{$show-more-text}" data-showing-text="{$showing-text}">				
+				<h4 id="{generate-id($contents)}" class="audible">Pagination</h4>
 				<ul>
 					<!-- First page -->
 					<xsl:if test="$index gt 0">
@@ -66,10 +63,12 @@
 							</a>
 						</li>
 					</xsl:if>
+					
 					<!-- Middle pagination part -->
 					<xsl:variable name="tmp" select="floor(($total-count - ($index + 1)) div $contents-per-page) - floor(($pages-in-pagination - 1) div 2)"/>
 					<xsl:variable name="tmp2" select="if ($tmp gt 0) then 0 else $tmp"/>
 					<xsl:variable name="tmp3" select="$index - (floor($pages-in-pagination div 2) * $contents-per-page) + ($tmp2 * $contents-per-page)"/>
+					
 					<xsl:call-template name="stk:pagination.create-menu-middle">
 						<xsl:with-param name="start" tunnel="yes" select="if ($tmp3 lt 0) then 0 else $tmp3"/>
 						<xsl:with-param name="max-count" tunnel="yes" select="$pages-in-pagination"/>
@@ -100,15 +99,15 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template name="stk:pagination.create-menu-middle">
-		<xsl:param name="parameters" tunnel="yes" as="element()*"/>
-		<xsl:param name="index" tunnel="yes" as="xs:integer"/>
-		<xsl:param name="total-count" tunnel="yes" as="xs:integer"/>
-		<xsl:param name="contents-per-page" tunnel="yes" as="xs:integer"/>
-		<xsl:param name="index-parameter-name" tunnel="yes" select="'index'" as="xs:string"/>
-		<xsl:param name="start" tunnel="yes"/>
-		<xsl:param name="max-count" tunnel="yes"/>
-		<xsl:param name="counter" select="1"/>
+	<xsl:template name="stk:pagination.create-menu-middle" as="element()*">
+		<xsl:param name="parameters" as="element()*" tunnel="yes"/>
+		<xsl:param name="index" as="xs:integer" tunnel="yes"/>
+		<xsl:param name="total-count" as="xs:integer" tunnel="yes"/>
+		<xsl:param name="contents-per-page" as="xs:integer" tunnel="yes" />
+		<xsl:param name="index-parameter-name" as="xs:string" tunnel="yes" select="'index'" />
+		<xsl:param name="start" as="xs:integer" tunnel="yes"/>
+		<xsl:param name="max-count" as="xs:integer" tunnel="yes"/>
+		<xsl:param name="counter" as="xs:integer" select="1"/>
 		<xsl:if test="$counter le $max-count and (($start + (($counter - 1) * $contents-per-page)) lt $total-count)">
 			<li>
 				<xsl:attribute name="class">

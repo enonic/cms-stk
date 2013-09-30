@@ -21,11 +21,11 @@
     <xsl:import href="video.xsl"/>
     
         
-    <xsl:template name="stk:html.process">
-        <xsl:param name="filter" as="xs:string?" select="$stk:config-filter"/>
-        <xsl:param name="imagesize" as="element()*" select="$stk:config-imagesize"/>
+    <xsl:template name="stk:html.process" as="element()">        
         <xsl:param name="document" as="element()"/>
         <xsl:param name="image" as="element()*" select="//content[contentdata/sourceimage]"/>
+        <xsl:param name="imagesize" as="element()*" select="$stk:config-imagesize"/>
+        <xsl:param name="filter" as="xs:string?" select="$stk:config-filter"/>
         <xsl:param name="region-width" as="xs:integer" select="$stk:img-max-width"/>
         <div class="editor">
             <xsl:apply-templates select="$document/*|$document/text()" mode="html.process">
@@ -153,6 +153,7 @@
                 <xsl:with-param name="scaling" select="$last-scale-filter"/>
                 <xsl:with-param name="size" select="$url-size"/>
                 <xsl:with-param name="class" select="$class"/>
+                <xsl:with-param name="scale-up" select="if ($url-size = 'original') then false() else true()"/>
             </xsl:call-template>
         </xsl:if>
         

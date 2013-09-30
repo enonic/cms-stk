@@ -8,6 +8,7 @@
 .accessibility {
     &.bypass-links {
         position: absolute;
+        list-style: none;
         
         a {
             position: absolute;
@@ -49,9 +50,22 @@
             top: 30px;
             right: 30px;
             background: #fff;
+            color: #000;
             .border-radius(5px);
             padding: 20px;
             min-width: 1000px;
         }
+    }
+}
+
+.editor-image {
+    &-right {
+        float: right;
+        margin: 0 0 1em 1em;
+    }
+    
+    &-left {
+        float: left;
+        margin: 0 1em 1em 0;
     }
 }

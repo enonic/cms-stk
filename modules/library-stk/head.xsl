@@ -10,7 +10,7 @@
    <xsl:import href="file.xsl"/>
    
    <!-- Metadata template -->
-   <xsl:template name="stk:head.create-metadata">
+   <xsl:template name="stk:head.create-metadata" as="element()*">
       <xsl:param name="description" as="xs:string?"/>
       <xsl:param name="keywords" as="xs:string?"/>
       
