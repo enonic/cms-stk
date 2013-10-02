@@ -31,20 +31,20 @@
 
     <!-- Formats date (and time) -->
     <!-- Valid input formats: ISO 8601 -->
-    <xsl:template name="stk:time.format-date" as="xs:string">
-        <xsl:param name="date"/>
-        <xsl:param name="language" as="xs:string?" select="$stk:language"/>
+    <xsl:template name="stk:time.format-date" as="element()?">
+        <xsl:param name="date" as="xs:string"/>
+        <xsl:param name="language" as="xs:string" select="$stk:language"/>
         <xsl:param name="picture" as="xs:string?"/>
         <xsl:param name="include-time" as="xs:boolean" select="false()"/>
         <xsl:choose>
             <xsl:when test="not($date castable as xs:string)">                
-                <xsl:text>Erroneous date format</xsl:text>
+                <!-- Erroneous date format -->
             </xsl:when>
             <xsl:otherwise>
                 <xsl:variable name="date-parts" select="tokenize(xs:string($date), ' |T')"/>
                 <xsl:choose>
                     <xsl:when test="not($date-parts[1] castable as xs:date)">                        
-                        <xsl:text>Erroneous date format</xsl:text>
+                        <!-- Erroneous date format -->
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:variable name="final-picture">
@@ -81,6 +81,7 @@
                                 <xsl:call-template name="stk:time.format-time">
                                     <xsl:with-param name="time" select="$date-parts[2]"/>
                                     <xsl:with-param name="language" select="$language"/>
+                                    <xsl:with-param name="wrap-in-time" select="false()"/>
                                 </xsl:call-template>
                             </xsl:if>
                         </time>
@@ -95,10 +96,11 @@
     
     <!-- Formats time -->
     <!-- Valid input formats: ISO 8601 and hh:mm -->
-    <xsl:template name="stk:time.format-time" as="xs:string">
-        <xsl:param name="time"/>
-        <xsl:param name="language" as="xs:string?" select="$stk:language"/>
+    <xsl:template name="stk:time.format-time" as="element()?">
+        <xsl:param name="time" as="xs:string"/>
+        <xsl:param name="language" as="xs:string" select="$stk:language"/>
         <xsl:param name="picture" as="xs:string?"/>
+        <xsl:param name="wrap-in-time" as="xs:boolean" select="true()"/>
         
         <xsl:variable name="final-time">
             <xsl:value-of select="$time"/>
@@ -106,7 +108,7 @@
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="not($final-time castable as xs:time)">
-                <xsl:text>Erroneous time format</xsl:text>
+                <!-- Erroneous date format -->
             </xsl:when>
             <xsl:otherwise>
                 <xsl:variable name="final-picture">
@@ -126,9 +128,18 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <span class="time">                    
-                    <xsl:value-of select="format-time($final-time, $final-picture, $language,(), ())"/>
-                </span>
+                <xsl:choose>
+                    <xsl:when test="$wrap-in-time">
+                        <time datetime="{$final-time}">
+                            <xsl:value-of select="format-time($final-time, $final-picture, $language,(), ())"/>
+                        </time>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <span class="time">                    
+                            <xsl:value-of select="format-time($final-time, $final-picture, $language,(), ())"/>
+                        </span>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:otherwise>
         </xsl:choose>           
     </xsl:template>
