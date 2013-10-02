@@ -26,9 +26,9 @@
     </xsl:template>
     
     <xsl:template match="row" mode="stk:region.create">
-        <div class="row">
+        <div>
+            <xsl:attribute name="class" select="concat('row ', @class)" />
             <xsl:apply-templates select="group|region[@name = $stk:region.active-regions/name]" mode="stk:region.create"/>
-            
         </div>
     </xsl:template>
     
