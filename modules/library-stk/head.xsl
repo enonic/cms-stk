@@ -4,7 +4,7 @@
    xmlns:xs="http://www.w3.org/2001/XMLSchema"
    xmlns:portal="http://www.enonic.com/cms/xslt/portal" 
    xmlns:stk="http://www.enonic.com/cms/xslt/stk">
-  
+   
    <xsl:import href="stk-variables.xsl"/>
    <xsl:import href="system.xsl"/>   
    <xsl:import href="file.xsl"/>
@@ -63,7 +63,7 @@
       <xsl:if test="normalize-space($keywords) or normalize-space($stk:head.meta-keywords)">
          <meta name="keywords" content="{if (normalize-space($keywords)) then $keywords else $stk:head.meta-keywords}"/>
       </xsl:if>
-
+      
       <xsl:if test="normalize-space($stk:head.meta-google-site-verification)">
          <meta name="google-site-verification" content="{$stk:head.meta-google-site-verification}"/>
       </xsl:if>
@@ -83,7 +83,7 @@
       </xsl:if>
       
    </xsl:template>
-
+   
    <!-- Css common template -->
    <!-- Renders all CSS files defined in theme.xml  -->
    <xsl:template name="stk:head.create-css">
@@ -126,13 +126,34 @@
          <xsl:text disable-output-escaping="yes">&lt;![endif]--&gt;</xsl:text>
       </xsl:for-each-group>
    </xsl:template>
-
+   
    <!-- Script common template -->
    <!-- Renders all javascript for current device as defined in the theme.xml -->
    <xsl:template name="stk:head.create-js">      
       <script>
          <xsl:text>head.js(</xsl:text>
          <xsl:for-each select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script[normalize-space(path)][not(normalize-space(condition))][stk:head.check-resource-include-filter(.)]">
+            <xsl:variable name="resource-url" as="xs:string">
+               <xsl:apply-templates select="." mode="stk:head"/>
+            </xsl:variable>
+            <xsl:text>'</xsl:text>
+            <xsl:value-of select="$resource-url"/>
+            <xsl:text>'</xsl:text>
+            <xsl:if test="position() != last()">
+               <xsl:text>,</xsl:text>
+            </xsl:if>
+            
+         </xsl:for-each>   
+         <xsl:text>);</xsl:text>
+      </script>
+      
+      <xsl:for-each-group select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script[normalize-space(path)][stk:head.check-resource-include-filter(.)]" group-by="condition">            
+         <xsl:text disable-output-escaping="yes"> &lt;!--[if </xsl:text>
+         <xsl:value-of select="current-grouping-key()"/>
+         <xsl:text disable-output-escaping="yes">]&gt; </xsl:text>
+         <script>
+            <xsl:text>head.js(</xsl:text>
+            <xsl:for-each select="current-group()">
                <xsl:variable name="resource-url" as="xs:string">
                   <xsl:apply-templates select="." mode="stk:head"/>
                </xsl:variable>
@@ -142,30 +163,9 @@
                <xsl:if test="position() != last()">
                   <xsl:text>,</xsl:text>
                </xsl:if>
-                        
-         </xsl:for-each>   
-         <xsl:text>);</xsl:text>
-      </script>
-      
-      <xsl:for-each-group select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script[normalize-space(path)][stk:head.check-resource-include-filter(.)]" group-by="condition">            
-         <xsl:text disable-output-escaping="yes"> &lt;!--[if </xsl:text>
-         <xsl:value-of select="current-grouping-key()"/>
-         <xsl:text disable-output-escaping="yes">]&gt; </xsl:text>
-            <xsl:variable name="resource-url" as="xs:string">
-               <xsl:apply-templates select="." mode="stk:head"/>
-            </xsl:variable>
-            <script>
-               <xsl:text>head.js(</xsl:text>
-               <xsl:for-each select="current-group()">
-                  <xsl:text>'</xsl:text>
-                  <xsl:value-of select="$resource-url"/>
-                  <xsl:text>'</xsl:text>
-                  <xsl:if test="position() != last()">
-                     <xsl:text>,</xsl:text>
-                  </xsl:if>
-               </xsl:for-each>
-               <xsl:text>);</xsl:text>
-            </script>
+            </xsl:for-each>
+            <xsl:text>);</xsl:text>
+         </script>
          <xsl:text disable-output-escaping="yes"> &lt;![endif]--&gt; </xsl:text>
       </xsl:for-each-group>
    </xsl:template>
@@ -221,5 +221,5 @@
          </xsl:otherwise>         
       </xsl:choose>
    </xsl:function>
-
+   
 </xsl:stylesheet>
