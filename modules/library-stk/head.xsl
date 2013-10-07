@@ -151,21 +151,21 @@
          <xsl:text disable-output-escaping="yes"> &lt;!--[if </xsl:text>
          <xsl:value-of select="current-grouping-key()"/>
          <xsl:text disable-output-escaping="yes">]&gt; </xsl:text>
-         <xsl:for-each select="current-group()">
-            <xsl:variable name="resource-url" as="xs:string">
-               <xsl:apply-templates select="." mode="stk:head"/>
-            </xsl:variable>
             <script>
                <xsl:text>head.js(</xsl:text>
-               <xsl:text>'</xsl:text>
-               <xsl:value-of select="$resource-url"/>
-               <xsl:text>'</xsl:text>
-               <xsl:if test="position() != last()">
-                  <xsl:text>,</xsl:text>
-               </xsl:if>
+               <xsl:for-each select="current-group()">
+                  <xsl:variable name="resource-url" as="xs:string">
+                     <xsl:apply-templates select="." mode="stk:head"/>
+                  </xsl:variable>
+                  <xsl:text>'</xsl:text>
+                  <xsl:value-of select="$resource-url"/>
+                  <xsl:text>'</xsl:text>
+                  <xsl:if test="position() != last()">
+                     <xsl:text>,</xsl:text>
+                  </xsl:if>
+               </xsl:for-each>
                <xsl:text>);</xsl:text>
             </script>
-         </xsl:for-each>
          <xsl:text disable-output-escaping="yes"> &lt;![endif]--&gt; </xsl:text>
       </xsl:for-each-group>
    </xsl:template>
