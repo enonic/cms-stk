@@ -65,12 +65,13 @@
                     <path>{theme}main.js</path>
                 </script>
                 <script>
-                    <path>//html5shiv.googlecode.com/svn/trunk/html5.js</path>                    
+                    <path>//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js</path>                    
                     <condition>lt IE 9</condition>
+                    <placement>head</placement>
                 </script>
                 <script>
                     <path>{stk}selectivizr-min.js</path>
-                    <condition>lt IE 9</condition>
+                    <condition>lt IE 9</condition>   
                 </script>
             </scripts>
         </device-class>

@@ -129,10 +129,14 @@
 
    <!-- Script common template -->
    <!-- Renders all javascript for current device as defined in the theme.xml -->
-   <xsl:template name="stk:head.create-js">      
-      <script>
-         <xsl:text>head.js(</xsl:text>
-         <xsl:for-each select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script[normalize-space(path)][not(normalize-space(condition))][stk:head.check-resource-include-filter(.)]">
+   <xsl:template name="stk:head.create-js">
+      <xsl:param name="placement" as="xs:string" select="'body'"/>   
+      <xsl:variable name="scripts" as="element()*" select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script[if ($placement = 'head') then placement = 'head' else not(placement = 'head')]"/>
+      
+      <xsl:if test="$scripts[normalize-space(path)][not(normalize-space(condition))][stk:head.check-resource-include-filter(.)]">
+         <script>
+            <xsl:text>head.js(</xsl:text>
+            <xsl:for-each select="$scripts[normalize-space(path)][not(normalize-space(condition))][stk:head.check-resource-include-filter(.)]">
                <xsl:variable name="resource-url" as="xs:string">
                   <xsl:apply-templates select="." mode="stk:head"/>
                </xsl:variable>
@@ -142,12 +146,12 @@
                <xsl:if test="position() != last()">
                   <xsl:text>,</xsl:text>
                </xsl:if>
-                        
-         </xsl:for-each>   
-         <xsl:text>);</xsl:text>
-      </script>
+            </xsl:for-each>   
+            <xsl:text>);</xsl:text>
+         </script>
+      </xsl:if>
       
-      <xsl:for-each-group select="($stk:theme-all-devices | $stk:theme-device-class)/scripts/script[normalize-space(path)][stk:head.check-resource-include-filter(.)]" group-by="condition">            
+      <xsl:for-each-group select="$scripts[normalize-space(path)][stk:head.check-resource-include-filter(.)]" group-by="condition">            
          <xsl:text disable-output-escaping="yes"> &lt;!--[if </xsl:text>
          <xsl:value-of select="current-grouping-key()"/>
          <xsl:text disable-output-escaping="yes">]&gt; </xsl:text>

@@ -45,6 +45,9 @@
                 <xsl:call-template name="stk:head.create-css"/>
                 
                 <script src="{portal:createResourceUrl('/_public/library-stk/js/head.load.min.js')}"/>
+                <xsl:call-template name="stk:head.create-js">
+                    <xsl:with-param name="placement" select="'head'"/>
+                </xsl:call-template>
                 <noscript>
                     <style>
                         .js-img {display:none;}
@@ -67,7 +70,9 @@
                 <!-- This is outputted if set in config -->
                 <xsl:call-template name="stk:analytics.google"/>
                 
-                <xsl:call-template name="stk:head.create-js"/>  
+                <xsl:call-template name="stk:head.create-js">
+                    <xsl:with-param name="placement" select="'body'"/>
+                </xsl:call-template>  
             </body>
         </html>
     </xsl:template>
