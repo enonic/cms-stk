@@ -17,7 +17,7 @@
    
    <xsl:import href="stk-variables.xsl"/>
    
-   <xsl:template name="stk:error.create-message">
+   <xsl:template name="stk:error.create-message" as="element()?">
       <xsl:param name="locale" as="xs:string" select="$stk:language"/>
       <xsl:variable name="error" as="element()?" select="$stk:querystring-parameter[@name = 'http_status_code']"/>
       <xsl:variable name="url" as="xs:string?" select="/result/context/querystring/@url"/>
