@@ -82,6 +82,8 @@
          </xsl:if>
       </xsl:if>
       
+      <link rel="canonical" href="{stk:head.create-canonical-url()}"/>
+      
    </xsl:template>
 
    <!-- Css common template -->
@@ -223,6 +225,24 @@
          <xsl:otherwise>
             <xsl:value-of select="true()"/>
          </xsl:otherwise>         
+      </xsl:choose>
+   </xsl:function>
+   
+   <!-- Create a canonical URL based on filter specified in site.xml config -->
+   <!-- Example config: <parameter path="/" name="canonical-filter">index,count</parameter> -->
+   <xsl:function name="stk:head.create-canonical-url" as="xs:string">
+      <xsl:variable name="full-url" as="xs:string" select="$stk:result/context/querystring/@url"/>
+      <xsl:variable name="base-url" as="xs:string" select="tokenize($full-url, '\?')[1]"/>      
+      <xsl:variable name="url-params" as="xs:string*" select="tokenize($full-url, '\?|&amp;')[position() gt 1]"/>
+      <xsl:variable name="canonical-filter" as="element()?" select="stk:system.get-config-param('canonical-filter', $stk:path)"/>
+      <xsl:variable name="filtered-params" as="xs:string*" select="$url-params[not(tokenize(., '=')[1] = tokenize($canonical-filter, ','))]"/>            
+      <xsl:choose>
+         <xsl:when test="count($filtered-params) gt 0">
+            <xsl:value-of select="concat($base-url, '?', $filtered-params[1], if (count($filtered-params) gt 1) then concat('&amp;', string-join($filtered-params[position() gt 1], '&amp;')) else '')"/>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:value-of select="$base-url"/>
+         </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
 
