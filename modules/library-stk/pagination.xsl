@@ -43,7 +43,7 @@
 		<xsl:param name="index-parameter-name" as="xs:string" select="'index'"/>
 		<xsl:param name="show-more-text" as="xs:string" select="portal:localize('stk.pagination.show-more-text')"/>
 		<xsl:param name="showing-text" as="xs:string" select="portal:localize('stk.pagination.showing-text')"/>
-		<xsl:variable name="current-page" as="xs:integer" select="($contents-per-page + $index) div $contents-per-page"/>
+		<xsl:variable name="current-page" as="xs:integer" select="xs:integer(floor($contents-per-page + $index) div $contents-per-page)"/>
 		<xsl:if test="$total-count gt $contents-per-page">
 			<nav class="pagination" aria-labelledby="{generate-id($contents)}" data-count="{$contents-per-page}" data-totalcount="{$total-count}" data-windowurl="{portal:createWindowUrl(('index', 'REPLACEWITHINDEX'))}" data-show-more-text="{$show-more-text}" data-showing-text="{$showing-text}">				
 				<h4 id="{generate-id($contents)}" class="audible">Pagination</h4>
