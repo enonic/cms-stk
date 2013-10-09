@@ -2,6 +2,10 @@
 /* Modify this to reflect the number of columns in your grid */
 @columns: 12;
 
+@desktop: ~'(min-width: 871px)';
+@tablet: ~'(min-width: 581px) and (max-width: 870px)';
+@mobile: ~'(max-width: 580px)';
+
 /********** "DO NOT MODIFY THIS" *********/
 
 /* Create width for all column classes */
@@ -44,9 +48,7 @@
 
 /********** END OF "DO NOT MODIFY THIS" **********/
 
-
-figure {
-	
+figure {	
 	width: 100%;
 
 	&.thumbnail {
@@ -65,6 +67,11 @@ figure {
 		max-width: 40%;
 	}
 	
+	&.no-scale-up img {
+	    width: auto;
+	    max-width: 100%;
+	}
+	
 	img {
 		width: 100%;
 		display: block;
@@ -77,19 +84,18 @@ figure {
 
 
 
-
 #container {
     box-sizing: border-box;
     padding: 20px;
 }
 
-@media (min-width: 870px) {
+@media @desktop {
 	#container {
 		max-width: 1000px;
 	}
 }
 
-@media (min-width: 580px) and (max-width: 870px) {
+@media @tablet {
 	#container {
 		width: 100%;
 		border-top: 1px solid #f00;
@@ -99,7 +105,7 @@ figure {
 	}	
 }
 
-@media (max-width: 580px) {
+@media @mobile {
 	#container {
 		width: 100%;
 	}
