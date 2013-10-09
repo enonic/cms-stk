@@ -8,6 +8,7 @@
     
     <!-- ########## Context variables ########## -->
 
+    <xsl:variable name="stk:result" as="element()" select="/result"/>
     <xsl:variable name="stk:current-resource" as="element()" select="/result/context/resource"/>
     <xsl:variable name="stk:site-name" as="xs:string" select="/result/context/site/name"/>
     <xsl:variable name="stk:rendered-page" as="element()?" select="/result/context/page"/>
