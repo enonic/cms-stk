@@ -8,10 +8,14 @@
 
 /********** "DO NOT MODIFY THIS" *********/
 
+.grid-span(@width) {
+    width: 100% * (@width / @columns);
+}
+
 /* Create width for all column classes */
 .loop-grid-span (@index) when (@index > 0) {
 	.span-@{index} {
-		width: 100% * (@index / @columns);
+	   .grid-span(@index);
 	}
 	.loop-grid-span (@index - 1);
 }
