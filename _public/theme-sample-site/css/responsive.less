@@ -1,15 +1,7 @@
-
-/* Modify this to reflect the number of columns in your grid */
-@columns: 12;
-
-@desktop: ~'(min-width: 871px)';
-@tablet: ~'(min-width: 581px) and (max-width: 870px)';
-@mobile: ~'(max-width: 580px)';
-
 /********** "DO NOT MODIFY THIS" *********/
 
 .grid-span(@width) {
-    width: 100% * (@width / @columns);
+    width: 100% * (@width / @grid-columns);
 }
 
 /* Create width for all column classes */
@@ -20,7 +12,7 @@
 	.loop-grid-span (@index - 1);
 }
 .loop-grid-span (0) {}
-.loop-grid-span (@columns);
+.loop-grid-span (@grid-columns);
 
 .row {
 	overflow: hidden;
@@ -93,13 +85,13 @@ figure {
     padding: 20px;
 }
 
-@media @desktop {
+@media @device-desktop {
 	#container {
 		max-width: 1000px;
 	}
 }
 
-@media @tablet {
+@media @device-tablet {
 	#container {
 		width: 100%;
 		border-top: 1px solid #f00;
@@ -109,7 +101,7 @@ figure {
 	}	
 }
 
-@media @mobile {
+@media @device-mobile {
 	#container {
 		width: 100%;
 	}
