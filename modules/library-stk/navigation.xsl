@@ -106,7 +106,10 @@
                     </xsl:if>
                     <xsl:if test="menuitems/menuitem">
                         <xsl:text>parent</xsl:text>
-                    </xsl:if>                    
+                    </xsl:if>                         
+                    <xsl:if test="parameters/parameter[@name = 'class']">
+                        <xsl:value-of select="parameters/parameter[@name = 'class']"/>
+                    </xsl:if>   
                 </xsl:variable>
                 <xsl:if test="$classes">
                     <xsl:attribute name="class">
