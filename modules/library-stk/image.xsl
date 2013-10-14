@@ -123,6 +123,9 @@
                    
                    <img>
                        <xsl:attribute name="alt" select="$alt"/>
+                       <xsl:if test="normalize-space($title)">
+                           <xsl:attribute name="title" select="$title"/>
+                       </xsl:if>
                        <xsl:attribute name="data-srcset" select="$data-srcset"/>
                        <xsl:attribute name="data-ar" select="$image-ar[1] div $image-ar[2]"/>
                        <xsl:attribute name="class">

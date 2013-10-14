@@ -153,7 +153,9 @@
                 <xsl:with-param name="scaling" select="$last-scale-filter"/>
                 <xsl:with-param name="size" select="$url-size"/>
                 <xsl:with-param name="class" select="$class"/>
-                <xsl:with-param name="scale-up" select="if ($url-size = 'original') then false() else true()"/>
+                <xsl:with-param name="scale-up" select="if ($url-size = 'original') then false() else true()"/>                
+                <xsl:with-param name="title" select="@title"/>
+                <xsl:with-param name="alt" select="@alt"/>
             </xsl:call-template>
         </xsl:if>
         
