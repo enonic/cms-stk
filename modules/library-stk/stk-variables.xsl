@@ -13,7 +13,7 @@
     <xsl:variable name="stk:site-name" as="xs:string" select="/result/context/site/name"/>
     <xsl:variable name="stk:rendered-page" as="element()?" select="/result/context/page"/>
     
-    <xsl:variable name="stk:path" as="xs:string" select="concat('/', string-join($stk:current-resource/path/resource/name, '/'))"/>
+    <xsl:variable name="stk:path" as="xs:string" select="concat('/', string-join(($stk:current-resource/path/resource/name, $stk:current-resource[@key != $stk:current-resource/path/resource[position() = last()]/@key]/name), '/'))"/>
         
     <xsl:variable name="stk:language" as="xs:string" select="if (normalize-space(/result/context/locale)) then /result/context/locale else /result/context/@languagecode"/>
     <xsl:variable name="stk:device-class" as="xs:string" select="if (/result/context/device-class) then /result/context/device-class else 'not-set'"/>
