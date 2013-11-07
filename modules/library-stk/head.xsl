@@ -249,7 +249,6 @@
    
    <!-- Creates a meta robots element based on site configuration -->
    <xsl:template name="stk:head.create-robots-meta" as="element()?">        
-      <xsl:variable name="stk:path" as="xs:string" select="concat('/', string-join(($stk:current-resource/path/resource/name, $stk:current-resource[@key != $stk:current-resource/path/resource[position() = last()]/@key]/name), '/'))"/>
       <xsl:variable name="config-robots" as="element()?" select="$stk:config/robots"/>
       
       <xsl:variable name="exact-match" as="element()?" select="$config-robots/path[@src = $stk:path][1]"/>
