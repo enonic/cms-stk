@@ -47,7 +47,7 @@
       
       <meta charset="utf-8"/>
       <meta content="IE=Edge" http-equiv="X-UA-Compatible"/>
-      
+            
       <xsl:if test="normalize-space($stk:head.meta-generator)">
          <meta name="generator" content="{$stk:head.meta-generator}"/>
       </xsl:if>
@@ -71,6 +71,7 @@
       <meta content="minimum-scale=1.0, width=device-width, user-scalable=yes" name="viewport" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       
+      <xsl:call-template name="stk:head.create-robots-meta"/>
       
       <!-- for Google Search Appliance -->
       <xsl:if test="stk:system.get-config-param('gsa-version', $stk:path)">
@@ -245,5 +246,18 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
+   
+   <!-- Creates a meta robots element based on site configuration -->
+   <xsl:template name="stk:head.create-robots-meta" as="element()?">        
+      <xsl:variable name="stk:path" as="xs:string" select="concat('/', string-join(($stk:current-resource/path/resource/name, $stk:current-resource[@key != $stk:current-resource/path/resource[position() = last()]/@key]/name), '/'))"/>
+      <xsl:variable name="config-robots" as="element()?" select="$stk:config/robots"/>
+      
+      <xsl:variable name="exact-match" as="element()?" select="$config-robots/path[@src = $stk:path][1]"/>
+      <xsl:variable name="recursive-match" as="element()?" select="$config-robots/path[starts-with($stk:path, @src)][@recursive = 'true'][1]"/>
+      
+      <xsl:if test="$exact-match or $recursive-match">
+         <meta name="robots" content="{if ($exact-match) then $exact-match/@content else $recursive-match/@content}"/>
+      </xsl:if>
+   </xsl:template>
 
 </xsl:stylesheet>
