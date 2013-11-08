@@ -12,7 +12,6 @@
    <!-- Metadata template -->
    <xsl:template name="stk:head.create-metadata" as="element()*">
       <xsl:param name="description" as="xs:string?"/>
-      <xsl:param name="keywords" as="xs:string?"/>
       
       <xsl:variable name="stk:head.meta-generator" select="stk:system.get-config-param('meta-generator', $stk:path)" as="element()?"/>
       <xsl:variable name="stk:head.meta-author" select="stk:system.get-config-param('meta-author', $stk:path)" as="element()?"/>      
@@ -25,16 +24,6 @@
             </xsl:when>
             <xsl:otherwise>
                <xsl:value-of select="$stk:current-resource/description"/>
-            </xsl:otherwise>
-         </xsl:choose>
-      </xsl:variable>
-      <xsl:variable name="stk:head.meta-keywords">
-         <xsl:choose>
-            <xsl:when test="/result/contents/content/contentdata/meta-keywords != ''">
-               <xsl:value-of select="/result/contents/content/contentdata/meta-keywords"/>
-            </xsl:when>
-            <xsl:otherwise>
-               <xsl:value-of select="$stk:current-resource/keywords"/>
             </xsl:otherwise>
          </xsl:choose>
       </xsl:variable>
@@ -58,10 +47,6 @@
       
       <xsl:if test="normalize-space($description) or normalize-space($stk:head.meta-description)">
          <meta name="description" content="{if (normalize-space($description)) then $description else $stk:head.meta-description}"/>
-      </xsl:if>
-      
-      <xsl:if test="normalize-space($keywords) or normalize-space($stk:head.meta-keywords)">
-         <meta name="keywords" content="{if (normalize-space($keywords)) then $keywords else $stk:head.meta-keywords}"/>
       </xsl:if>
 
       <xsl:if test="normalize-space($stk:head.meta-google-site-verification)">
