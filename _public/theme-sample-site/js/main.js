@@ -1,15 +1,7 @@
-var STK = STK || {
-};
-
-
-// Prevent Internet Explorer from halting scripts when encountering console.log()
-if (typeof console == 'undefined') {
-	console = {
-		log: function () {}
-	};
-}
+var STK = STK || {};
 
 
 $(function() {
     STK.responsive.optimizeImages();    
+    console.log('test');
 });
