@@ -53,7 +53,7 @@
          <meta name="google-site-verification" content="{$stk:head.meta-google-site-verification}"/>
       </xsl:if>
       
-      <meta content="minimum-scale=1.0, width=device-width, user-scalable=yes" name="viewport" />
+      <meta content="initial-scale=1.0, minimum-scale=1.0, width=device-width, user-scalable=yes" name="viewport" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       
       <xsl:call-template name="stk:head.create-robots-meta"/>
