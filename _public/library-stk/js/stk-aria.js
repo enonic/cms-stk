@@ -12,11 +12,7 @@ $(function() {
         $(this).attr('role', 'navigation');
     });
     
-    $(':required').each(function() {
+    /*$(':required').each(function() {
         $(this).attr('aria-required', 'true');
-    });
-        
-    if (typeof Modernizr !== 'undefined') {
-        /* More coming */
-    }
+    });*/
 });
