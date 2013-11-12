@@ -3,11 +3,13 @@
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:xs="http://www.w3.org/2001/XMLSchema"
    xmlns:portal="http://www.enonic.com/cms/xslt/portal" 
-   xmlns:stk="http://www.enonic.com/cms/xslt/stk">
+   xmlns:stk="http://www.enonic.com/cms/xslt/stk"
+   xmlns:og="http://ogp.me/ns#">
   
    <xsl:import href="stk-variables.xsl"/>
    <xsl:import href="system.xsl"/>   
-   <xsl:import href="file.xsl"/>
+   <xsl:import href="file.xsl"/>   
+   <xsl:import href="navigation.xsl"/>
    
    <!-- Metadata template -->
    <xsl:template name="stk:head.create-metadata" as="element()*">
@@ -35,7 +37,7 @@
       </xsl:variable>      
       
       <meta charset="utf-8"/>
-      <meta content="IE=Edge" http-equiv="X-UA-Compatible"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             
       <xsl:if test="normalize-space($stk:head.meta-generator)">
          <meta name="generator" content="{$stk:head.meta-generator}"/>
@@ -253,6 +255,20 @@
       
       <xsl:if test="$exact-match or $recursive-match">
          <meta name="robots" content="{if ($exact-match) then $exact-match/@content else $recursive-match/@content}"/>
+      </xsl:if>
+   </xsl:template>
+   
+   <!-- Creates Open Graph metadata elements -->
+   <xsl:template name="stk:head.create-open-graph-meta" as="element()*">
+      <xsl:param name="title" as="xs:string" select="stk:navigation.get-menuitem-name($stk:current-resource)"/>
+      <xsl:param name="type" as="xs:string" select="'website'"/>
+      <xsl:param name="image" as="xs:string?"/>
+      <meta property="og:title" content="{$title}"/>
+      <meta property="og:url" content="{stk:head.create-canonical-url()}"/>
+      <meta property="og:type" content="{$type}"/>
+      <meta property="og:site_name" content="{$stk:site-name}"/>
+      <xsl:if test="normalize-space($image)">
+         <meta property="og:image" content="{$image}"/>
       </xsl:if>
    </xsl:template>
 
