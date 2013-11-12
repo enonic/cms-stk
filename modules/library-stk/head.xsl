@@ -53,7 +53,19 @@
          <meta name="google-site-verification" content="{$stk:head.meta-google-site-verification}"/>
       </xsl:if>
       
-      <meta content="initial-scale=1.0, minimum-scale=1.0, width=device-width, user-scalable=yes" name="viewport" />
+      <meta name="viewport">
+         <xsl:attribute name="content">
+            <xsl:choose>
+               <xsl:when test="stk:system.get-config-param('meta-viewport', $stk:path)">
+                  <xsl:value-of select="stk:system.get-config-param('meta-viewport', $stk:path)"/>
+               </xsl:when>
+               <xsl:otherwise>
+                  <xsl:text>initial-scale=1.0, minimum-scale=1.0, width=device-width, user-scalable=yes</xsl:text>
+               </xsl:otherwise>
+            </xsl:choose>
+         </xsl:attribute>
+      </meta>         
+         
       <meta name="apple-mobile-web-app-capable" content="yes" />
       
       <xsl:call-template name="stk:head.create-robots-meta"/>
