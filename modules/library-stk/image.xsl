@@ -67,6 +67,12 @@
                            </xsl:if>
                        </xsl:attribute>
                    </xsl:if>
+                   <xsl:if test="normalize-space($style)">
+                       <xsl:attribute name="style" select="$style"/>
+                   </xsl:if>
+                   <xsl:if test="normalize-space($id)">
+                       <xsl:attribute name="style" select="$id"/>
+                   </xsl:if>
                    
                    <noscript>
                        <img alt="{$alt}">
