@@ -132,6 +132,9 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <a href="{portal:createPageUrl(@key, ())}">
+                            <xsl:if test="url/@newwindow = 'yes'">
+                                <xsl:attribute name="target" select="'_blank'"/>
+                            </xsl:if>
                             <xsl:value-of select="stk:navigation.get-menuitem-name(.)"/>
                         </a>
                     </xsl:otherwise>
