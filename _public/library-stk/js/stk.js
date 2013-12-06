@@ -165,7 +165,7 @@ STK.pagination = {
 
 
 STK.responsive = {
-    optimizeImages: function () {
+    optimizeImages: function (callback) {
         $('img[data-srcset]').each(function () {
             var img = $(this);
             var srcset = img.data('srcset');
@@ -182,6 +182,10 @@ STK.responsive = {
                 img.attr('src', srcset[srcIndex]);
             }
         });
+        
+        if (typeof (callback) === 'function') {
+            callback();
+        }
         
         // Get's the closest higher number in array
         function getClosestHigherNum(num, ar) {
