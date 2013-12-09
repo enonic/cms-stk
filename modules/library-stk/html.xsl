@@ -223,7 +223,7 @@
                 <xsl:value-of select="portal:createContentUrl(substring-after($url, 'content://'))"/>
             </xsl:when>
             <xsl:when test="matches($url, 'attachment://\d+')">
-                <xsl:value-of select="portal:createAttachmentUrl(tokenize(substring-after($url, 'attachment://'), '\?')[1], ('_download', 'true'))"/>
+                <xsl:value-of select="portal:createAttachmentUrl(tokenize(substring-after($url, 'attachment://'), '\?')[1], if (contains($url, '_download=true')) then ('_download', 'true') else ())"/>
             </xsl:when>
             <xsl:otherwise>                
                 <xsl:value-of select="$url"/>    
