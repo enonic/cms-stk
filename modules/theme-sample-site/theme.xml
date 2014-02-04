@@ -90,7 +90,8 @@
             </layout>            
             <styles>
                 <style>
-                    <path>{theme}main.less</path>
+                    <!--<path>{theme}main.less</path>-->
+                    <path>{theme}theme-sample-site.css</path>
                 </style>
             </styles>
         </device-class>
