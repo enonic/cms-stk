@@ -148,12 +148,15 @@
                     <xsl:when test="contains($file-path, '{stk}')">
                         <xsl:text>/_public/library-stk</xsl:text>
                     </xsl:when>
+                    <xsl:when test="contains($file-path, '{shared}')">
+                        <xsl:text>/_public/shared</xsl:text>
+                    </xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="$stk:theme-public"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:variable name="trimmed-file-path" as="xs:string" select="replace($file-path, '\{stk\}|\{theme\}', '')"/>
+            <xsl:variable name="trimmed-file-path" as="xs:string" select="replace($file-path, '\{stk\}|\{theme\}|\{shared\}', '')"/>
             <xsl:if test="normalize-space($file-type)">                    
                 <xsl:value-of select="portal:createResourceUrl(concat($resource-folder, '/', $file-type, '/', $trimmed-file-path))"/>
             </xsl:if>

@@ -183,7 +183,7 @@
             <xsl:value-of select="path"/>
          </xsl:when>
          <!-- theme or stk resource -->
-         <xsl:when test="matches(path, '\{theme\}|\{stk\}')">
+         <xsl:when test="matches(path, '\{theme\}|\{stk\}|\{shared\}')">
             <xsl:value-of select="stk:file.create-resource-url(path)"/>
          </xsl:when>
          <!-- other local resources -->
