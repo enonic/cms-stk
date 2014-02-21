@@ -17,6 +17,7 @@
     xmlns:stk="http://www.enonic.com/cms/xslt/stk">
     
     <xsl:import href="stk-variables.xsl"/>
+    <xsl:import href="stk-general.xsl" />
     
     <!-- Generates image element -->
     <xsl:template name="stk:image.create" as="element()?">
@@ -33,6 +34,7 @@
         <xsl:param name="class" as="xs:string?"/>
         <xsl:param name="style" as="xs:string?"/>
         <xsl:param name="id" as="xs:string?"/>
+        <xsl:param name="attr" as="xs:string*"/>
         
         <xsl:variable name="original-image-size" as="xs:integer*" select="stk:image.get-original-size($image)"/>
         
@@ -73,6 +75,11 @@
                    <xsl:if test="normalize-space($id)">
                        <xsl:attribute name="style" select="$id"/>
                    </xsl:if>
+                   
+                   <xsl:call-template name="stk:general.add-attributes">
+                       <xsl:with-param name="attr" select="$attr"/>
+                   </xsl:call-template>
+                   
                    
                    <noscript>
                        <img alt="{$alt}">

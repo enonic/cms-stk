@@ -16,6 +16,7 @@
     xmlns:stk="http://www.enonic.com/cms/xslt/stk">    
     
     <xsl:import href="stk-variables.xsl"/>    
+    <xsl:import href="stk-general.xsl" />
     
     <!-- Returns timezone as xs:string -->
     <xsl:function name="stk:time.get-timezone" as="xs:string">
@@ -36,6 +37,7 @@
         <xsl:param name="language" as="xs:string" select="$stk:language"/>
         <xsl:param name="picture" as="xs:string?"/>
         <xsl:param name="include-time" as="xs:boolean" select="false()"/>
+        <xsl:param name="attr" as="xs:string*"/>
         <xsl:choose>
             <xsl:when test="not($date castable as xs:string)">                
                 <!-- Erroneous date format -->
@@ -73,6 +75,9 @@
                                     <xsl:value-of select="$date-parts[2]"/>
                                 </xsl:if>
                             </xsl:attribute>
+                            <xsl:call-template name="stk:general.add-attributes">
+                                <xsl:with-param name="attr" select="$attr"/>
+                            </xsl:call-template>
                             <span class="date">                                
                                 <xsl:value-of select="format-date(xs:date($date-parts[1]), $final-picture, $language, (), ())" disable-output-escaping="yes"/>
                             </span>
@@ -100,7 +105,8 @@
         <xsl:param name="time" as="xs:string"/>
         <xsl:param name="language" as="xs:string" select="$stk:language"/>
         <xsl:param name="picture" as="xs:string?"/>
-        <xsl:param name="wrap-in-time" as="xs:boolean" select="true()"/>
+        <xsl:param name="wrap-in-time" as="xs:boolean" select="true()"/>        
+        <xsl:param name="attr" as="xs:string*"/>
         
         <xsl:variable name="final-time">
             <xsl:value-of select="$time"/>
@@ -131,6 +137,9 @@
                 <xsl:choose>
                     <xsl:when test="$wrap-in-time">
                         <time datetime="{$final-time}">
+                            <xsl:call-template name="stk:general.add-attributes">
+                                <xsl:with-param name="attr" select="$attr"/>
+                            </xsl:call-template>
                             <xsl:value-of select="format-time($final-time, $final-picture, $language,(), ())"/>
                         </time>
                     </xsl:when>
