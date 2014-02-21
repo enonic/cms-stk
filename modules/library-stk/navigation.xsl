@@ -14,7 +14,8 @@
     xmlns:portal="http://www.enonic.com/cms/xslt/portal"
     xmlns:stk="http://www.enonic.com/cms/xslt/stk">
     
-    <xsl:import href="stk-variables.xsl"/>
+    <xsl:import href="stk-variables.xsl"/>    
+    <xsl:import href="stk-general.xsl" />
     <xsl:import href="system.xsl"/>    
     
     <!-- Displays menu item name -->
@@ -30,7 +31,8 @@
         <xsl:param name="current-level" as="xs:integer" select="1"/>
         <xsl:param name="class" as="xs:string?"/>
         <xsl:param name="id" as="xs:string?"/>
-        <xsl:param name="container-element" as="xs:string?" select="'nav'"/>        
+        <xsl:param name="container-element" as="xs:string?" select="'nav'"/>          
+        <xsl:param name="attr" as="xs:string*"/>
         <xsl:if test="$menuitems">
             <xsl:variable name="wrapped-menuitems" as="element()">
                 <xsl:choose>
@@ -56,6 +58,9 @@
                 <xsl:when test="normalize-space($container-element)">
                     <xsl:element name="{$container-element}">
                         <xsl:attribute name="role" select="'navigation'"/>
+                        <xsl:call-template name="stk:general.add-attributes">
+                            <xsl:with-param name="attr" select="$attr"/>
+                        </xsl:call-template>
                         <xsl:sequence select="$rendered-menuitems"/>
                     </xsl:element>
                 </xsl:when>
@@ -148,17 +153,25 @@
     
     <xsl:template name="stk:navigation.create-breadcrumbs">
         <xsl:param name="include-home" as="xs:boolean" select="true()"/>
+        <xsl:param name="include-current" as="xs:boolean" select="false()"/>        
+        <xsl:param name="attr" as="xs:string*"/>
         <xsl:if test="not($stk:current-resource/@key = $stk:front-page)">            
-            <nav class="breadcrumbs">
+            <nav class="breadcrumbs" xmlns:v="http://rdf.data-vocabulary.org/#">
+                <xsl:call-template name="stk:general.add-attributes">
+                    <xsl:with-param name="attr" select="$attr"/>
+                </xsl:call-template>
                 <xsl:if test="$include-home">
-                    <a href="{portal:createPageUrl($stk:front-page,())}" class="home">
-                        <xsl:value-of select="portal:localize('stk.navigation.breadcrumbs.home')"/>
-                    </a>
+                    <span typeof="v:Breadcrumb">
+                        <a href="{portal:createPageUrl($stk:front-page,())}" class="home"  rel="v:url" property="v:title">
+                            <xsl:value-of select="portal:localize('stk.navigation.breadcrumbs.home')"/>
+                            
+                        </a>
+                    </span>
                 </xsl:if>
                 <xsl:apply-templates select="/result/context/resource/path/resource" mode="stk:navigation.create-breadcrumbs">
-                    <xsl:with-param name="include-home" select="$include-home"/>
+                    <xsl:with-param name="include-current" select="$include-current" tunnel="yes"/>
                 </xsl:apply-templates>
-                <xsl:if test="/result/context/resource/@key != /result/context/resource/path/resource[position() = last()]/@key">
+                <xsl:if test="/result/context/resource/@key != /result/context/resource/path/resource[position() = last()]/@key and $include-current">
                     <span class="active">                        
                         <xsl:value-of select="stk:navigation.get-menuitem-name(/result/context/resource)"/>
                     </span>
@@ -168,22 +181,26 @@
     </xsl:template>
     
     <xsl:template match="resource" mode="stk:navigation.create-breadcrumbs">
+        <xsl:param name="include-current" tunnel="yes"/>
         <xsl:choose>
-            <xsl:when test="type = 'label'">
+            <xsl:when test="@key = $stk:front-page"/>
+            <xsl:when test="type = 'label' or type = 'section'">
                 <span class="label">                    
                     <xsl:value-of select="stk:navigation.get-menuitem-name(.)"/>
                 </span>
             </xsl:when>
             <xsl:when test="position() != last() or (position() = last() and @key != ../../@key)">
-                <a href="{portal:createPageUrl(@key,())}">
-                    <xsl:value-of select="stk:navigation.get-menuitem-name(.)"/>
-                </a>
+                <span typeof="v:Breadcrumb">
+                    <a href="{portal:createPageUrl(@key,())}"  rel="v:url" property="v:title">
+                        <xsl:value-of select="stk:navigation.get-menuitem-name(.)"/>                        
+                    </a>
+                </span>     
             </xsl:when>
-            <xsl:otherwise>                
+            <xsl:when test="$include-current">   
                 <span class="active">
                     <xsl:value-of select="stk:navigation.get-menuitem-name(.)"/>
                 </span>
-            </xsl:otherwise>
+            </xsl:when>
         </xsl:choose>
     </xsl:template>
     
