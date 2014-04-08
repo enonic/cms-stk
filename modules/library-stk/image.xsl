@@ -35,7 +35,7 @@
         <xsl:param name="style" as="xs:string?"/>
         <xsl:param name="id" as="xs:string?"/>
         <xsl:param name="attr" as="xs:string*"/>
-        <xsl:param name="scale-by" as="''"/>
+        <xsl:param name="scale-by" select="''"/>
         
         <xsl:variable name="original-image-size" as="xs:integer*" select="stk:image.get-original-size($image)"/>
         
