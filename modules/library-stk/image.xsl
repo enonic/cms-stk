@@ -35,6 +35,7 @@
         <xsl:param name="style" as="xs:string?"/>
         <xsl:param name="id" as="xs:string?"/>
         <xsl:param name="attr" as="xs:string*"/>
+        <xsl:param name="scale-by" as="''"/>
         
         <xsl:variable name="original-image-size" as="xs:integer*" select="stk:image.get-original-size($image)"/>
         
@@ -141,6 +142,9 @@
                        </xsl:if>
                        <xsl:attribute name="data-srcset" select="$data-srcset"/>
                        <xsl:attribute name="data-ar" select="$image-ar[1] div $image-ar[2]"/>
+                       <xsl:if test="$scale-by != ''">
+                           <xsl:attribute name="data-scale-by" select="$scale-by"/>
+                       </xsl:if>
                        <xsl:attribute name="class">
                            <xsl:text>js-img </xsl:text>
                            <xsl:value-of select="$size"/>
