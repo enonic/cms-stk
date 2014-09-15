@@ -71,7 +71,7 @@
 					<xsl:variable name="tmp3" as="xs:integer" select="xs:integer($index - (floor($pages-in-pagination div 2) * $contents-per-page) + ($tmp2 * $contents-per-page))"/>
 										
 					<xsl:variable name="max-page" as="xs:integer" select="xs:integer(ceiling($total-count div $contents-per-page))"/>
-					<xsl:variable name="start-page" as="xs:integer" select="if ($tmp3 lt 1) then 1 else $tmp3"/>
+					<xsl:variable name="start-page" as="xs:integer" select="if ($tmp3 lt 1) then 1 else $tmp3 div $contents-per-page"/>
 					<xsl:variable name="stop-page" as="xs:integer" select="if ($max-page lt ($start-page + $pages-in-pagination - 1)) then $max-page else $start-page + $pages-in-pagination - 1"/>
 
 					<xsl:for-each select="$start-page to $stop-page">
