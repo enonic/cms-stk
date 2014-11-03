@@ -120,6 +120,7 @@
             <!-- make sure the video width fits inside the current region width -->
             <xsl:attribute name="width" select="if ($width gt $region-width) then $region-width else $width"/>
             <xsl:attribute name="height" select="if ($width gt $region-width) then $region-width div $aspect-ratio else $height"/>
+            <xsl:comment>required for validation</xsl:comment>
         </iframe>
     </xsl:template>
     
