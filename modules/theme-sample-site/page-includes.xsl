@@ -41,7 +41,24 @@
                 </title>
                 
                 <link rel="shortcut icon" type="image/x-icon" href="{stk:file.create-resource-url('/all/favicon.ico')}"/>
-                <xsl:call-template name="stk:head.create-metadata"/>
+
+                <!-- With a getContent on each "show" Page Template we'll be able to fetch the preface field and use it for meta description -->
+                <xsl:call-template name="stk:head.create-metadata">
+                    <xsl:with-param name="description">
+                         <xsl:choose>
+                            <xsl:when test="/result/contents/content/contentdata/preface != ''">
+                               <xsl:value-of select="/result/contents/content/contentdata/preface"/>
+                            </xsl:when>
+                            <xsl:when test="/result/contents/content/contentdata/description != ''">
+                               <xsl:value-of select="/result/contents/content/contentdata/description"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text></xsl:text><!-- empty -->
+                            </xsl:otherwise>
+                         </xsl:choose>
+                    </xsl:with-param>
+                </xsl:call-template>
+
                 <xsl:call-template name="stk:head.create-css"/>                
                 <xsl:call-template name="stk:head.create-open-graph-meta"/>
                 
