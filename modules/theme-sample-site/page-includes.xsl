@@ -43,7 +43,9 @@
                 <link rel="shortcut icon" type="image/x-icon" href="{stk:file.create-resource-url('/all/favicon.ico')}"/>
                 <xsl:call-template name="stk:head.create-metadata"/>
                 <xsl:call-template name="stk:head.create-css"/>                
-                <xsl:call-template name="stk:head.create-open-graph-meta"/>
+                <xsl:call-template name="stk:head.create-open-graph-meta">
+					<xsl:with-param name="type" select="if ( /result/context/site/front-page/resource[@key = /result/context/resource[1]/@key] ) then 'website' else 'article'" />
+				</xsl:call-template>
                 
                 <script src="{portal:createResourceUrl('/_public/library-stk/js/head.load.min.js')}"/>
                 <xsl:call-template name="stk:head.create-js">
