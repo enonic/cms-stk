@@ -1,0 +1,83 @@
+@mixin font-size($sizeValue) {
+  $remValue: $sizeValue / 16;
+  $pxValue: $sizeValue;
+  font-size: #{$pxValue}px; 
+  font-size: #{$remValue}rem;
+}
+
+@mixin  border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -o-border-radius: $radius;
+  border-radius: $radius;
+}
+
+ @mixin box-shadow($shadow) {
+  -webkit-box-shadow: $shadow;  
+  -moz-box-shadow: $shadow;
+  box-shadow: $shadow;
+}
+
+@mixin user-select($select) {    
+    -webkit-user-select: $select;
+    -moz-user-select: $select;
+    -ms-user-select: $select;
+    -o-user-select: $select;
+    user-select: $select;
+}
+
+@mixin rotate($degrees) {
+  -webkit-transform: rotate($degrees);
+     -moz-transform: rotate($degrees);
+      -ms-transform: rotate($degrees);
+       -o-transform: rotate($degrees);
+          transform: rotate($degrees);
+}
+
+	
+@mixin gradient-horizontal ($startColor: #555, $endColor: #333) {
+    background-color: $endColor;
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient(left, $startColor, $endColor);
+    background-image: -ms-linear-gradient(left, $startColor, $endColor);
+    background-image: -webkit-gradient(linear, left top, right top, color-stop(0%, $startColor), color-stop(100%, $endColor));
+    background-image: -webkit-linear-gradient(left, $startColor, $endColor);
+    background-image: -o-linear-gradient(left, $startColor, $endColor);
+    background-image: linear-gradient(left, $startColor, $endColor);
+}
+
+@mixin gradient-vertical ($startColor: #555, $endColor: #333) {
+    background-color: $endColor;
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient($startColor, $endColor);
+    background-image: -ms-linear-gradient($startColor, $endColor);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $startColor), color-stop(100%, $endColor));
+    background-image: -webkit-linear-gradient($startColor, $endColor);
+    background-image: -o-linear-gradient($startColor, $endColor);
+    background-image: linear-gradient($startColor, $endColor);
+}
+
+
+@mixin box-sizing($sizing) {
+    -webkit-box-sizing: $sizing;
+	-moz-box-sizing: $sizing;
+	box-sizing: $sizing;
+}
+
+@mixin text-shadow ($string: 0 1px 3px rgba(0, 0, 0, 0.25)) {
+	text-shadow: $string;
+}
+
+@mixin background-size($size) {
+  -webkit-background-size: $size;
+     -moz-background-size: $size;
+       -o-background-size: $size;
+          background-size: $size;
+}
+
+@mixin audible-text {
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
