@@ -113,6 +113,8 @@ STK.responsive = {
     optimizeImages: function (callback) {
         $('img[data-srcset]').each(function () {
             var img = $(this);
+            // Either use the selector from data-scale-by or the image for scaling.
+            var scaleBy = (img.attr('data-scale-by')) ? $(img.data('scale-by')).first() : img;
             var srcset = img.data('srcset');
             if (typeof srcset === 'object') {
                 var sizes =[];
@@ -122,7 +124,7 @@ STK.responsive = {
                 sizes.sort(function (a, b) {
                     return a - b;
                 });
-                var width = Math.floor(img.width() * (window.devicePixelRatio || 1));
+                var width = Math.floor(scaleBy.width() * (window.devicePixelRatio || 1));
                 var srcIndex = getClosestHigherNum(width, sizes);
                 img.attr('src', srcset[srcIndex]);
             }
