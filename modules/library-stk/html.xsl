@@ -215,18 +215,32 @@
     
     <xsl:function name="stk:html.process-url" as="xs:string?">
         <xsl:param name="url" as="xs:string"/>
+        
+        <!-- URLs must follow the RFC 3986 standard of "querystring before anchor". Otherwise, the parameters are interpreted as part of the anchor -->
+        <xsl:variable name="url-part-anchorless" select="tokenize(tokenize($url, '#')[1], '://|\?|&amp;')"/>
+        <xsl:variable name="url-type" select="$url-part-anchorless[1]"/>
+        <xsl:variable name="url-key" select="$url-part-anchorless[2]"/>
+        <xsl:variable name="url-parameter" select="$url-part-anchorless[position() gt 2 and contains(., '=')]"/>
+        <xsl:variable name="url-parameters" as="xs:anyAtomicType*">
+            <xsl:for-each select="$url-parameter">
+                <xsl:sequence select="tokenize(., '=')[1], tokenize(., '=')[2]"/>
+            </xsl:for-each>
+        </xsl:variable>
+        
         <xsl:choose>
-            <xsl:when test="matches($url, 'page://\d+')">
-                <xsl:value-of select="portal:createPageUrl(substring-after($url, 'page://'), ())"/>
+            <!-- Dynamic URLs with optional parameters and anchor -->
+            <xsl:when test="$url-type = 'page'">
+                <xsl:value-of select="concat(portal:createPageUrl($url-key, ($url-parameters)), if (contains($url, '#')) then concat('#', tokenize($url, '#')[last()]) else '')"/>
             </xsl:when>
-            <xsl:when test="matches($url, 'content://\d+')">
-                <xsl:value-of select="portal:createContentUrl(substring-after($url, 'content://'))"/>
+            <xsl:when test="$url-type = 'content'">
+                <xsl:value-of select="concat(portal:createContentUrl($url-key, ($url-parameters)), if (contains($url, '#')) then concat('#', tokenize($url, '#')[last()]) else '')"/>
             </xsl:when>
-            <xsl:when test="matches($url, 'attachment://\d+')">
-                <xsl:value-of select="portal:createAttachmentUrl(tokenize(substring-after($url, 'attachment://'), '\?')[1], if (contains($url, '_download=true')) then ('_download', 'true') else ())"/>
+            <xsl:when test="$url-type = 'attachment'">
+                <xsl:value-of select="concat(portal:createAttachmentUrl($url-key, ($url-parameters)), if (contains($url, '#')) then concat('#', tokenize($url, '#')[last()]) else '')"/>
             </xsl:when>
-            <xsl:otherwise>                
-                <xsl:value-of select="$url"/>    
+            <!-- Static URL -->
+            <xsl:otherwise>
+                <xsl:value-of select="$url"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>

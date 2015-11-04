@@ -1,0 +1,71 @@
+@import "mixins";
+
+.audible {
+    position: absolute;
+    left: -9999px;
+}
+
+.accessibility {
+    &.bypass-links {
+        position: absolute;
+        list-style: none;
+        
+        a {
+            position: absolute;
+            left: -10000em;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            
+            &:focus, &:active {
+                position: static;
+                left: 0;
+                width: auto;
+                height: auto;
+                overflow: visible;
+            }
+        }
+    }
+    
+    &.text-resizing-guidance {
+        span {
+            cursor: pointer;
+            font-weight: bold;
+            
+            span {                
+                &:first-child {
+                    font-size: 0.6em;
+                }
+                
+                &:nth-child(2) {
+                    font-size: 0.8em;
+                }
+            }
+        }
+        
+        p {
+            display: none;
+            position: absolute;
+            z-index: 999;
+            top: 30px;
+            right: 30px;
+            background: #fff;
+            color: #000;
+            @border-radius("5px");
+            padding: 20px;
+            min-width: 1000px;
+        }
+    }
+}
+
+.editor-image {
+    &-right {
+        float: right;
+        margin: 0 0 1em 1em;
+    }
+    
+    &-left {
+        float: left;
+        margin: 0 1em 1em 0;
+    }
+}

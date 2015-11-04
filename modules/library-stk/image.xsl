@@ -36,6 +36,7 @@
         <xsl:param name="id" as="xs:string?"/>
         <xsl:param name="attr" as="xs:string*"/>
         <xsl:param name="scale-by" select="''"/>
+        <xsl:param name="caption" as="xs:string?"/>
         
         <xsl:variable name="original-image-size" as="xs:integer*" select="stk:image.get-original-size($image)"/>
         
@@ -153,12 +154,16 @@
                            </xsl:if>
                        </xsl:attribute>
                        <xsl:attribute name="src" select="stk:image.create-placeholder($image-ar, $scale-up)"/>                
-                   </img>            
+                   </img>
+
+                   <!-- Support for figcaption -->
+                   <xsl:if test="normalize-space($caption)">
+                       <figcaption><xsl:value-of select="$caption"/></figcaption>
+                   </xsl:if>
+
                </figure>
            </xsl:if>
-       
-       
-        
+
     </xsl:template>
     
     <!-- Generates image url -->

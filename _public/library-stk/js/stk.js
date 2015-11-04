@@ -65,9 +65,7 @@ STK.pagination = {
             var showingText = function () {
                 return (pagination.data('showing-text') || 'Showing #count of #totalcount').replace('#totalcount', totalCount).replace('#count', count + indexCounter);
             };
-            
-            console.log(count);
-            
+
             if (! isNaN(count) && ! isNaN(totalCount) && windowUrl && count < totalCount) {
                 var wait = false;
                 pagination.addClass('click-load');
@@ -158,10 +156,6 @@ STK.responsive = {
         });
     }
 };
-
-
-
-
 
 
 // Avoid `console` errors in browsers that lack a console.
