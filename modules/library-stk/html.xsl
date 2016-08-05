@@ -200,7 +200,19 @@
     
     
     <xsl:template match="@href[parent::a]|@data[parent::object]|@src[parent::param]|@src[parent::video]|@src[parent::audio]|@src[parent::source]|@src[parent::track]" mode="html.process">
-        <xsl:attribute name="{name()}" select="stk:html.process-url(.)"/>
+       <xsl:attribute name="{name()}">
+            <xsl:choose>
+                <xsl:when test="contains(., '#')">
+                    <xsl:value-of select="concat(stk:html.process-url(substring-before(., '#')), '#', substring-after(., '#'))"/>
+                </xsl:when>
+                <xsl:when test="contains(., '?')">
+                    <xsl:value-of select="concat(stk:html.process-url(substring-before(., '?')), '?', substring-after(., '?'))"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="stk:html.process-url(.)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
     </xsl:template>
     
     <xsl:template match="iframe[contains(@src, 'youtube')]" mode="html.process">
